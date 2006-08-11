@@ -1,0 +1,42 @@
+# pixeltoaster makefile for unix (static linking)
+
+CFLAGS = -O3 -Wall -Isource -DPLATFORM_UNIX
+LDFLAGS = -L/usr/X11R6/lib -lX11
+
+SHELL = /bin/sh
+INSTALL = /usr/bin/install -c
+INSTALLDATA = ${INSTALL} -m 644
+INSTALLDIR = ${INSTALL} -d
+
+srcdir = source
+prefix = /usr/local
+includedir = $(prefix)/include/PixelToaster-1.2
+libdir = $(prefix)/lib
+pkgconfigdir = $(libdir)/pkgconfig
+
+source := $(wildcard source/*.cpp)
+headers := $(wildcard source/*.h)
+pkconfig = PixelToaster-1.2.pc
+
+tests := $(patsubst tests/%.cpp,%,$(wildcard tests/*.cpp))
+demos := $(patsubst demos/%.cpp,%,$(wildcard demos/*.cpp))
+examples := $(patsubst examples/%.cpp,%,$(wildcard examples/*.cpp))
+
+VPATH = tests:examples:demos
+
+% : %.cpp ${source} ${headers} makefile.unix
+	g++ $< -o $@ source/PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+
+all: ${examples} ${demos} ${tests}
+	
+clean:
+	rm -f ${tests} ${demos} ${examples}
+
+install: installdirs
+	$(INSTALLDATA) ${source} $(includedir)
+	$(INSTALLDATA) ${headers} $(includedir)
+	$(INSTALLDATA) ${pkconfig} $(pkgconfigdir)
+	
+installdirs:
+	test -z "$(includedir)" || $(INSTALLDIR) "$(includedir)"
+	test -z "$(pkgconfigdir)" || $(INSTALLDIR) "$(pkgconfigdir)"

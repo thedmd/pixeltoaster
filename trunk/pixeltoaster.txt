@@ -1,0 +1,7 @@
+Pixel Toaster is the latest open source framebuffer library designed by Glenn Fiedler, author of the PTC, OpenPTC and TinyPTC libraries.
+
+The library is designed for people who want to write their own software rendering routines, directly reading and writing pixels in a framebuffer, instead of hardware accelerated rendering with OpenGL or Direct3D.
+
+All you need to do is open a display at the desired resolution, draw to an array of pixels, and call "update" to copy them to the screen once per frame. On typical machines you can achieve greater than 60 frames per second rendering using this technique, with floating point color (one float per pixel for red, green and blue), or truecolor (red, green and blue packed into a 32bit integer). 
+
+Pixel Toaster takes care of the platform specific details of opening the display, converting your pixel format to the native display format when required, it also provides you with basic keyboard and mouse input, and a high resolution timer.

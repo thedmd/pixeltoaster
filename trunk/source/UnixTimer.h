@@ -1,0 +1,104 @@
+// Unix Timer
+// Implemented by Bram De Greve
+// http://www.pixeltoaster.com
+
+class UnixTimer : public TimerInterface
+{
+public:
+	
+	UnixTimer():
+		resolution_(determineResolution())
+	{
+		reset();
+	}
+	
+	void reset()
+	{
+		deltaStart_ = start_ = tick();
+	}
+	
+	double time()
+	{
+		const uint64_t now = tick();
+		return resolution_ * (now - start_);
+	}
+	
+	double delta()
+	{
+		const uint64_t now = tick();
+		const double dt = resolution_ * (now - deltaStart_);
+		deltaStart_ = now;
+		return dt;
+	}
+	
+	double resolution()
+	{
+		return resolution_;
+	}
+	
+	void wait( double seconds )
+	{
+		const double floorSeconds = ::floor(seconds);
+		const double fractionalSeconds = seconds - floorSeconds;
+		
+		timespec timeOut;
+		timeOut.tv_sec = static_cast<time_t>(floorSeconds);
+		timeOut.tv_nsec = static_cast<long>(fractionalSeconds * 1e9);
+		
+		// nanosleep may return earlier than expected if there's a signal
+		// that should be handled by the calling thread.  If it happens,
+		// sleep again. [Bramz]
+		//
+		timespec timeRemaining;
+		while (true)
+		{
+			const int ret = nanosleep(&timeOut, &timeRemaining);
+			if (ret == -1 && errno == EINTR)
+			{
+				// there was only an sleep interruption, go back to sleep.
+				timeOut.tv_sec = timeRemaining.tv_sec;
+				timeOut.tv_nsec = timeRemaining.tv_nsec;
+			}
+			else
+			{
+				// we're done, or error =)
+				return; 
+			}
+		}
+	}
+	
+private:
+
+	static inline uint64_t tick()
+	{
+		uint32_t a, d;
+		__asm__ __volatile__("rdtsc": "=a"(a), "=d"(d));
+		return (static_cast<uint64_t>(d) << 32) | static_cast<uint64_t>(a);
+	}
+	
+	static double determineResolution()
+	{
+		FILE* f = fopen("/proc/cpuinfo", "r");
+		if (!f)
+		{
+			return 0.;
+		}
+		const int bufferSize = 256;
+		char buffer[bufferSize];
+		while (fgets(buffer, bufferSize, f))
+		{
+			float frequency;
+			if (sscanf(buffer, "cpu MHz         : %f", &frequency) == 1)
+			{
+				fclose(f);
+				return 1e-6 / static_cast<double>(frequency);
+			}
+		}
+		fclose(f);
+		return 0.;
+	}
+
+	uint64_t start_;
+	uint64_t deltaStart_;
+	double resolution_;
+};

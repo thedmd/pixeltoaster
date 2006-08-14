@@ -128,10 +128,21 @@ public:
 			displayDepth, InputOutput, visual, 
 			CWBackPixel | CWBorderPixel | CWBackingStore, &attributes);
 
-		// gfiedler: here is what we have to do to properly handle xwindow errors
-		//   ->  http://astropy.scipy.org/svn/pyraf/trunk/src/xutil.c
 		
 		::XStoreName(display_, window_, title);
+
+		wmProtocols_ = XInternAtom(display_, "WM_PROTOCOLS", True);
+		wmDeleteWindow_ = XInternAtom(display_, "WM_DELETE_WINDOW", True);
+		if (wmProtocols_ == 0 || wmDeleteWindow_ == 0)
+		{
+			close();
+			return false;
+		}
+		if (::XSetWMProtocols(display_, window_, &wmDeleteWindow_, 1) == 0)
+		{
+			close();
+			return false;
+		}
 
 		::XSizeHints sizeHints;
 		sizeHints.flags = PPosition | PMinSize | PMaxSize;
@@ -266,9 +277,20 @@ private:
 	void pumpEvents()
 	{
 		::XEvent event;
-		while (::XCheckWindowEvent(display_, window_, -1, &event))
-		{
-			handleEvent(event);
+		while (true)
+		{		
+			if (::XCheckWindowEvent(display_, window_, -1, &event))
+			{
+				handleEvent(event);
+			}
+			else if (::XCheckTypedEvent(display_, ClientMessage, &event))
+			{
+				handleEvent(event);
+			}
+			else
+			{
+				break;
+			}
 		}
 		
 		// send key press and up events
@@ -362,6 +384,23 @@ private:
 				mouse.buttons.middle = event.xmotion.state & Button2Mask;
 				mouse.buttons.right = event.xmotion.state & Button3Mask;
 				if (listener()) listener()->onMouseMove(mouse);
+				break;
+			}
+			case ClientMessage:
+			{
+				if (event.xclient.message_type == wmProtocols_ && 
+					event.xclient.format == 32 &&
+					event.xclient.data.l[0] == (long) wmDeleteWindow_)
+				{
+					if (listener()) 
+					{
+						listener()->onClose();
+					}
+					else
+					{
+						isShuttingDown_ = true;
+					}
+				}
 				break;
 			}
 		}
@@ -529,6 +568,8 @@ private:
 	Converter* floatingPointConverter_;
 	bool isShuttingDown_;
 	Format destFormat_;
+	Atom wmProtocols_;
+	Atom wmDeleteWindow_;
 	
 	static TKeyMap normalKeys_;
 	static TKeyMap functionKeys_;

@@ -10,13 +10,15 @@
 #include <X11/keysymdef.h>
 
 // for timer
-#include <stdint.h>
-#include <stdio.h>
-
-// for timer sleep
 #include <time.h>
 #include <errno.h>
 #include <math.h>
+
+//#define PIXELTOASTER_RDTSC
+#ifdef PIXELTOASTER_RDTSC
+#	include <stdint.h>
+#	include <stdio.h>
+#endif
 
 namespace PixelToaster
 {

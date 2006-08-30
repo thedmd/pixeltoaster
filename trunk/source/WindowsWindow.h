@@ -107,7 +107,7 @@ public:
 		if ( !window )
 			return;
 
-		SetWindowLongPtr( window, GWL_USERDATA, (LONG)(LONG_PTR) this );
+		SetWindowLongPtr( window, GWLP_USERDATA, (LONG_PTR) this );
 
 		// setup system menu
 
@@ -367,7 +367,7 @@ protected:
 
 	static LRESULT CALLBACK StaticWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 	{
-		LONG_PTR extra = GetWindowLongPtr( hWnd, GWL_USERDATA );
+		LONG_PTR extra = GetWindowLongPtr( hWnd, GWLP_USERDATA );
 
 		if (!extra) 
 			return DefWindowProc( hWnd, uMsg, wParam, lParam );

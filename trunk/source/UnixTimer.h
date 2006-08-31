@@ -81,9 +81,15 @@ private:
 
 	static inline uint64_t tick()
 	{
+#ifdef PIXELTOASTER_64BIT
 		uint32_t a, d;
 		__asm__ __volatile__("rdtsc": "=a"(a), "=d"(d));
 		return (static_cast<uint64_t>(d) << 32) | static_cast<uint64_t>(a);
+#else
+		uint64_t val;
+		__asm__ __volatile__("rdtsc": "=A"(val));
+		return val;
+#endif
 	}
 	
 	static double determineResolution()

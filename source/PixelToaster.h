@@ -41,6 +41,12 @@
 	#endif
 #endif
 
+// 32 or 64 bits?
+
+#if defined(__LP64__) || defined(__64BIT__) || defined(_LP64) || (__WORDSIZE == 64)
+#	define PIXELTOASTER_64BIT
+#endif
+
 // endianness
 
 #if defined(__LITTLE_ENDIAN__)

@@ -29,7 +29,7 @@
 
 #include <PixelToaster.h>
 #include <iostream>
-#include "Gui.h"
+#include "PixelPainterGui.h"
 
 using namespace PixelToaster;
 

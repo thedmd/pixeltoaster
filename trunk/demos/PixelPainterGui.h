@@ -2,7 +2,7 @@
 #define PIXELTOASTER_GUI_H
 
 #include <PixelToaster.h>
-#include "Callback.h"
+#include "PixelPainterCallback.h"
 
 using namespace PixelToaster;
  

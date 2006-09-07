@@ -265,7 +265,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\demos\Flower.cpp"
+			RelativePath=".\examples\MultiDisplay.cpp"
 			>
 		</File>
 	</Files>

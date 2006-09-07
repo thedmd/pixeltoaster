@@ -510,71 +510,113 @@ protected:
 			break;
 
 			case WM_LBUTTONDOWN:
+			{
 				if ( !( mouse.buttons.left | mouse.buttons.right | mouse.buttons.middle ) )
 					SetCapture( hWnd );
+				RECT rect;
+				GetClientRect( window, &rect );
+				const float widthRatio = (float) width / ( rect.right - rect.left );
+				const float heightRatio = (float) height / ( rect.bottom - rect.top );
+				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
+				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.left = true;
-				mouse.x = (float) GET_X_LPARAM( lParam ); 
-				mouse.y = (float) GET_Y_LPARAM( lParam );
 				if ( listener )
 					listener->onMouseButtonDown( mouse );
-				break;
+			}
+			break;
 
 			case WM_MBUTTONDOWN:
+			{
 				if ( !( mouse.buttons.left | mouse.buttons.right | mouse.buttons.middle ) )
 					SetCapture( hWnd );
+				RECT rect;
+				GetClientRect( window, &rect );
+				const float widthRatio = (float) width / ( rect.right - rect.left );
+				const float heightRatio = (float) height / ( rect.bottom - rect.top );
+				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
+				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.middle = true;
-				mouse.x = (float) GET_X_LPARAM( lParam ); 
-				mouse.y = (float) GET_Y_LPARAM( lParam );
 				if ( listener )
 					listener->onMouseButtonDown( mouse );
-				break;
+			}
+			break;
 
 			case WM_RBUTTONDOWN:
+			{
 				if ( !( mouse.buttons.left | mouse.buttons.right | mouse.buttons.middle ) )
 					SetCapture( hWnd );
+				RECT rect;
+				GetClientRect( window, &rect );
+				const float widthRatio = (float) width / ( rect.right - rect.left );
+				const float heightRatio = (float) height / ( rect.bottom - rect.top );
+				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
+				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.right = true;
-				mouse.x = (float) GET_X_LPARAM( lParam ); 
-				mouse.y = (float) GET_Y_LPARAM( lParam );
 				if ( listener )
 					listener->onMouseButtonDown( mouse );
-				break;
+			}
+			break;
 
 			case WM_LBUTTONUP:
+			{
+				RECT rect;
+				GetClientRect( window, &rect );
+				const float widthRatio = (float) width / ( rect.right - rect.left );
+				const float heightRatio = (float) height / ( rect.bottom - rect.top );
+				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
+				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.left = false;
-				mouse.x = (float) GET_X_LPARAM( lParam ); 
-				mouse.y = (float) GET_Y_LPARAM( lParam );
 				if ( listener )
 					listener->onMouseButtonUp( mouse );
 				if ( !( mouse.buttons.left | mouse.buttons.right | mouse.buttons.middle ) )
 					ReleaseCapture();
-				break;
+			}
+			break;
 
 			case WM_MBUTTONUP:
+			{
+				RECT rect;
+				GetClientRect( window, &rect );
+				const float widthRatio = (float) width / ( rect.right - rect.left );
+				const float heightRatio = (float) height / ( rect.bottom - rect.top );
+				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
+				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.middle = false;
-				mouse.x = (float) GET_X_LPARAM( lParam ); 
-				mouse.y = (float) GET_Y_LPARAM( lParam );
 				if ( listener )
 					listener->onMouseButtonUp( mouse );
 				if ( !( mouse.buttons.left | mouse.buttons.right | mouse.buttons.middle ) )
 					ReleaseCapture();
-				break;
+			}
+			break;
 
 			case WM_RBUTTONUP:
+			{
+				RECT rect;
+				GetClientRect( window, &rect );
+				const float widthRatio = (float) width / ( rect.right - rect.left );
+				const float heightRatio = (float) height / ( rect.bottom - rect.top );
+				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
+				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.right = false;
-				mouse.x = (float) GET_X_LPARAM( lParam ); 
-				mouse.y = (float) GET_Y_LPARAM( lParam );
 				if ( listener )
 					listener->onMouseButtonUp( mouse );
 				if ( !( mouse.buttons.left | mouse.buttons.right | mouse.buttons.middle ) )
 					ReleaseCapture();
-				break;
+			}
+			break;
 
 			case WM_MOUSEMOVE:
-				mouse.x = (float) GET_X_LPARAM( lParam ); 
-				mouse.y = (float) GET_Y_LPARAM( lParam );
+			{
+				RECT rect;
+				GetClientRect( window, &rect );
+				const float widthRatio = (float) width / ( rect.right - rect.left );
+				const float heightRatio = (float) height / ( rect.bottom - rect.top );
+				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
+				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				if ( listener )
 					listener->onMouseMove( mouse );
-				break;
+			}
+			break;
 
 			default:
 				return DefWindowProc( hWnd, uMsg, wParam, lParam );

@@ -44,7 +44,7 @@
 // 32 or 64 bits?
 
 #if defined(__LP64__) || defined(__64BIT__) || defined(_LP64) || (__WORDSIZE == 64)
-#	define PIXELTOASTER_64BIT
+	#define PIXELTOASTER_64BIT
 #endif
 
 // endianness
@@ -1323,88 +1323,9 @@ int main()
     public:
 		virtual ~Converter() {};
         virtual void begin() = 0;
-        virtual void convert( const void *source, void *destination, int pixels ) = 0;
+        virtual void convert( const void * source, void * destination, int pixels ) = 0;
         virtual void end() = 0;
     };
 }
 
 #endif
-
-/// \mainpage
-///
-/// \section intro Introduction
-///
-/// Pixel Toaster is a portable open source framebuffer library for C++
-///
-/// In a nutshell, it provides a simple and easy way to get your pixels on the screen. Fast.
-///
-/// All you have to do is open a display then update it each frame with your array of pixels. Pixel Toaster does the rest!
-/// You choose whether you want to work in 32bit truecolor or 128bit floating point color, and Pixel Toaster transparently
-/// converts your pixels to the native format each time you update the display.
-///
-/// Pixel Toaster is suitable for use when rendering in software is preferable to hardware. 
-/// Examples include realtime raytracing, high dynamic range rendering and image processing.
-///
-/// \section features Features
-///
-/// - Exceptionally fast floating point color support
-/// - Industry standard truecolor pixel format
-/// - Lighting fast pixel format conversion
-/// - Windows display using DirectX 9.0
-/// - Keyboard and mouse input
-/// - High resolution timer
-///
-/// \section download Download
-///
-/// http://www.pixeltoaster.com/downloads
-///
-/// Pixel Toaster currently supports Windows output using DirectX 9.0. Apple MacOS X support is planned, Unix support will 
-/// happen only if somebody volunteers to port to XWindows.
-///
-/// The source code is currently known to compile under the following compilers:
-///
-/// - MinGW GCC 3.4.2
-/// - Visual C++ 6.0
-/// - Visual C++ .NET 2003
-/// - Visual C++ Express 2005 BETA 2
-/// 
-/// However, Pixel Toaster is written in portable C++ so it should be able to compile just about anywhere. 
-/// In order to port it to a platform, all that is required is to implement a display driver. Skeletal 
-/// display drivers exist for Unix and Apple platforms. Please contact glenn.fiedler@gmail.com if you 
-/// want to help out with porting.
-///
-/// \section support Support
-/// 
-/// Please visit the Pixel Toaster forums if you have a question, bug report or feature request.
-///
-/// http://www.pixeltoaster.com/forum
-///
-/// \section licence Licence
-///
-/// Pixel Toaster is Copyright &copy; 2004-2005 Glenn Fiedler
-/// 
-/// You are licenced to use this software as follows:
-/// 
-/// - Non-commercial use is permitted under the terms of either the GNU General Public Licence or the 
-///   GNU Lesser General Public Licence at your choice.
-///
-/// - Commercial use is permitted only under the terms of the GNU General Public Licence. 
-///   If you wish to use this software under other terms then may purchase a non-transferrable commercial
-///   licence for $100US per product. Contact glenn.fiedler@gmail.com for details.
-///     
-/// This software is provided 'as-is', without any express or implied 
-/// warranty. In no event will the author be held liable for any damages
-/// arising from the use of this software.
-
-
-/// \example FloatingPoint.cpp
-/// This example shows how to use floating point color.
-
-/// \example TrueColor.cpp
-/// This example shows how to use in truecolor mode.
-
-/// \example Fullscreen.cpp
-/// This example shows how to open a fullscreen display.
-
-/// \example Events.cpp
-/// This example shows how to listen for keyboard, mouse and other events from the display.

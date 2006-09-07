@@ -235,7 +235,7 @@ namespace PixelToaster
 		double time() { return 0.0f; }
 		double delta() { return 0.0f; }
 		double resolution() { return 0.0f; }
-		void wait(double seconds) {}
+		void wait( double seconds ) {}
 	};
 	
 #endif

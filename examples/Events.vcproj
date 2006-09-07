@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="pixeltoaster"
-	ProjectGUID="{F991E948-39C0-4ECB-BB40-CB4CBF6DF973}"
+	Name="Events"
+	ProjectGUID="{176D4049-75B5-4148-9689-2BC9B5221381}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -12,30 +12,31 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
+			OutputDirectory="../build"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="source"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				AdditionalIncludeDirectories="../source"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
+				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
+				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/pixeltoaster.exe"
+				OutputFile="$(OutDir)/$(ProjectName)-Debug.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/pixeltoaster.pdb"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName)-Debug.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -61,26 +62,37 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
+			OutputDirectory="../build"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="source"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				WholeProgramOptimization="TRUE"
+				OptimizeForProcessor="3"
+				AdditionalIncludeDirectories="../source"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="4"
+				BufferSecurityCheck="FALSE"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
+				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
+				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/pixeltoaster.exe"
+				AdditionalOptions="/LTCG"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="FALSE"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -110,72 +122,8 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="apple"
-			Filter="">
-			<File
-				RelativePath=".\source\AppleDisplay.h">
-			</File>
-			<File
-				RelativePath=".\source\ApplePlatform.h">
-			</File>
-			<File
-				RelativePath=".\source\AppleTimer.h">
-			</File>
-		</Filter>
-		<Filter
-			Name="unix"
-			Filter="">
-			<File
-				RelativePath=".\source\UnixDisplay.h">
-			</File>
-			<File
-				RelativePath=".\source\UnixPlatform.h">
-			</File>
-			<File
-				RelativePath=".\source\UnixTimer.h">
-			</File>
-		</Filter>
-		<Filter
-			Name="windows"
-			Filter="">
-			<File
-				RelativePath=".\source\WindowsAdapter.h">
-			</File>
-			<File
-				RelativePath=".\source\WindowsDevice.h">
-			</File>
-			<File
-				RelativePath=".\source\WindowsDisplay.h">
-			</File>
-			<File
-				RelativePath=".\source\WindowsPlatform.h">
-			</File>
-			<File
-				RelativePath=".\source\WindowsTimer.h">
-			</File>
-			<File
-				RelativePath=".\source\WindowsWindow.h">
-			</File>
-		</Filter>
-		<Filter
-			Name="common"
-			Filter="">
-			<File
-				RelativePath=".\source\Common.h">
-			</File>
-			<File
-				RelativePath=".\source\Conversion.h">
-			</File>
-			<File
-				RelativePath=".\source\PixelToaster.cpp">
-			</File>
-			<File
-				RelativePath=".\source\PixelToaster.h">
-			</File>
-		</Filter>
 		<File
-			RelativePath=".\demos\Flower.cpp">
+			RelativePath=".\Events.cpp">
 		</File>
 	</Files>
 	<Globals>

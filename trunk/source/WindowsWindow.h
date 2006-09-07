@@ -107,7 +107,10 @@ public:
 		if ( !window )
 			return;
 
+		#pragma warning( push )
+		#pragma warning( disable : 4244 )		// conversion from 'LONG_PTR' to 'LONG', possible loss of data (stupid win32 api! =p)
 		SetWindowLongPtr( window, GWLP_USERDATA, (LONG_PTR) this );
+		#pragma warning( pop )
 
 		// setup system menu
 

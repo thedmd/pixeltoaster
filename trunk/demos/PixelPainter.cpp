@@ -128,7 +128,7 @@ private:
 	typedef FloatingPointPixel TPixel;
 	typedef std::vector<TPixel> TBuffer;
 
-	void onKeyDown(Key key)
+	void onKeyDown(DisplayInterface & display, Key key)
 	{
 		const bool isAlreadyEnteringThickness = isEnteringThickness_;
 		isEnteringThickness_ = false;
@@ -166,7 +166,7 @@ private:
 		}
 	}
 
-	void onMouseButtonDown(Mouse mouse)
+	void onMouseButtonDown(DisplayInterface & display, Mouse mouse)
 	{
 		isEnteringThickness_ = false;
 		const int x = static_cast<int>(mouse.x);
@@ -188,7 +188,7 @@ private:
 		}
 	}
 
-	void onMouseMove(Mouse mouse)
+	void onMouseMove(DisplayInterface & display, Mouse mouse)
 	{
 		isEnteringThickness_ = false;
 		const int x = static_cast<int>(mouse.x);
@@ -210,7 +210,7 @@ private:
 		}
 	}
 
-	void onClose()
+	void onClose(DisplayInterface & display)
 	{
 		isQuiting_ = true;
 	}

@@ -69,6 +69,16 @@ public:
 			return false;
 		}
 
+		if ( pendingToggle )
+		{
+			pendingToggle = false;
+
+			if ( output() == Output::Windowed )
+				fullscreen();
+			else
+				windowed();
+		}
+
 		if ( window )
 			window->update();
 
@@ -175,12 +185,9 @@ public:
 		return true;
 	}
 
-	bool toggle()
+	void toggle()
 	{
-		if ( output() == Output::Windowed )
-			return fullscreen();
-		else
-			return windowed();
+		pendingToggle = true;
 	}
 
 	void exit()
@@ -196,6 +203,7 @@ protected:
 		window = NULL;
 		device = NULL;
 		shutdown = false;
+		pendingToggle = false;
 	}
 
 private:
@@ -204,4 +212,5 @@ private:
 	WindowsWindow * window;
 	WindowsDevice * device;
 	bool shutdown;
+	bool pendingToggle;
 };

@@ -63,10 +63,9 @@ Global
 		{176D4049-75B5-4148-9689-2BC9B5221384}.Debug.Build.0 = Debug|Win32
 		{176D4049-75B5-4148-9689-2BC9B5221384}.Release.ActiveCfg = Release|Win32
 		{176D4049-75B5-4148-9689-2BC9B5221384}.Release.Build.0 = Release|Win32
-		{176D4049-75B5-4148-9689-2BC9B5221385}.Debug.ActiveCfg = Debug|Win32
-		{176D4049-75B5-4148-9689-2BC9B5221385}.Debug.Build.0 = Debug|Win32
-		{176D4049-75B5-4148-9689-2BC9B5221385}.Release.ActiveCfg = Release|Win32
-		{176D4049-75B5-4148-9689-2BC9B5221385}.Release.Build.0 = Release|Win32
+		{176D4049-75B5-4148-9689-2BC9B5221390}.Debug.ActiveCfg = Debug|Win32
+		{176D4049-75B5-4148-9689-2BC9B5221390}.Debug.Build.0 = Debug|Win32
+		{176D4049-75B5-4148-9689-2BC9B5221390}.Release.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

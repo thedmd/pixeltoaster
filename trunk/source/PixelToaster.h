@@ -758,8 +758,8 @@ assert( ! (a == b) );
 	    virtual void listener( class Listener * listener ) = 0;
 		virtual class Listener * listener() const = 0;
 
-	    virtual void wrapper( class Display * wrapper ) = 0;
-		virtual class Display * wrapper() = 0;
+	    virtual void wrapper( DisplayInterface * wrapper ) = 0;
+		virtual DisplayInterface * wrapper() = 0;
 	};
 
     /** \brief Provides the mechanism for getting your pixels up on the screen.
@@ -1013,12 +1013,12 @@ while ( display.open() )
 				return 0;
 		}
 
-		void wrapper( class Display * wrapper ) 
+		void wrapper( class DisplayInterface * wrapper ) 
 		{
-			// unsupported: wrapper is always this
+			// wrapper is always this
 		}
 
-		class Display * wrapper()
+		class DisplayInterface * wrapper()
 		{
 			return this;
 		}
@@ -1322,6 +1322,11 @@ int main()
         /// @param active true if the window is being activated, false if it is being deactivated.
 
 		virtual void onActivate( DisplayInterface & display, bool active ) {}
+
+		/// On open.
+		/// Called when a display is opened successfully.
+
+		virtual void onOpen( DisplayInterface & display ) {}
 
         /// On close.
         /// Called when the window has been requested to close by the user.

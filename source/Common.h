@@ -113,12 +113,12 @@ namespace PixelToaster
 			return _listener;
 		}
 
-		void wrapper( Display * display )
+		void wrapper( DisplayInterface * display )
 		{
 			_wrapper = display;
 		}
 
-		Display * wrapper()
+		DisplayInterface * wrapper()
 		{
 			return _wrapper;
 		}
@@ -174,7 +174,7 @@ namespace PixelToaster
 		Output _output;
 		bool _open;
 		Listener * _listener;
-		Display * _wrapper;			// required for listener callbacks
+		DisplayInterface * _wrapper;			// required for listener callbacks
 	};
 
 #ifndef PIXELTOASTER_NO_CRT

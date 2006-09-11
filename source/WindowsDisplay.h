@@ -37,10 +37,20 @@ public:
 			return false;
 		}
 
+		bool result = false;
+
 		if ( output==Output::Default || output == Output::Windowed )
-			return windowed();
+			result = windowed();
 		else
-			return fullscreen();
+			result = fullscreen();
+
+		if ( !result )
+			return false;
+
+		if ( DisplayAdapter::listener() )
+			DisplayAdapter::listener()->onOpen( wrapper() ? *wrapper() : *(DisplayInterface*)this );
+
+		return true;
 	}
 
 	void close()

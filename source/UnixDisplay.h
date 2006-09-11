@@ -181,6 +181,9 @@ public:
 		::XMapRaised(display_, window_);
 		::XFlush(display_);
 
+		if ( DisplayAdapter::listener() )
+			DisplayAdapter::listener()->onOpen( wrapper() ? *wrapper() : *(DisplayInterface*)this );
+
 		return true;
 	}
 	

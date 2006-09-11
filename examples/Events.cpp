@@ -18,12 +18,10 @@ public:
         const int width = 320;
         const int height = 240;
 
+        display.listener( this );
+
         if ( !display.open( "Events Example", width, height ) )
 			return 1;
-
-		// register listener
-
-        display.listener( this );
 
 		// keep updating the display while it is open
 
@@ -103,6 +101,21 @@ protected:
     void onActivate( DisplayInterface & display, bool active )
     {
         printf( "onActivate: active=%d\n", active );
+    }
+
+    void onOpen( DisplayInterface & display )
+	{
+		printf( "onOpen: \"%s\", %d x %d ", display.title(), display.width(), display.height() );
+		switch ( display.mode() )
+		{
+			case Mode::TrueColor: printf( "truecolor" ); break;
+			case Mode::FloatingPoint: printf( "floating point" ); break;
+		}
+		switch ( display.output() )
+		{
+			case Output::Windowed: printf( " (windowed)\n" ); break;
+			case Output::Fullscreen: printf( " (fullscreen)\n" ); break;
+		}
     }
 
     bool onClose( DisplayInterface & display )

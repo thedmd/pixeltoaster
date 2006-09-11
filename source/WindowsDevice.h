@@ -11,73 +11,32 @@ public:
 		assert( direct3d );
 		assert( window );
 
+		this->direct3d = direct3d;
+		this->window = window;
+
 		// store parameters
 
 		this->width = width;
 		this->height = height;
 		this->window = window;
+		this->mode = mode;
+		this->windowed = windowed;
 
 		// defaults
 
 		surface = NULL;
 		device = NULL;
-		fullscreen = false;
 
-		// if we are fullscreen, resize the window to cover the entire screen then show it
+		// setup
 
-		if ( !windowed )
-		{
-			RECT rect;
-			rect.left = -100;
-			rect.right = 1600 + 100;
-			rect.top = -100;
-			rect.bottom = 1200 + 100;
-
-			SetWindowPos( window, HWND_TOP, -100, -100, 1800, 1400, SWP_SHOWWINDOW );
-		}
-
-		// create device
-
-		if ( mode == Mode::FloatingPoint )
-		{
-			if ( !createDevice( direct3d, width, height, Format::XBGRFFFF, windowed ) )
-				if ( !createDevice( direct3d, width, height, Format::XRGB8888, windowed ) )
-					if ( !createDevice( direct3d, width, height, Format::XBGR8888, windowed ) )
-						if ( !createDevice( direct3d, width, height, Format::RGB888, windowed ) )
-							if ( !createDevice( direct3d, width, height, Format::RGB565, windowed ) )
-								if ( !createDevice(direct3d, width, height, Format::XRGB1555, windowed ) )
-									return;
-		}
-		else
-		{
-			if ( !createDevice(direct3d, width, height, Format::XRGB8888, windowed ) )
-				if ( !createDevice(direct3d, width, height, Format::XBGR8888, windowed ) )
-					if ( !createDevice(direct3d, width, height, Format::RGB888, windowed ) )
-						if ( !createDevice(direct3d, width, height, Format::RGB565, windowed ) )
-							if ( !createDevice(direct3d, width, height, Format::XRGB1555, windowed ) )
-								return;
-		}
-
-		// create surface
-
-		device->CreateOffscreenPlainSurface( width, height, convertFormat(format), D3DPOOL_SYSTEMMEM, &surface, NULL );
+		createDeviceAndSurface();
 	}
 
 	/// destructor
 
 	~WindowsDevice()
 	{
-		if ( surface )
-		{
-			surface->Release();
-			surface = NULL;
-		}
-
-		if ( device )
-		{
-			device->Release();
-			device = NULL;
-		}
+		destroyDeviceAndSurface();
 	}
 
 	/// check if device is valid
@@ -85,7 +44,10 @@ public:
 
 	bool valid() const
 	{
-		return device!=0 && surface!=0;
+		if ( device == NULL && surface == NULL )
+			return false;
+
+		return !FAILED( device->TestCooperativeLevel() );		// not valid if device is lost
 	}
 
 	/// update the device pixels.
@@ -102,18 +64,12 @@ public:
 
 		HRESULT result = device->TestCooperativeLevel();
 
-		if ( result == D3DERR_DEVICELOST )
+		if ( FAILED( result ) )
+		{
+			if ( result == D3DERR_DEVICENOTRESET )
+				device->Reset( &presentation );
+
 			return false;
-
-		if ( result==D3DERR_DRIVERINTERNALERROR )
-			return false;
-
-		if ( result == D3DERR_DEVICENOTRESET )
-		{             
-			// reset device
-
-			if ( FAILED( device->Reset(&presentation ) ) )
-				return false;
 		}
 
 		// copy pixels to surface
@@ -207,7 +163,7 @@ public:
 
 		// present back buffer to display
 
-		if ( FAILED(device->Present( NULL, NULL, NULL, NULL ) ) )
+		if ( FAILED( device->Present( NULL, NULL, NULL, NULL ) ) )
 			return false;
 
 		// tell windows that we dont need to repaint anything
@@ -308,7 +264,62 @@ protected:
 		return true;
 	}
 
+protected:
+
+	void createDeviceAndSurface()
+	{
+		// create device
+
+		if ( mode == Mode::FloatingPoint )
+		{
+			if ( !createDevice( direct3d, width, height, Format::XBGRFFFF, windowed ) )
+				if ( !createDevice( direct3d, width, height, Format::XRGB8888, windowed ) )
+					if ( !createDevice( direct3d, width, height, Format::XBGR8888, windowed ) )
+						if ( !createDevice( direct3d, width, height, Format::RGB888, windowed ) )
+							if ( !createDevice( direct3d, width, height, Format::RGB565, windowed ) )
+								if ( !createDevice(direct3d, width, height, Format::XRGB1555, windowed ) )
+									return;
+		}
+		else
+		{
+			if ( !createDevice(direct3d, width, height, Format::XRGB8888, windowed ) )
+				if ( !createDevice(direct3d, width, height, Format::XBGR8888, windowed ) )
+					if ( !createDevice(direct3d, width, height, Format::RGB888, windowed ) )
+						if ( !createDevice(direct3d, width, height, Format::RGB565, windowed ) )
+							if ( !createDevice(direct3d, width, height, Format::XRGB1555, windowed ) )
+								return;
+		}
+
+		// create surface
+
+		device->CreateOffscreenPlainSurface( width, height, convertFormat(format), D3DPOOL_SYSTEMMEM, &surface, NULL );
+	}
+
+	void destroyDeviceAndSurface()
+	{
+		if ( surface )
+		{
+			surface->Release();
+			surface = NULL;
+		}
+
+		if ( device )
+		{
+			device->Release();
+			device = NULL;
+		}
+	}
+
+	void Reset()
+	{
+		destroyDeviceAndSurface();
+		createDeviceAndSurface();
+	}
+
 private:
+
+	LPDIRECT3D9 direct3d;
+	HWND window;
 
 	D3DPRESENT_PARAMETERS presentation;
 	LPDIRECT3DDEVICE9 device;
@@ -317,8 +328,7 @@ private:
 	int width;
 	int height;
 	Format format;
-
-	HWND window;
-
-	bool fullscreen;
+	Mode mode;
+	bool windowed;
+	bool lost;
 };

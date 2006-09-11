@@ -336,11 +336,15 @@ private:
 				{
 					if (!keyIsPressed_[key])
 					{
+						bool defaultKeyHandlers = true;
+
 						if (listener())
 						{
 							listener()->onKeyDown(key);
+							defaultKeyHandlers = listener()->defaultKeyHandlers();
 						}
-						else if (key == Key::Escape)
+
+						if (defaultKeyHandlers && key == Key::Escape)
 						{
 							isShuttingDown_ = true;
 						}

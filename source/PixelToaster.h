@@ -7,7 +7,7 @@
 
 // current API version (API is not allowed to change in point releases)
 
-#define PIXELTOASTER_API 1.4
+#define PIXELTOASTER_VERSION 1.4
 
 // disable annoying visual c++ warnings
 
@@ -290,7 +290,7 @@ if ( mode != Mode::TrueColor )
 switch ( mode )
 {
 	case Mode::FloatingPoint: print( "floating point mode" ); break;
-	case Mode::FloatingPoint: print( "truecolor mode" ); break;
+	case Mode::TrueColor: print( "truecolor mode" ); break;
 }
 
 Mode a = Mode::FloatingPoint;
@@ -757,6 +757,9 @@ assert( ! (a == b) );
 
 	    virtual void listener( class Listener * listener ) = 0;
 		virtual class Listener * listener() const = 0;
+
+	    virtual void wrapper( class Display * wrapper ) = 0;
+		virtual class Display * wrapper() = 0;
 	};
 
     /** \brief Provides the mechanism for getting your pixels up on the screen.
@@ -805,21 +808,10 @@ while ( display.open() )
 
 	display.update( pixels );
 }
-
 		\endcode
-
-
-
-		\bug Alt-tabbing away from fullscreen then clicking on the window title in the taskbar may cause problems
-		\bug %Mouse input does not yet adjust for output window resizing so the x and y coordinates returned are relative to window size, not display size as they should be.
-		\bug %Output will fail if you select a non-standard windowed output resolution (say 100x100) then the user switches to fullscreen
-		\bug If you set the listener then close your display, and re-open in, you need to manually set the listener again.
-		\bug The system menu zoom/center menu items sometimes get out of sync with the state of your display window
-		\bug Some users have reported a long delay occuring when switching between fullscreen and windowed output using ALT-ENTER.
-		\bug Creating multiple displays simultaneously does not work yet.
 	 **/
 
-    class Display
+	class Display : public DisplayInterface
     {
     public:
 
@@ -829,6 +821,7 @@ while ( display.open() )
         Display()
         {
             internal = createDisplay();
+			internal->wrapper( this );
         }
 
 		/// Create and open display in one step.
@@ -838,6 +831,7 @@ while ( display.open() )
 		Display( const char title[], int width, int height, Output output = Output::Default, Mode mode = Mode::FloatingPoint )
 		{
             internal = createDisplay();
+			internal->wrapper( this );
 			open( title, width, height, output, mode );
 		}
 
@@ -1019,9 +1013,19 @@ while ( display.open() )
 				return 0;
 		}
 
+		void wrapper( class Display * wrapper ) 
+		{
+			// unsupported: wrapper is always this
+		}
+
+		class Display * wrapper()
+		{
+			return this;
+		}
+
     private:
 
-        DisplayInterface * internal;
+		DisplayInterface * internal;
     };
 
 	// internal timer interface
@@ -1197,43 +1201,43 @@ public:
 
 protected:
 
-    void onKeyDown( Display & display, Key key )
+    void onKeyDown( DisplayInterface & display, Key key )
     {
         if ( key==Key::Escape )
             quit = true;
     }
 
-    void onKeyPressed( Display & display, Key key )
+    void onKeyPressed( DisplayInterface & display, Key key )
     {
 		// ...
     }
 
-    void onKeyUp( Display & display, Key key )
+    void onKeyUp( DisplayInterface & display, Key key )
     {
 		// ...
     }
 
-    void onMouseButtonDown( Display & display, Mouse mouse )
+    void onMouseButtonDown( DisplayInterface & display, Mouse mouse )
     {
 		// ...
     }
 
-    void onMouseButtonUp( Display & display, Mouse mouse )
+    void onMouseButtonUp( DisplayInterface & display, Mouse mouse )
     {
 		// ...
     }
 
-    void onMouseMove( Display & display, Mouse mouse )
+    void onMouseMove( DisplayInterface & display, Mouse mouse )
     {
 		// ...
     }
 
-    void onActivate( Display & display, bool active )
+    void onActivate( DisplayInterface & display, bool active )
     {
 		// ...
     }
 
-    void onClose( Display & display )
+    void onClose( DisplayInterface & display )
     {
         quit = true;
     }
@@ -1273,43 +1277,45 @@ int main()
         /// Called once only when a key is pressed and held.
         /// @param key the key event data.
 
-		virtual void onKeyDown( Key key ) {}
+		virtual void onKeyDown( DisplayInterface & display, Key key ) {}
 
         /// On key pressed.
         /// Called multiple times while a key is pressed and held including the initial event.
         /// @param key the key event data.
 
-		virtual void onKeyPressed( Key key ) {}
+		virtual void onKeyPressed( DisplayInterface & display, Key key ) {}
 
         /// On key up.
         /// Called when a key is released.
         /// @param key the key event data.
 
-		virtual void onKeyUp( Key key ) {}
+		virtual void onKeyUp( DisplayInterface & display, Key key ) {}
 
         /// On mouse button down.
         /// Called once only when a mouse button is initially pressed.
         /// @param mouse the mouse event data.
 
-		virtual void onMouseButtonDown( Mouse mouse ) {}
+		virtual void onMouseButtonDown( DisplayInterface & display, Mouse mouse ) {}
 
         /// On mouse button up.
         /// Called when a mouse button is released.
         /// @param mouse the mouse event data.
 
-		virtual void onMouseButtonUp( Mouse mouse ) {}
+		virtual void onMouseButtonUp( DisplayInterface & display, Mouse mouse ) {}
 
         /// On mouse move.
         /// Called when the mouse is moved.
         /// @param mouse the mouse event data.
 
-		virtual void onMouseMove( Mouse mouse ) {}
+		virtual void onMouseMove( DisplayInterface & display, Mouse mouse ) {}
 
         /// On activate.
         /// Called when the display window is activated or deactivated.
         /// @param active true if the window is being activated, false if it is being deactivated.
 
-		virtual void onActivate( bool active ) {}
+		virtual void onActivate( DisplayInterface & display, bool active ) {}
+
+		// todo: on display open, on display open failed etc...
 
         /// On close.
         /// Called when the window has been requested to close by the user.
@@ -1317,7 +1323,7 @@ int main()
         /// your application, otherwise the window will stay open and the
         /// application will keep running.
 
-		virtual void onClose() {}
+		virtual void onClose( DisplayInterface & display ) {}
     };
 
 	// internal converter interface

@@ -16,14 +16,16 @@ namespace PixelToaster
 
 		DisplayAdapter()
 		{
-			_listener = 0;
+			_listener = NULL;
+			_wrapper = NULL;
 			defaults();
 		}
 
 		~DisplayAdapter()
 		{
 			close();
-			_listener = 0;
+			_listener = NULL;
+			_wrapper = NULL;
 		}
 
         bool open( const char title[], int width, int height, Output output, Mode mode )
@@ -111,6 +113,16 @@ namespace PixelToaster
 			return _listener;
 		}
 
+		void wrapper( Display * display )
+		{
+			_wrapper = display;
+		}
+
+		Display * wrapper()
+		{
+			return _wrapper;
+		}
+
 	protected:
 
 		// note: override this "unified" update to implement your display update.
@@ -162,6 +174,7 @@ namespace PixelToaster
 		Output _output;
 		bool _open;
 		Listener * _listener;
+		Display * _wrapper;			// required for listener callbacks
 	};
 
 #ifndef PIXELTOASTER_NO_CRT

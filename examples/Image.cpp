@@ -1,6 +1,6 @@
 // Image example
-// Copyright © Glenn Fiedler
-// http://www.pixeltoaster.com
+// Demonstrates how to load and display a TGA image
+// Copyright © Glenn Fiedler, 2004-2006. http://www.pixeltoaster.com
 
 #include <cstdio>
 #include <PixelToaster.h>

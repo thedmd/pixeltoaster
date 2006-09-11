@@ -27,7 +27,7 @@ public:
 	{
 		DisplayAdapter::open( title, width, height, output, mode );
 
-		window = new WindowsWindow( this, title, width, height );
+		window = new WindowsWindow( this, this, title, width, height );
 
 		if ( !window->handle() )
 		{

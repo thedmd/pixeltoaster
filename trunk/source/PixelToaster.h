@@ -1197,43 +1197,43 @@ public:
 
 protected:
 
-    void onKeyDown(Key key)
+    void onKeyDown( Display & display, Key key )
     {
         if ( key==Key::Escape )
             quit = true;
     }
 
-    void onKeyPressed( Key key )
+    void onKeyPressed( Display & display, Key key )
     {
 		// ...
     }
 
-    void onKeyUp( Key key )
+    void onKeyUp( Display & display, Key key )
     {
 		// ...
     }
 
-    void onMouseButtonDown( Mouse mouse )
+    void onMouseButtonDown( Display & display, Mouse mouse )
     {
 		// ...
     }
 
-    void onMouseButtonUp( Mouse mouse )
+    void onMouseButtonUp( Display & display, Mouse mouse )
     {
 		// ...
     }
 
-    void onMouseMove( Mouse mouse )
+    void onMouseMove( Display & display, Mouse mouse )
     {
 		// ...
     }
 
-    void onActivate( bool active )
+    void onActivate( Display & display, bool active )
     {
 		// ...
     }
 
-    void onClose()
+    void onClose( Display & display )
     {
         quit = true;
     }

@@ -3,11 +3,11 @@ prefix=/usr/local
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
-pixeltoaster_release_name=PixelToaster-1.3
+pixeltoaster_release_name=PixelToaster-1.4
 
 Name: PixelToaster
 Description: PixelToaster is a portable open source framebuffer library for C++ (http://pixeltoaster.com)
 Requires: 
-Version: 1.3
+Version: 1.4
 Libs: -L/usr/X11R6/lib -lX11
 Cflags: -I${includedir}/${pixeltoaster_release_name}

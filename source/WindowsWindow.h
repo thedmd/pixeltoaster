@@ -508,8 +508,20 @@ protected:
 
 				if ( !down[key] )
 				{
+					bool defaultKeyHandlers = true;
+
 					if ( _listener )
+					{
 						_listener->onKeyDown( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
+						defaultKeyHandlers = _listener->defaultKeyHandlers();
+					}
+
+					if ( defaultKeyHandlers )
+					{
+						if ( key == 27 )
+							adapter->exit();		// quit on escape by default, return false in listener to disable this
+					}
+
 					down[key] = true;
 				}
 
@@ -525,8 +537,6 @@ protected:
 			
 				if ( _listener )
 					_listener->onKeyUp( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
-				else if (key==27)
-					adapter->exit();
 
 				down[key] = false;
 			}

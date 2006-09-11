@@ -11,11 +11,6 @@ class Application : public Listener
 {
 public:
 
-	Application()
-	{
-		quit = false;
-	}
-
     int run()
     {
 		// open display
@@ -30,11 +25,11 @@ public:
 
         display.listener( this );
 
-		// keep updating the display until the user quits
+		// keep updating the display while it is open
 
         vector<Pixel> pixels( width * height );
 
-        while ( !quit )
+        while ( display.open() )
         {
 			unsigned int index = 0;
 
@@ -63,9 +58,6 @@ protected:
     void onKeyDown( DisplayInterface & display, Key key )
     {
         printf( "onKeyDown: key=%s\n", getKeyString(key) );
-
-        if ( key==Key::Escape )
-            quit = true;
     }
 
     void onKeyPressed( DisplayInterface & display, Key key )
@@ -115,7 +107,8 @@ protected:
 
     bool onClose( DisplayInterface & display )
     {
-        return quit = true;
+		printf( "onClose" );
+        return true;
     }
 
     const char * getKeyString( Key key )
@@ -237,7 +230,6 @@ protected:
 private:
 
 	Display display;
-	bool quit;
 };
 
 

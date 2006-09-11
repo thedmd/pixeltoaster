@@ -1152,7 +1152,7 @@ while ( display.open() )
 		your program will respond to input in using the following default behavior:
 
 			- Pressing the escape key closes the display.
-			- If the user presses Alt-F4 or clicks on the close icon in the title bar then the display is closed.
+			- If the user presses the platform close window key combinaton (Alt-F4 on windows, Apple-W on Mac) or clicks on the close icon in the title bar then the display is closed.
 			- All other events are ignored.
 
 		This avoids writing code to handle basic events when all you want is to open a display and draw pixels.
@@ -1205,6 +1205,8 @@ protected:
     {
         if ( key==Key::Escape )
             quit = true;
+
+		return false;		// disable default key handlers
     }
 
     void onKeyPressed( DisplayInterface & display, Key key )
@@ -1239,7 +1241,7 @@ protected:
 
     void onClose( DisplayInterface & display )
     {
-        quit = true;
+        return quit = true;			// returning true indicates that we want the display close to proceed
     }
 
 private:
@@ -1272,12 +1274,18 @@ int main()
     public:
 
 		virtual ~Listener() {};
+		
+		/// Called by display to ask if you want default key handlers to be applied,
+		/// eg. Escape quits without you needing to do anything. default is true.
+		/// override and return false if you dont want default key handlers.
+
+		bool defaultKeyHandlers() const { return true; }
 
         /// On key down.
         /// Called once only when a key is pressed and held.
         /// @param key the key event data.
 
-		virtual void onKeyDown( DisplayInterface & display, Key key ) {}
+		virtual void onKeyDown( DisplayInterface & display, Key key ) { }
 
         /// On key pressed.
         /// Called multiple times while a key is pressed and held including the initial event.

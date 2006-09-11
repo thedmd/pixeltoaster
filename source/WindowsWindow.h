@@ -509,7 +509,7 @@ protected:
 			
 				if ( key==VK_RETURN && GetAsyncKeyState( VK_MENU ) )
 				{
-					adapter->toggle();
+					adapter->toggle();		// note: toggle fullscreen and windowed output
 					break;
 				}
 

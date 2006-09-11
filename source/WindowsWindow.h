@@ -8,6 +8,8 @@ public:
 
 	WindowsWindow( DisplayInterface * display, WindowsAdapter * adapter, const char title[], int width, int height )
 	{
+		windowCount()++;
+
 		assert( display );
 		assert( adapter );
 
@@ -38,7 +40,14 @@ public:
 
 		// get handle to system arrow cursor
 
-		arrowCursor = LoadCursor(0, IDC_ARROW);
+		arrowCursor = LoadCursor( NULL, IDC_ARROW );
+
+		// create null cursor so we can hide it reliably
+
+		integer32 and = 0xFFFFFFFF;
+		integer32 xor = 0;
+
+		nullCursor = CreateCursor( NULL, 0, 0, 1, 1, &and, &xor );
 
 		// clear mouse data
 
@@ -131,6 +140,10 @@ public:
 	{
 		DestroyWindow( window );
 		window = NULL;
+
+		DestroyCursor( nullCursor );
+
+		windowCount()--;
 	}
 
 	// show the window (it is initially hidden)
@@ -170,7 +183,7 @@ public:
 		
 		hide();
 
-		SetCursor(0);
+		SetCursor( nullCursor );
 
 		SetWindowLongPtr( window, GWL_STYLE, WS_POPUPWINDOW );	
 
@@ -227,9 +240,6 @@ public:
 
 	void center()
 	{
-		if ( IsIconic(window) || IsZoomed(window) )
-			return;
-
 		RECT rect;
 		GetWindowRect( window, &rect );
 		
@@ -256,9 +266,6 @@ public:
 
 	void zoom( float scale )
 	{
-		if ( IsIconic(window) || IsZoomed(window) )
-			return;
-
 		// get current window rect and calculate current window center
 
 		RECT rect;
@@ -339,7 +346,7 @@ public:
 		// hide mouse cursor if fullscreen
 
 		if ( mode == Fullscreen && active )
-			SetCursor(0);
+			SetCursor( nullCursor );
 
 		// check window
 
@@ -435,8 +442,8 @@ protected:
 			case WM_SETCURSOR:
 				if ( LOWORD( lParam ) == HTCLIENT )
 				{
-					if ( mode==Fullscreen )
-						SetCursor( NULL );
+					if ( mode == Fullscreen )
+						SetCursor( nullCursor );
 					else
 						SetCursor( arrowCursor );
 				}
@@ -706,12 +713,12 @@ protected:
 
 		// rebuild menu
 
-		bool windowed = mode == Windowed && !IsIconic(window) && !IsMaximized(window);
+		bool windowed = mode == Windowed;
 
-		if ( windowed )
+		if ( windowed && !IsIconic(window) && !IsMaximized(window) )
 		{
 			AppendMenu( systemMenu, MF_SEPARATOR, MENU_SEPARATOR_A, TEXT("") );
-			AppendMenu( systemMenu, MF_STRING, MENU_ZOOM_ORIGINAL, TEXT("Original") );
+			AppendMenu( systemMenu, MF_STRING, MENU_ZOOM_ORIGINAL, TEXT("Original Size") );
 
 			const int desktopWidth = GetSystemMetrics( SM_CXSCREEN );
 			const int desktopHeight = GetSystemMetrics( SM_CYSCREEN );
@@ -742,6 +749,8 @@ protected:
 
 private:
 
+	int & windowCount() { static windowCount = 0; return windowCount; }
+
 	HWND window;					// window handle
 	HMENU systemMenu;				// system menu handle
 	int width;						// natural window width
@@ -762,6 +771,7 @@ private:
 	bool down[256];					// key down table (true means key is down)
 
 	HCURSOR arrowCursor;			// handle to system arrow cursor (does not need to be freed)
+	HCURSOR nullCursor;				// null cursor when we dont want to see it
 
 	bool centered;					// true if window is centered
 	ZoomLevel zoomLevel;			// current zoom level

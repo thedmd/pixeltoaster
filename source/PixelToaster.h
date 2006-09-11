@@ -5,6 +5,10 @@
 #ifndef PIXELTOASTER_H
 #define PIXELTOASTER_H
 
+// current API version (API is not allowed to change in point releases)
+
+#define PIXELTOASTER_API 1.3
+
 // disable annoying visual c++ warnings
 
 #ifdef _MSC_VER

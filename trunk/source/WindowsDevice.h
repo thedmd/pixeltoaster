@@ -55,11 +55,6 @@ public:
 
 	bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels )
 	{
-		// check valid
-
-		if ( !valid() )
-			return false;
-
 		// handle device loss
 
 		HRESULT result = device->TestCooperativeLevel();
@@ -67,10 +62,11 @@ public:
 		if ( FAILED( result ) )
 		{
 			if ( result == D3DERR_DEVICENOTRESET )
-				device->Reset( &presentation );
-
-			return false;
+				Reset();
 		}
+
+		if ( !valid() )
+			return false;
 
 		// copy pixels to surface
 
@@ -312,6 +308,8 @@ protected:
 
 	void Reset()
 	{
+		printf( "reset\n" );
+
 		destroyDeviceAndSurface();
 		createDeviceAndSurface();
 	}

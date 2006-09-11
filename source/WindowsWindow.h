@@ -31,7 +31,7 @@ public:
 		window = NULL;
 		systemMenu = NULL;
 		active = false;
-		listener = NULL;
+		_listener = NULL;
 		centered = false;
 		zoomLevel = ZOOM_ORIGINAL;
 		mode = Windowed;
@@ -376,6 +376,18 @@ public:
 		return window;
 	}
 
+	// listener management
+
+	void listener( Listener * listener )
+	{
+		_listener = listener;
+	}
+
+	Listener * listener()
+	{
+		return _listener;
+	}
+
 protected:
 
 	static LRESULT CALLBACK StaticWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
@@ -396,8 +408,8 @@ protected:
 		{
 			case WM_ACTIVATE:
 				active = wParam != WA_INACTIVE;
-				if ( listener )
-					listener->onActivate( display->wrapper() ? *display->wrapper() : *display, active );
+				if ( _listener )
+					_listener->onActivate( display->wrapper() ? *display->wrapper() : *display, active );
 				break;
 
 			case WM_PAINT:
@@ -413,8 +425,9 @@ protected:
 
 			case WM_QUIT:
 			case WM_CLOSE:
-				if ( listener )
-					listener->onClose( display->wrapper() ? *display->wrapper() : *display );
+				if ( _listener )
+					if ( _listener->onClose( display->wrapper() ? *display->wrapper() : *display ) )
+						adapter->exit();
 				else
 					adapter->exit();
 				break;
@@ -495,13 +508,13 @@ protected:
 
 				if ( !down[key] )
 				{
-					if ( listener )
-						listener->onKeyDown( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
+					if ( _listener )
+						_listener->onKeyDown( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
 					down[key] = true;
 				}
 
-				if ( listener )
-					listener->onKeyPressed( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
+				if ( _listener )
+					_listener->onKeyPressed( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
 			}
 			break;
 
@@ -510,8 +523,8 @@ protected:
 			{
 				unsigned char key = (unsigned char)wParam;
 			
-				if (listener)
-					listener->onKeyUp( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
+				if ( _listener )
+					_listener->onKeyUp( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
 				else if (key==27)
 					adapter->exit();
 
@@ -530,8 +543,8 @@ protected:
 				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
 				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.left = true;
-				if ( listener )
-					listener->onMouseButtonDown( display->wrapper() ? *display->wrapper() : *display, mouse );
+				if ( _listener )
+					_listener->onMouseButtonDown( display->wrapper() ? *display->wrapper() : *display, mouse );
 			}
 			break;
 
@@ -546,8 +559,8 @@ protected:
 				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
 				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.middle = true;
-				if ( listener )
-					listener->onMouseButtonDown( display->wrapper() ? *display->wrapper() : *display, mouse );
+				if ( _listener )
+					_listener->onMouseButtonDown( display->wrapper() ? *display->wrapper() : *display, mouse );
 			}
 			break;
 
@@ -562,8 +575,8 @@ protected:
 				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
 				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.right = true;
-				if ( listener )
-					listener->onMouseButtonDown( display->wrapper() ? *display->wrapper() : *display, mouse );
+				if ( _listener )
+					_listener->onMouseButtonDown( display->wrapper() ? *display->wrapper() : *display, mouse );
 			}
 			break;
 
@@ -576,8 +589,8 @@ protected:
 				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
 				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.left = false;
-				if ( listener )
-					listener->onMouseButtonUp( display->wrapper() ? *display->wrapper() : *display, mouse );
+				if ( _listener )
+					_listener->onMouseButtonUp( display->wrapper() ? *display->wrapper() : *display, mouse );
 				if ( !( mouse.buttons.left | mouse.buttons.right | mouse.buttons.middle ) )
 					ReleaseCapture();
 			}
@@ -592,8 +605,8 @@ protected:
 				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
 				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.middle = false;
-				if ( listener )
-					listener->onMouseButtonUp( display->wrapper() ? *display->wrapper() : *display, mouse );
+				if ( _listener )
+					_listener->onMouseButtonUp( display->wrapper() ? *display->wrapper() : *display, mouse );
 				if ( !( mouse.buttons.left | mouse.buttons.right | mouse.buttons.middle ) )
 					ReleaseCapture();
 			}
@@ -608,8 +621,8 @@ protected:
 				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
 				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
 				mouse.buttons.right = false;
-				if ( listener )
-					listener->onMouseButtonUp( display->wrapper() ? *display->wrapper() : *display, mouse );
+				if ( _listener )
+					_listener->onMouseButtonUp( display->wrapper() ? *display->wrapper() : *display, mouse );
 				if ( !( mouse.buttons.left | mouse.buttons.right | mouse.buttons.middle ) )
 					ReleaseCapture();
 			}
@@ -623,8 +636,8 @@ protected:
 				const float heightRatio = (float) height / ( rect.bottom - rect.top );
 				mouse.x = (float) GET_X_LPARAM( lParam ) * widthRatio;
 				mouse.y = (float) GET_Y_LPARAM( lParam ) * heightRatio;
-				if ( listener )
-					listener->onMouseMove( display->wrapper() ? *display->wrapper() : *display, mouse );
+				if ( _listener )
+					_listener->onMouseMove( display->wrapper() ? *display->wrapper() : *display, mouse );
 			}
 			break;
 
@@ -747,7 +760,5 @@ private:
 
 	DisplayInterface * display;		// required for listener callbacks (may be null)
 
-public:
-
-	Listener * listener;			// the listener interface (may be null)
+	Listener * _listener;			// the listener interface (may be null)
 };

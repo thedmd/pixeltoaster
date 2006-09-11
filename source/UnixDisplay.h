@@ -394,7 +394,8 @@ private:
 				{
 					if (listener()) 
 					{
-						listener()->onClose();
+						if (listener()->onClose())
+							isShuttingDown_ = true;
 					}
 					else
 					{

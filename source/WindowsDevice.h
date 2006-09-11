@@ -62,7 +62,7 @@ public:
 		if ( FAILED( result ) )
 		{
 			if ( result == D3DERR_DEVICENOTRESET )
-				Reset();
+				device->Reset( &presentation );
 		}
 
 		if ( !valid() )
@@ -304,14 +304,6 @@ protected:
 			device->Release();
 			device = NULL;
 		}
-	}
-
-	void Reset()
-	{
-		printf( "reset\n" );
-
-		destroyDeviceAndSurface();
-		createDeviceAndSurface();
 	}
 
 private:

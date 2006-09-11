@@ -113,9 +113,9 @@ protected:
         printf( "onActivate: active=%d\n", active );
     }
 
-    void onClose( DisplayInterface & display )
+    bool onClose( DisplayInterface & display )
     {
-        quit = true;
+        return quit = true;
     }
 
     const char * getKeyString( Key key )

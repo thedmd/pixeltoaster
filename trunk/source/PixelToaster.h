@@ -1315,15 +1315,15 @@ int main()
 
 		virtual void onActivate( DisplayInterface & display, bool active ) {}
 
-		// todo: on display open, on display open failed etc...
-
         /// On close.
         /// Called when the window has been requested to close by the user.
         /// You are responsible for responding to this event by quitting
         /// your application, otherwise the window will stay open and the
         /// application will keep running.
+		/// If you return true, the display will close, if you return false it
+		/// will remain open and the close will be ignored. true is default.
 
-		virtual void onClose( DisplayInterface & display ) {}
+		virtual bool onClose( DisplayInterface & display ) { return true; }
     };
 
 	// internal converter interface

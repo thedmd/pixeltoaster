@@ -29,7 +29,7 @@ public:
 
 		window = new WindowsWindow( this, this, title, width, height );
 
-		window->listener = DisplayAdapter::listener();			// note: fixes bug where listener was forgotten after display close
+		window->listener( DisplayAdapter::listener() );			// note: fixes bug where listener was forgotten after display close
 
 		if ( !window->handle() )
 		{
@@ -79,7 +79,7 @@ public:
 		DisplayAdapter::listener( listener );
 
 		if ( window )
-			window->listener = listener;
+			window->listener( listener );
 	}
 
 	// implement adapter interface for interoperability with window class

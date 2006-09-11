@@ -1,6 +1,6 @@
 // Events Example
 // How to get keyboard, mouse and system events from a display.
-// Copyright © Glenn Fiedler, 2004-2005. http://www.pixeltoaster.com
+// Copyright © Glenn Fiedler, 2004-2006. http://www.pixeltoaster.com
 
 #include <cstdio>
 #include <PixelToaster.h>
@@ -60,7 +60,7 @@ protected:
 
 	// respond to events sent back via the listener interface
 
-    void onKeyDown(Key key)
+    void onKeyDown( DisplayInterface & display, Key key )
     {
         printf( "onKeyDown: key=%s\n", getKeyString(key) );
 
@@ -68,17 +68,17 @@ protected:
             quit = true;
     }
 
-    void onKeyPressed( Key key )
+    void onKeyPressed( DisplayInterface & display, Key key )
     {
         printf( "onKeyPressed: key=%s\n", getKeyString(key) );
     }
 
-    void onKeyUp( Key key )
+    void onKeyUp( DisplayInterface & display, Key key )
     {
         printf( "onKeyUp: key=%s\n", getKeyString(key) );
     }
 
-    void onMouseButtonDown( Mouse mouse )
+    void onMouseButtonDown( DisplayInterface & display, Mouse mouse )
     {
         printf( "onMouseButtonDown: buttons=%d,%d,%d x=%f, y=%f\n", 
                 mouse.buttons.left, 
@@ -88,7 +88,7 @@ protected:
                 mouse.y );
     }
 
-    void onMouseButtonUp( Mouse mouse )
+    void onMouseButtonUp( DisplayInterface & display, Mouse mouse )
     {
         printf( "onMouseButtonUp: buttons=%d,%d,%d x=%f, y=%f\n", 
                 mouse.buttons.left, 
@@ -98,7 +98,7 @@ protected:
                 mouse.y );
     }
 
-    void onMouseMove( Mouse mouse )
+    void onMouseMove( DisplayInterface & display, Mouse mouse )
     {
         printf( "onMouseMove: buttons=%d,%d,%d x=%f, y=%f\n", 
                 mouse.buttons.left, 
@@ -108,12 +108,12 @@ protected:
                 mouse.y );
     }
 
-    void onActivate( bool active )
+    void onActivate( DisplayInterface & display, bool active )
     {
         printf( "onActivate: active=%d\n", active );
     }
 
-    void onClose()
+    void onClose( DisplayInterface & display )
     {
         quit = true;
     }

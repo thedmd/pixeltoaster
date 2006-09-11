@@ -1,6 +1,6 @@
 // Fullscreen Example.
 // Opens a display for fullscreen output in floating point color mode.
-// Copyright © Glenn Fiedler, 2004-2005. http://www.pixeltoaster.com
+// Copyright © Glenn Fiedler, 2004-2006. http://www.pixeltoaster.com
 
 #include <PixelToaster.h>
 

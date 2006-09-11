@@ -106,7 +106,7 @@ public:
 
 	bool paint()
 	{
-		if ( !device )
+		if ( !device || !device->valid() )
 		{
 			HDC dc = GetDC( window->handle() );
 

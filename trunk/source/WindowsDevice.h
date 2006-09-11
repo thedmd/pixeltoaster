@@ -228,7 +228,7 @@ protected:
 				if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &presentation, &device ) ) )
 					device = NULL;
 
-		// fallback to double buffered
+		// double buffered fallback
 
 		if ( !device )
 		{
@@ -240,22 +240,10 @@ protected:
 						device = NULL;
 		}
 
+		// check for failure
+
 		if ( !device )
 			return false;
-
-		/*
-		// last resort single buffered
-
-		if ( !device )
-		{
-			presentation.BackBufferCount = 0;
-
-			if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_HARDWARE_VERTEXPROCESSING, &presentation, &device ) ) )
-				if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_MIXED_VERTEXPROCESSING, &presentation, &device ) ) )
-					if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &presentation, &device ) ) )
-						return false;
-		}
-		*/
 
 		return true;
 	}

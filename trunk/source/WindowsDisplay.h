@@ -29,6 +29,8 @@ public:
 
 		window = new WindowsWindow( this, this, title, width, height );
 
+		window->listener = DisplayAdapter::listener();			// note: fixes bug where listener was forgotten after display close
+
 		if ( !window->handle() )
 		{
 			close();

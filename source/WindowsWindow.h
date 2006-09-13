@@ -8,8 +8,6 @@ public:
 
 	WindowsWindow( DisplayInterface * display, WindowsAdapter * adapter, const char title[], int width, int height )
 	{
-		windowCount()++;
-
 		assert( display );
 		assert( adapter );
 
@@ -44,10 +42,10 @@ public:
 
 		// create null cursor so we can hide it reliably
 
-		integer32 and = 0xFFFFFFFF;
-		integer32 xor = 0;
+		integer32 cursorAnd = 0xFFFFFFFF;
+		integer32 cursorXor = 0;
 
-		nullCursor = CreateCursor( NULL, 0, 0, 1, 1, &and, &xor );
+		nullCursor = CreateCursor( NULL, 0, 0, 1, 1, &cursorAnd, &cursorXor );
 
 		// clear mouse data
 
@@ -142,8 +140,6 @@ public:
 		window = NULL;
 
 		DestroyCursor( nullCursor );
-
-		windowCount()--;
 	}
 
 	// show the window (it is initially hidden)
@@ -748,8 +744,6 @@ protected:
 	}
 
 private:
-
-	int & windowCount() { static windowCount = 0; return windowCount; }
 
 	HWND window;					// window handle
 	HMENU systemMenu;				// system menu handle

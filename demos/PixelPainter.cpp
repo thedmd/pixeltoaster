@@ -210,9 +210,9 @@ private:
 		}
 	}
 
-	void onClose(DisplayInterface & display)
+	bool onClose(DisplayInterface & display)
 	{
-		isQuiting_ = true;
+		return isQuiting_ = true;
 	}
 
 	inline int button(const Mouse& mouse) const

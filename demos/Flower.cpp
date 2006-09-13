@@ -406,7 +406,7 @@ public:
 
 protected:
 
-    void onMouseButtonDown( Mouse mouse )
+    void onMouseButtonDown( DisplayInterface & display, Mouse mouse )
 	{
 		if ( !dragging )
 		{
@@ -415,7 +415,7 @@ protected:
 		}
 	}
 
-    void onMouseMove( Mouse mouse )
+    void onMouseMove( DisplayInterface & display, Mouse mouse )
 	{
 		if ( dragging )
 		{
@@ -429,21 +429,21 @@ protected:
 		}
 	}
 
-    void onMouseButtonUp( Mouse mouse )
+    void onMouseButtonUp( DisplayInterface & display, Mouse mouse )
 	{
 		if ( dragging )
 			dragging = false;
 	}
 
-	void onKeyDown( Key key )
+	void onKeyDown( DisplayInterface & display, Key key )
 	{
 		if ( key == Key::Escape )
 			quit = true;
 	}
 
-	void onClose()
+	bool onClose( DisplayInterface & display )
 	{
-		quit = true;
+		return quit = true;
 	}
 
 private:

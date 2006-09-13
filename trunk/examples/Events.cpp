@@ -115,6 +115,7 @@ protected:
 		{
 			case Output::Windowed: printf( " (windowed)\n" ); break;
 			case Output::Fullscreen: printf( " (fullscreen)\n" ); break;
+			default: break;
 		}
     }
 

@@ -182,7 +182,7 @@ public:
 		::XFlush(display_);
 
 		if ( DisplayAdapter::listener() )
-			DisplayAdapter::listener()->onOpen( wrapper() ? *wrapper() : *(DisplayInterface*)this );
+			DisplayAdapter::listener()->onOpen(wrapper() ? *wrapper() : *(DisplayInterface*)this);
 
 		return true;
 	}
@@ -302,13 +302,13 @@ private:
 		{
 			if (keyIsReleased_[i] && keyIsPressed_[i])
 			{
-				if (listener()) listener()->onKeyUp(static_cast<Key::Code>(i));
+				if (listener()) listener()->onKeyUp(wrapper() ? *wrapper() : *(DisplayInterface*)this,static_cast<Key::Code>(i));
 				keyIsPressed_[i] = false;
 				keyIsReleased_[i] = false;
 			}
 			else if (keyIsPressed_[i])
 			{
-				if (listener()) listener()->onKeyPressed(static_cast<Key::Code>(i));
+				if (listener()) listener()->onKeyPressed(wrapper() ? *wrapper() : *(DisplayInterface*)this,static_cast<Key::Code>(i));
 			}
 		}		
 	}
@@ -343,7 +343,7 @@ private:
 
 						if (listener())
 						{
-							listener()->onKeyDown(key);
+							listener()->onKeyDown(wrapper() ? *wrapper() : *(DisplayInterface*)this,key);
 							defaultKeyHandlers = listener()->defaultKeyHandlers();
 						}
 
@@ -374,11 +374,11 @@ private:
 				mouse.buttons.right = event.xbutton.button == Button3;
 				if (event.type == ButtonPress)
 				{
-					if (listener()) listener()->onMouseButtonDown(mouse);
+					if (listener()) listener()->onMouseButtonDown(wrapper() ? *wrapper() : *(DisplayInterface*)this,mouse);
 				}
 				else
 				{
-					if (listener()) listener()->onMouseButtonUp(mouse);
+					if (listener()) listener()->onMouseButtonUp(wrapper() ? *wrapper() : *(DisplayInterface*)this,mouse);
 				}
 				break;
 			}
@@ -390,7 +390,7 @@ private:
 				mouse.buttons.left = event.xmotion.state & Button1Mask;
 				mouse.buttons.middle = event.xmotion.state & Button2Mask;
 				mouse.buttons.right = event.xmotion.state & Button3Mask;
-				if (listener()) listener()->onMouseMove(mouse);
+				if (listener()) listener()->onMouseMove(wrapper() ? *wrapper() : *(DisplayInterface*)this,mouse);
 				break;
 			}
 			case ClientMessage:
@@ -401,7 +401,7 @@ private:
 				{
 					if (listener()) 
 					{
-						if (listener()->onClose())
+						if (listener()->onClose(wrapper() ? *wrapper() : *(DisplayInterface*)this))
 							isShuttingDown_ = true;
 					}
 					else

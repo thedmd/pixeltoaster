@@ -7,7 +7,7 @@
 
 // current API version (API is not allowed to change in point releases)
 
-#define PIXELTOASTER_API 1.3
+#define PIXELTOASTER_VERSION 1.3
 
 // disable annoying visual c++ warnings
 

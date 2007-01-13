@@ -1306,48 +1306,56 @@ int main()
 
         /// On key down.
         /// Called once only when a key is pressed and held.
+		/// @param display the display sending the event
         /// @param key the key event data.
 
 		virtual void onKeyDown( DisplayInterface & display, Key key ) { }
 
         /// On key pressed.
         /// Called multiple times while a key is pressed and held including the initial event.
+		/// @param display the display sending the event
         /// @param key the key event data.
 
 		virtual void onKeyPressed( DisplayInterface & display, Key key ) {}
 
         /// On key up.
         /// Called when a key is released.
+		/// @param display the display sending the event
         /// @param key the key event data.
 
 		virtual void onKeyUp( DisplayInterface & display, Key key ) {}
 
         /// On mouse button down.
         /// Called once only when a mouse button is initially pressed.
+		/// @param display the display sending the event
         /// @param mouse the mouse event data.
 
 		virtual void onMouseButtonDown( DisplayInterface & display, Mouse mouse ) {}
 
         /// On mouse button up.
         /// Called when a mouse button is released.
+		/// @param display the display sending the event
         /// @param mouse the mouse event data.
 
 		virtual void onMouseButtonUp( DisplayInterface & display, Mouse mouse ) {}
 
         /// On mouse move.
         /// Called when the mouse is moved.
+		/// @param display the display sending the event
         /// @param mouse the mouse event data.
 
 		virtual void onMouseMove( DisplayInterface & display, Mouse mouse ) {}
 
         /// On activate.
         /// Called when the display window is activated or deactivated.
+		/// @param display the display sending the event
         /// @param active true if the window is being activated, false if it is being deactivated.
 
 		virtual void onActivate( DisplayInterface & display, bool active ) {}
 
 		/// On open.
 		/// Called when a display is opened successfully.
+		/// @param display the display sending the event
 
 		virtual void onOpen( DisplayInterface & display ) {}
 
@@ -1358,6 +1366,7 @@ int main()
         /// application will keep running.
 		/// If you return true, the display will close, if you return false it
 		/// will remain open and the close will be ignored. true is default.
+		/// @param display the display sending the event
 
 		virtual bool onClose( DisplayInterface & display ) { return true; }
     };

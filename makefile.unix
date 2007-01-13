@@ -10,13 +10,13 @@ INSTALLDIR = ${INSTALL} -d
 
 srcdir = source
 prefix = /usr/local
-includedir = $(prefix)/include/PixelToaster-1.2
+includedir = $(prefix)/include/PixelToaster-1.4
 libdir = $(prefix)/lib
 pkgconfigdir = $(libdir)/pkgconfig
 
 source := $(wildcard source/*.cpp)
 headers := $(wildcard source/*.h)
-pkconfig = PixelToaster-1.2.pc
+pkconfig = PixelToaster-1.4.pc
 
 tests := $(patsubst tests/%.cpp,%,$(wildcard tests/*.cpp))
 demos := $(patsubst demos/%.cpp,%,$(wildcard demos/*.cpp))

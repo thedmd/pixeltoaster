@@ -14,12 +14,12 @@ VPATH = tests:examples:demos
 % : %.cpp ${source} ${headers} makefile.apple
 	g++ $< -o $@ source/PixelToaster.cpp ${flags}
 
+all: ${examples} ${demos} ${tests} docs
+
 documentation : ${source} ${headers} doxygen.config
 	doxygen doxygen.config
 	
 docs : documentation
-
-all: ${examples} ${demos} ${tests} docs
 	
 clean:
 	rm -rf ${tests} ${demos} ${examples} documentation

@@ -1,6 +1,6 @@
 // Image example
 // Demonstrates how to load and display a TGA image
-// Copyright © Glenn Fiedler, 2004-2006. http://www.pixeltoaster.com
+// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #include <cstdio>
 #include <PixelToaster.h>

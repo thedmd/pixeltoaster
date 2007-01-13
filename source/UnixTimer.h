@@ -1,8 +1,8 @@
 // Unix Timer
-// Implemented by Bram De Greve
-// http://www.pixeltoaster.com
+// Copyright © 2006-2007 Bram de Greve
+// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
-namespace impl
+namespace internal
 {
 	void wait( double seconds )
 	{
@@ -74,7 +74,7 @@ public:
 	
 	void wait( double seconds )
 	{
-		impl::wait(seconds);
+		internal::wait(seconds);
 	}	
 	
 private:
@@ -160,7 +160,7 @@ public:
 	
 	void wait( double seconds )
 	{
-		impl::wait(seconds);
+		internal::wait(seconds);
 	}
 	
 private:

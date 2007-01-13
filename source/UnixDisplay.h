@@ -1,6 +1,6 @@
 // Unix Display
-// Copyright © Glenn Fiedler
-// http://www.pixeltoaster.com
+// Copyright © 2004-2007 Glenn Fiedler
+// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 // X11 version implemented by Bram de Greve <bramz@users.sourceforge.net>
 // inspired by X11 version of TinyPTC by Alessandro Gatti <a.gatti@tiscali.it>

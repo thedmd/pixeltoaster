@@ -1,6 +1,6 @@
 // Floating Point Color.
 // Pixels are float r,g,b,a values automatically clamped in range [0,1]
-// Copyright © Glenn Fiedler, 2004-2006. http://www.pixeltoaster.com
+// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #include <PixelToaster.h>
 

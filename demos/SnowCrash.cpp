@@ -1,5 +1,4 @@
 // Snow Crash
-// Respect to Neil Stephenson
 // Copyright © Glenn Fiedler
 // http://www.pixeltoaster.com
 

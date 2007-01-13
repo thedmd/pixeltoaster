@@ -1,6 +1,6 @@
-// Pixel Toaster Conversion routines
-// Copyright © 2004-2006, Glenn Fiedler
-// http://www.pixeltoaster.com
+// Pixel Format Conversion Routines
+// Copyright © 2004-2007 Glenn Fiedler
+// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #ifndef PIXELTOASTER_CONVERSION_H
 #define PIXELTOASTER_CONVERSION_H

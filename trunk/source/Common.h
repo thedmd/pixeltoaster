@@ -1,6 +1,6 @@
-// Pixel Toaster code common across all platforms
-// Copyright © 2004-2006, Glenn Fiedler
-// http://www.pixeltoaster.com
+// Common code across all platforms
+// Copyright © 2004-2007 Glenn Fiedler
+// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #ifndef PIXELTOASTER_NO_CRT
 #include <ctime>

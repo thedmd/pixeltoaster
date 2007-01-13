@@ -1,6 +1,6 @@
 // Windows Device
-// Copyright © 2004-2006, Glenn Fiedler
-// http://www.pixeltoaster.com
+// Copyright © 2006-2007 Glenn Fiedler
+// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 class WindowsDevice
 {

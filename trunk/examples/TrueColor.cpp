@@ -1,6 +1,6 @@
 // TrueColor Example
 // How to open a display in truecolor mode and work with 32 bit integer pixels.
-// Copyright © Glenn Fiedler, 2004-2006. http://www.pixeltoaster.com
+// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #include <PixelToaster.h>
 

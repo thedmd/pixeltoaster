@@ -1,6 +1,6 @@
 // Events Example
 // How to get keyboard, mouse and system events from a display.
-// Copyright © Glenn Fiedler, 2004-2006. http://www.pixeltoaster.com
+// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #include <cstdio>
 #include <PixelToaster.h>

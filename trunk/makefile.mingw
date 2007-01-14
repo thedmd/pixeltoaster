@@ -1,14 +1,14 @@
 # pixeltoaster makefile for mingw (new source code layout)
 
-flags = -s -O3 -Wall -ffast-math
+flags = -s -O3 -Wall -ffast-math -mwindows -ld3d9
 
 source := PixelToaster.cpp
 headers := $(wildcard PixelToaster*.h)
 
-%.exe : %.cpp ${headers} makefile
-	g++ $< -o $@ ${flags}
+PixelToaster.exe : PixelToaster.cpp ${headers} makefile.mingw
+	g++ $< -o PixelToaster.exe ${flags}
 
-all: PixelToaster
+all: PixelToaster.exe
 
 documentation : ${source} ${headers} doxygen.config
 	doxygen doxygen.config
@@ -16,4 +16,4 @@ documentation : ${source} ${headers} doxygen.config
 docs : documentation
 	
 clean:
-	rm -rf PixelToaster documentation
+	rm -rf PixelToaster.exe documentation

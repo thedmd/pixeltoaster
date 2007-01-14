@@ -1,13 +1,13 @@
-# pixeltoaster makefile (new source code layout)
+# pixeltoaster makefile for apple
 
 flags = -O3 -Wall -framework CoreServices -L/usr/X11R6/lib -lX11
 
 headers := $(wildcard PixelToaster*.h)
 
-Test : Test.cpp ${headers} makefile
+Test : Test.cpp ${headers} makefile.apple
 		g++ Test.cpp PixelToaster.cpp -o Test ${flags}
 
-Profile : Profile.cpp ${headers} makefile
+Profile : Profile.cpp ${headers} makefile.apple
 		g++ Profile.cpp PixelToaster.cpp -o Profile ${flags}
 
 documentation : PixelToaster.h ${headers} doxygen.config
@@ -22,4 +22,4 @@ profile : Profile
 	./Profile
 	
 clean:
-	rm -rf PixelToaster documentation
+	rm -rf Test Profile documentation

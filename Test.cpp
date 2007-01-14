@@ -1,151 +1,114 @@
-// Conversion Unit Test
-// Copyright © 2004-2007 Glenn Fiedler
-// Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
+/*
+	PixelToaster Unit Tests
+	Copyright © 2004-2007 Glenn Fiedler
+	Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
+*/
 
 #include <cstdio>
 #include <cstdlib>
-#include <Conversion.h>
+#include "PixelToaster.h"
+#include "PixelToasterConversion.h"
 
 using namespace PixelToaster;
 
-int main()
+// truecolor converters
+
+void test_truecolor_to_truecolor()
 {
-    printf( "\ntesting conversion routines:\n\n" );
+	printf( "   truecolor -> truecolor\n" );
 
-    // ---------------------------------------------------------
+    printf( "     checking identity...\n" );
 
-    printf( "TrueColor -> TrueColor\n" );
+    for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
     {
-        // verify identity
+        integer32 a = i;
+        integer32 b;
 
-        printf( "  checking identity...\n" );
+        convert_XRGB8888_to_XRGB8888( &a, &b, 1 );
 
-        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        if ( a != b )
         {
-            integer32 a = i;
-            integer32 b;
-
-            convert_XRGB8888_to_XRGB8888(&a, &b, 1);
-
-            if (a!=b)
-            {
-                printf("  failed: %d -> %d\n", a, b);
-                exit(1);
-            }
+            printf( "     failed: %d -> %d\n", a, b );
+            exit( 1 );
         }
-
-        printf("  passed.\n\n");
     }
 
-    printf( "FloatingPointColor -> FloatingPointColor\n");
+    printf( "     passed.\n\n" );
+}
+
+void test_truecolor_to_xbgr1555()
+{
+    printf( "   truecolor -> xbgr1555\n" );
+
     {
-        // verify identity
+        printf("     checking one-to-one...\n");
 
-        printf("  checking identity...\n");
-
-        for (unsigned int i=0; i<=0x00FFFFFF; i++)
-        {
-            integer32 a = i;
-            Pixel b;
-            Pixel c;
-
-            convert_XRGB8888_to_XBGRFFFF(&a, &b, 1);
-            convert_XBGRFFFF_to_XBGRFFFF(&b, &c, 1);
-
-            if (b.r!=c.r || b.g!=c.g || b.b!=c.b)
-            {
-                printf("  failed: %d -> (%f,%f,%f) -> (%f,%f,%f)\n", a, b.r, b.g, b.b, c.r, c.g, c.b);
-                exit(1);
-            }
-        }
-
-        printf("  passed.\n\n");
-    }
-
-    // ---------------------------------------------------------
-       
-    printf( "TrueColor -> XBGR1555\n" );
-    {
-        // verify one-to-one
-
-        printf("  checking one-to-one...\n");
-
-        for (unsigned int i=0; i<=0x00007FFF; i++)
+        for ( unsigned int i =0; i <= 0x00007FFF; i++ )
         {
             integer16 a = i;
             integer32 b;
             integer16 c;
 
-            convert_XBGR1555_to_XRGB8888(&a, &b, 1);
-            convert_XRGB8888_to_XBGR1555(&b, &c, 1);
+            convert_XBGR1555_to_XRGB8888( &a, &b, 1 );
+            convert_XRGB8888_to_XBGR1555( &b, &c, 1 );
 
-            if (a!=c)
+            if ( a != c )
             {
-                printf("  failed: %d -> %d -> %d\n", a, b, c);
-                exit(1);
+                printf( "     failed: %d -> %d -> %d\n", a, b, c );
+                exit( 1 );
             }
         }
 
-        // verify black
-
-        printf("  checking black\n");
+        printf( "     checking black\n" );
 
         integer16 input = 0;
         integer32 output;
 
-        convert_XBGR1555_to_XRGB8888(&input, &output, 1);
+        convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
-        if (output!=0)
+        if ( output != 0 )
         {
-            printf("  black test failed: %d\n", output);
-            exit(1);
+            printf( "     black test failed: %d\n", output );
+            exit( 1 );
         }
 
-        // verify maximum red
-
-        printf("  checking maximum red\n");
+        printf( "     checking maximum red\n" );
 
         input = 0x0000001F;
 
-        convert_XBGR1555_to_XRGB8888(&input, &output, 1);
+        convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
-        if (output!=0x00F80000)     // note slightly reduced dynamic range
+        if ( output != 0x00F80000 )     // note: slightly reduced dynamic range
         {
-            printf("  red test failed: %d\n", output);
-            exit(1);
+            printf( "     red test failed: %d\n", output );
+            exit( 1 );
         }
 
-        // verify maximum green
-
-        printf("  checking maximum green\n");
+        printf( "     checking maximum green\n" );
 
         input = 0x000003E0;         
 
-        convert_XBGR1555_to_XRGB8888(&input, &output, 1);
+        convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
-        if (output!=0x0000F800)
+        if ( output != 0x0000F800 )
         {
-            printf("  green test failed: %d\n", output);
-            exit(1);
+            printf( "     green test failed: %d\n", output );
+            exit( 1 );
         }
 
-        // verify maximum blue
-
-        printf("  checking maximum blue\n");
+        printf( "     checking maximum blue\n" );
 
         input = 0x7C00;
 
-        convert_XBGR1555_to_XRGB8888(&input, &output, 1);
+        convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
-        if (output!=0x000000F8)     
+        if ( output != 0x000000F8 )
         {
-            printf("  blue test failed: %d\n", output);
-            exit(1);
+            printf( "     blue test failed: %d\n", output );
+            exit( 1 );
         }
 
-        // verify red channel
-
-        printf("  checking red channel\n");
+        printf( "     checking red channel\n" );
         {
             const int steps = 32;
 
@@ -153,24 +116,24 @@ int main()
 
             integer32 previousDistinctValue = 0xFFFFFFFF;
 
-            for (int i=0; i<steps; i++)
+            for ( int i = 0; i < steps; i++ )
             {
                 input = i;
 
-                convert_XBGR1555_to_XRGB8888(&input, &output, 1);
+                convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
-                if (output&0x0000FFFF)
+                if ( output & 0x0000FFFF )
                 {
-                    printf("  red channel polluted other channels: %d -> %d\n", input, output);
-                    exit(1);
+                    printf( "     red channel polluted other channels: %d -> %d\n", input, output );
+                    exit( 1 );
                 }
 
-                if (output!=previousDistinctValue)
+                if ( output != previousDistinctValue )
                 {
-                    if (output<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
+                    if ( output < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
                     {
-                        printf("  red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output);
-                        exit(1);
+                        printf( "     red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output );
+                        exit( 1 );
                     }
 
                     distinctValues++;
@@ -178,16 +141,14 @@ int main()
                 }
             }
 
-            if (distinctValues!=32)
+            if ( distinctValues != 32 )
             {
-                printf("  red channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
+                printf( "     red channel distinct value check failed: %d distinct values\n", distinctValues );
+                exit( 1 );
             }
         }
 
-        // verify green channel
-
-        printf("  checking green channel\n");
+        printf( "     checking green channel\n" );
         {
             const int steps = 32;
 
@@ -195,24 +156,24 @@ int main()
 
             integer32 previousDistinctValue = 0xFFFFFFFF;
 
-            for (int i=0; i<steps; i++)
+            for ( int i = 0; i < steps; i++ )
             {
                 input = i << 5;
 
-                convert_XBGR1555_to_XRGB8888(&input, &output, 1);
+                convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
-                if (output&0x00FF00FF)
+                if ( output & 0x00FF00FF )
                 {
-                    printf("  green channel polluted other channels: %d -> %d\n", input, output);
-                    exit(1);
+                    printf( "     green channel polluted other channels: %d -> %d\n", input, output );
+                    exit( 1 );
                 }
 
-                if (output!=previousDistinctValue)
+                if ( output != previousDistinctValue )
                 {
-                    if (output<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
+                    if ( output < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
                     {
-                        printf("  green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output);
-                        exit(1);
+                        printf( "     green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output );
+                        exit( 1 );
                     }
 
                     distinctValues++;
@@ -220,16 +181,14 @@ int main()
                 }
             }
 
-            if (distinctValues!=32)
+            if ( distinctValues != 32 )
             {
-                printf("  green channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
+                printf( "     green channel distinct value check failed: %d distinct values\n", distinctValues );
+                exit( 1 );
             }
         }
 
-        // verify blue channel
-
-        printf("  checking blue channel\n");
+        printf( "     checking blue channel\n" );
         {
             const int steps = 32;
 
@@ -237,24 +196,24 @@ int main()
 
             integer32 previousDistinctValue = 0xFFFFFFFF;
 
-            for (int i=0; i<steps; i++)
+            for ( int i = 0; i < steps; i++ )
             {
                 input = i << 10;
 
-                convert_XBGR1555_to_XRGB8888(&input, &output, 1);
+                convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
-                if (output&0x00FFFF00)
+                if ( output & 0x00FFFF00 )
                 {
-                    printf("  blue channel polluted other channels: %d -> %d\n", input, output);
-                    exit(1);
+                    printf( "     blue channel polluted other channels: %d -> %d\n", input, output );
+                    exit( 1 );
                 }
 
-                if (output!=previousDistinctValue)
+                if ( output != previousDistinctValue )
                 {
-                    if (output<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
+                    if ( output < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
                     {
-                        printf("  blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output);
-                        exit(1);
+                        printf( "     blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output );
+                        exit( 1 );
                     }
 
                     distinctValues++;
@@ -262,15 +221,69 @@ int main()
                 }
             }
 
-            if (distinctValues!=32)
+            if ( distinctValues != 32 )
             {
-                printf("  blue channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
+                printf( "     blue channel distinct value check failed: %d distinct values\n", distinctValues );
+                exit( 1 );
             }
         }
 
-        printf("  passed.\n\n");
+        printf( "     passed.\n\n" );
     }
+}
+
+// floating point converters
+
+void test_floating_point_to_floating_point()
+{
+	printf( "   floating point -> floating point\n" );
+
+    printf( "     checking identity...\n" );
+
+    for ( unsigned int i = 0; i <= 0x00FFFFFF; i++ )
+    {
+        integer32 a = i;
+        Pixel b;
+        Pixel c;
+
+        convert_XRGB8888_to_XBGRFFFF( &a, &b, 1 );
+        convert_XBGRFFFF_to_XBGRFFFF( &b, &c, 1 );
+
+        if ( b.r != c.r || b.g != c.g || b.b != c.b )
+        {
+            printf( "     failed: %d -> (%f,%f,%f) -> (%f,%f,%f)\n", a, b.r, b.g, b.b, c.r, c.g, c.b);
+            exit( 1 );
+        }
+    }
+
+    printf( "     passed.\n\n" );
+}
+
+void test_converters()
+{
+	printf( "testing pixel format conversion:\n\n" );
+	
+	test_truecolor_to_truecolor();
+	test_truecolor_to_xbgr1555();
+	
+	test_floating_point_to_floating_point();
+}
+
+int main()
+{
+	printf( "\n[ PixelToaster Test Suite ]\n\n" );
+	
+	test_converters();
+	
+	// more tests
+	
+	printf( "test completed successfully!\n\n" );
+
+	return 0;
+
+/*	
+    // ---------------------------------------------------------
+       
 
     // ---------------------------------------------------------
 
@@ -3428,4 +3441,5 @@ int main()
 
         printf("  passed.\n\n");
     }
+	*/
 }

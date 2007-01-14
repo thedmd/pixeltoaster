@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>PixelToasterCommon.h</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -22,25 +20,37 @@
 			<key>filename</key>
 			<string>PixelToaster.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-14T00:17:29Z</date>
+			<date>2007-01-14T01:10:04Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>PixelToaster.h</string>
 			<key>lastUsed</key>
-			<date>2007-01-14T00:13:30Z</date>
+			<date>2007-01-14T01:10:04Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>PixelToasterCommon.h</string>
 			<key>lastUsed</key>
-			<date>2007-01-14T00:31:41Z</date>
+			<date>2007-01-14T01:10:04Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>PixelToasterConversion.h</string>
 			<key>lastUsed</key>
-			<date>2007-01-14T00:13:33Z</date>
+			<date>2007-01-14T01:10:03Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>PixelToasterUnix.h</string>
+			<key>lastUsed</key>
+			<date>2007-01-14T01:10:03Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>PixelToasterApple.h</string>
+			<key>lastUsed</key>
+			<date>2007-01-14T01:09:59Z</date>
 			<key>selected</key>
 			<true/>
 		</dict>
@@ -48,71 +58,7 @@
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>184</integer>
 	<key>metaData</key>
-	<dict>
-		<key>PixelToaster.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>46</integer>
-				<key>line</key>
-				<integer>32</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>19</integer>
-		</dict>
-		<key>PixelToaster.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>PixelToasterCommon.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>PixelToasterConversion.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>PixelToaster.h</string>
-		<string>PixelToasterCommon.h</string>
-		<string>PixelToaster.cpp</string>
-		<string>PixelToasterConversion.h</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

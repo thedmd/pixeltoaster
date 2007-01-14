@@ -123,10 +123,3 @@ PixelToaster::Converter * PixelToaster::requestConverter( PixelToaster::Format s
 
 	return NULL;
 }
-
-
-// hack!
-int main()
-{
-	printf( "hello.\n" );
-}

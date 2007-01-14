@@ -1,13 +1,14 @@
 # pixeltoaster makefile (new source code layout)
 
-flags = -O3 -Wall -Isource -framework CoreServices -L/usr/X11R6/lib -lX11
+flags = -O3 -Wall -framework CoreServices -L/usr/X11R6/lib -lX11
 
 headers := $(wildcard PixelToaster*.h)
 
-% : %.cpp ${headers} makefile
-	g++ $< -o $@ ${flags}
+Test : Test.cpp ${headers} makefile
+		g++ Test.cpp PixelToaster.cpp -o Test ${flags}
 
-all: PixelToaster
+Profile : Profile.cpp ${headers} makefile
+		g++ Profile.cpp PixelToaster.cpp -o Profile ${flags}
 
 documentation : PixelToaster.h ${headers} doxygen.config
 	doxygen doxygen.config
@@ -16,6 +17,9 @@ docs : documentation
 
 test : Test
 	./Test
+	
+profile : Profile
+	./Profile
 	
 clean:
 	rm -rf PixelToaster documentation

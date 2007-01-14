@@ -11,6 +11,612 @@
 
 using namespace PixelToaster;
 
+
+// converter objects
+
+bool equal(float a, float b)
+{
+    const float epsilon = 0.000001f;
+    const float difference = a - b;
+    return difference > epsilon || difference < epsilon;
+}
+
+void test_converter_objects()
+{
+	printf( "testing converter objects:\n\n" );
+
+	printf( "   truecolor -> floating point\n" );
+    {
+        Converter * converter = requestConverter( Format::XRGB8888, Format::XBGRFFFF );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            integer32 a = i;
+            Pixel b;
+            Pixel c;
+
+            converter->convert( &a, &b, 1 );
+
+			convert_XRGB8888_to_XBGRFFFF( &a, &c, 1 );
+
+            if ( !equal( b.r, c.r ) || !equal( b.g, c.g ) || !equal( b.b, c.b ) )
+            {
+                printf( "     failed: (%f,%f,%f) vs. (%f,%f,%f)\n", b.r, b.g, b.b, c.r, c.g, c.b );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   truecolor -> truecolor\n" );
+    {
+        Converter * converter = requestConverter( Format::XRGB8888, Format::XRGB8888  );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            integer32 a = i;
+            integer32 b;
+            integer32 c;
+
+            converter->convert( &a, &b, 1 );
+
+			convert_XRGB8888_to_XRGB8888( &a, &c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   truecolor -> xbgr8888\n" );
+    {
+        Converter * converter = requestConverter( Format::XRGB8888, Format::XBGR8888 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit(1);
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            integer32 a = i;
+            integer32 b;
+            integer32 c;
+
+            converter->convert( &a, &b, 1 );
+
+			convert_XRGB8888_to_XBGR8888( &a, &c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   truecolor -> rgb888\n" );
+    {
+        Converter * converter = requestConverter( Format::XRGB8888, Format::RGB888 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            integer32 a = i;
+            integer8 b[3];
+            integer8 c[3];
+
+            converter->convert( &a, b, 1 );
+
+            convert_XRGB8888_to_RGB888( &a, c, 1 );
+
+            if ( b[0] != c[0] )
+            {
+                printf( "     failed: (%d,%d,%d) vs. (%d,%d,%d)\n", b[0], b[1], b[2], c[0], c[1], c[2] );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   truecolor -> bgr888\n" );
+    {
+        Converter * converter = requestConverter( Format::XRGB8888, Format::BGR888 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            integer32 a = i;
+            integer8 b[3];
+            integer8 c[3];
+
+            converter->convert( &a, b, 1 );
+
+            convert_XRGB8888_to_BGR888( &a, c, 1 );
+
+            if ( b[0] != c[0] )
+            {
+                printf( "     failed: (%d,%d,%d) vs. (%d,%d,%d)\n", b[0], b[1], b[2], c[0], c[1], c[2] );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   truecolor -> rgb565\n" );
+    {
+        Converter * converter = requestConverter( Format::XRGB8888, Format::RGB565 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            integer32 a = i;
+            integer16 b;
+            integer16 c;
+
+            converter->convert( &a, &b, 1 );
+
+            convert_XRGB8888_to_RGB565( &a, (integer16*)&c, 1 );
+
+            if ( b != c )
+            {
+                printf( "failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   truecolor -> bgr565\n");
+    {
+        Converter * converter = requestConverter( Format::XRGB8888, Format::BGR565 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            integer32 a = i;
+            integer16 b;
+            integer16 c;
+
+            converter->convert( &a, &b, 1 );
+
+            convert_XRGB8888_to_BGR565( &a, (integer16*)&c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+	printf( "   truecolor -> xrgb1555\n");
+    {
+        Converter * converter = requestConverter( Format::XRGB8888, Format::XRGB1555 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            integer32 a = i;
+            integer16 b;
+            integer16 c;
+
+            converter->convert( &a, &b, 1 );
+
+            convert_XRGB8888_to_XRGB1555( &a, (integer16*)&c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   truecolor -> xbgr1555\n" );
+    {
+        Converter * converter = requestConverter( Format::XRGB8888, Format::XBGR1555 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            integer32 a = i;
+            integer16 b;
+            integer16 c;
+
+            converter->convert( &a, &b, 1 );
+
+            convert_XRGB8888_to_XBGR1555( &a, (integer16*)&c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+	printf( "\n" );
+
+    printf( "   floating point -> floating point\n");
+    {
+        Converter * converter = requestConverter( Format::XBGRFFFF, Format::XBGRFFFF );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            Pixel a;
+            Pixel b;
+            Pixel c;
+
+            convert_XRGB8888_to_XBGRFFFF( &i, &a, 1 );
+
+            converter->convert(&a, &b, 1);
+
+            convert_XBGRFFFF_to_XBGRFFFF( &a, &c, 1 );
+
+            if ( b.r != c.r || b.g != c.g || b.b != c.b)
+            {
+                printf( "     failed: (%f,%f,%f) vs. (%f,%f,%f)\n", b.r, b.g, b.b, c.r, c.g, c.b );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   floating point -> truecolor\n");
+    {
+        Converter * converter = requestConverter( Format::XBGRFFFF, Format::XRGB8888);
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            Pixel a;
+            integer32 b;
+            integer32 c;
+
+            convert_XRGB8888_to_XBGRFFFF( &i, &a, 1 );
+
+            converter->convert( &a, &b, 1 );
+
+            convert_XBGRFFFF_to_XRGB8888( &a, &c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   floating point -> xbgr8888\n" );
+    {
+        Converter * converter = requestConverter( Format::XBGRFFFF, Format::XBGR8888 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            Pixel a;
+            integer32 b;
+            integer32 c;
+
+            convert_XRGB8888_to_XBGRFFFF( &i, &a, 1 );
+
+            converter->convert( &a, &b, 1 );
+
+            convert_XBGRFFFF_to_XBGR8888( &a, &c, 1 );
+
+            if ( b != c )
+            {
+                printf( "failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   floating point -> rgb888\n" );
+    {
+        Converter * converter = requestConverter( Format::XBGRFFFF, Format::RGB888 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            Pixel a;
+            integer8 b[3];
+            integer8 c[3];
+
+            converter->convert( &a, b, 1 );
+
+            convert_XBGRFFFF_to_RGB888( &a, c, 1 );
+
+            if ( b[0] != c[0] )
+            {
+                printf( "     failed: (%d,%d,%d) vs. (%d,%d,%d)\n", b[0], b[1], b[2], c[0], c[1], c[2] );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   floating point -> bgr888\n" );
+    {
+        Converter * converter = requestConverter( Format::XBGRFFFF, Format::BGR888 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            Pixel a;
+            integer8 b[3];
+            integer8 c[3];
+
+            converter->convert( &a, b, 1 );
+
+            convert_XBGRFFFF_to_BGR888( &a, c, 1 );
+
+            if ( b[0] != c[0] )
+            {
+                printf( "failed: (%d,%d,%d) vs. (%d,%d,%d)\n", b[0], b[1], b[2], c[0], c[1], c[2] );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   floating point -> rgb565\n" );
+    {
+        Converter * converter = requestConverter( Format::XBGRFFFF, Format::RGB565 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit(1);
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            Pixel a;
+            integer16 b;
+            integer16 c;
+
+            convert_XRGB8888_to_XBGRFFFF( &i, &a, 1 );
+
+            converter->convert( &a, (integer16*)&b, 1 );
+
+            convert_XBGRFFFF_to_RGB565( &a, (integer16*)&c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit(1);
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   floating point -> bgr565\n" );
+    {
+        Converter * converter = requestConverter( Format::XBGRFFFF, Format::BGR565);
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            Pixel a;
+            integer16 b;
+            integer16 c;
+
+            convert_XRGB8888_to_XBGRFFFF( &i, &a, 1 );
+
+            converter->convert( &a, (integer16*)&b, 1 );
+
+            convert_XBGRFFFF_to_BGR565( &a, (integer16*)&c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   floating point -> xrgb1555\n" );
+    {
+        Converter * converter = requestConverter( Format::XBGRFFFF, Format::XRGB1555 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit( 1 );
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            Pixel a;
+            integer16 b;
+            integer16 c;
+
+            convert_XRGB8888_to_XBGRFFFF( &i, &a, 1 );
+
+            converter->convert( &a, (integer16*)&b, 1 );
+
+            convert_XBGRFFFF_to_XRGB1555( &a, (integer16*)&c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+
+    printf( "   floating point -> xbgr1555\n" );
+    {
+        Converter * converter = requestConverter( Format::XBGRFFFF, Format::XBGR1555 );
+
+        if ( !converter )
+        {
+            printf( "     failed: invalid converter\n" );
+            exit(1);
+        }
+
+        converter->begin();
+
+        for ( unsigned int i = 0; i <= 0x00FFFFFF; ++i )
+        {
+            Pixel a;
+            integer16 b;
+            integer16 c;
+
+            convert_XRGB8888_to_XBGRFFFF( &i, &a, 1 );
+
+            converter->convert( &a, (integer16*)&b, 1 );
+            convert_XBGRFFFF_to_XBGR1555( &a, (integer16*)&c, 1 );
+
+            if ( b != c )
+            {
+                printf( "     failed: %d vs. %d\n", b, c );
+                exit( 1 );
+            }
+        }
+
+        converter->end();
+    }
+}
+
 // truecolor converters
 
 void test_truecolor_to_truecolor()
@@ -455,7 +1061,7 @@ void test_truecolor_to_xrgb1555()
 	printf( "     passed.\n\n" );
 }
 
-void test_converters()
+void test_conversion()
 {
 	printf( "testing pixel format conversion:\n\n" );
 	
@@ -470,9 +1076,10 @@ int main()
 {
 	printf( "\n[ PixelToaster Test Suite ]\n\n" );
 	
-	test_converters();
+	test_conversion();
+	test_converter_objects();
 	
-	printf( "test completed successfully!\n\n" );
+	printf( "\ntest completed successfully!\n\n" );
 
 	return 0;
 

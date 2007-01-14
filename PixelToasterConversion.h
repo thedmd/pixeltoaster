@@ -495,7 +495,7 @@ namespace PixelToaster
 
 	// declare set of converter classes
 
-	#define CONVERTER( type, source_type, destination_type )											\
+	#define PIXELTOASTER_CONVERTER( type, source_type, destination_type )								\
 																										\
 	class Converter_##type : public ConverterAdapter													\
     {																									\
@@ -505,25 +505,25 @@ namespace PixelToaster
         }																								\
     };																									\
 
-	CONVERTER( XBGRFFFF_to_XBGRFFFF, Pixel, Pixel);
-	CONVERTER( XBGRFFFF_to_XRGB8888, Pixel, integer32 );
-	CONVERTER( XBGRFFFF_to_XBGR8888, Pixel, integer32 );
-	CONVERTER( XBGRFFFF_to_RGB888, Pixel, integer8 );
-	CONVERTER( XBGRFFFF_to_BGR888, Pixel, integer8 );
-	CONVERTER( XBGRFFFF_to_RGB565, Pixel, integer16 );
-	CONVERTER( XBGRFFFF_to_BGR565, Pixel, integer16 );
-	CONVERTER( XBGRFFFF_to_XRGB1555, Pixel, integer16 );
-	CONVERTER( XBGRFFFF_to_XBGR1555, Pixel, integer16 );
+	PIXELTOASTER_CONVERTER( XBGRFFFF_to_XBGRFFFF, Pixel, Pixel);
+	PIXELTOASTER_CONVERTER( XBGRFFFF_to_XRGB8888, Pixel, integer32 );
+	PIXELTOASTER_CONVERTER( XBGRFFFF_to_XBGR8888, Pixel, integer32 );
+	PIXELTOASTER_CONVERTER( XBGRFFFF_to_RGB888, Pixel, integer8 );
+	PIXELTOASTER_CONVERTER( XBGRFFFF_to_BGR888, Pixel, integer8 );
+	PIXELTOASTER_CONVERTER( XBGRFFFF_to_RGB565, Pixel, integer16 );
+	PIXELTOASTER_CONVERTER( XBGRFFFF_to_BGR565, Pixel, integer16 );
+	PIXELTOASTER_CONVERTER( XBGRFFFF_to_XRGB1555, Pixel, integer16 );
+	PIXELTOASTER_CONVERTER( XBGRFFFF_to_XBGR1555, Pixel, integer16 );
 
-	CONVERTER( XRGB8888_to_XBGRFFFF, integer32, Pixel );
-	CONVERTER( XRGB8888_to_XRGB8888, integer32, integer32 );
-	CONVERTER( XRGB8888_to_XBGR8888, integer32, integer32 );
-	CONVERTER( XRGB8888_to_RGB888, integer32, integer8 );
-	CONVERTER( XRGB8888_to_BGR888, integer32, integer8 );
-	CONVERTER( XRGB8888_to_RGB565, integer32, integer16 );
-	CONVERTER( XRGB8888_to_BGR565, integer32, integer16 );
-	CONVERTER( XRGB8888_to_XRGB1555, integer32, integer16 );
-	CONVERTER( XRGB8888_to_XBGR1555, integer32, integer16 );
+	PIXELTOASTER_CONVERTER( XRGB8888_to_XBGRFFFF, integer32, Pixel );
+	PIXELTOASTER_CONVERTER( XRGB8888_to_XRGB8888, integer32, integer32 );
+	PIXELTOASTER_CONVERTER( XRGB8888_to_XBGR8888, integer32, integer32 );
+	PIXELTOASTER_CONVERTER( XRGB8888_to_RGB888, integer32, integer8 );
+	PIXELTOASTER_CONVERTER( XRGB8888_to_BGR888, integer32, integer8 );
+	PIXELTOASTER_CONVERTER( XRGB8888_to_RGB565, integer32, integer16 );
+	PIXELTOASTER_CONVERTER( XRGB8888_to_BGR565, integer32, integer16 );
+	PIXELTOASTER_CONVERTER( XRGB8888_to_XRGB1555, integer32, integer16 );
+	PIXELTOASTER_CONVERTER( XRGB8888_to_XBGR1555, integer32, integer16 );
 
 	#undef CONVERTER
 }

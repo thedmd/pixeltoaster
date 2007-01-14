@@ -16,7 +16,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 
 source := $(wildcard source/*.cpp)
 headers := $(wildcard source/*.h)
-pkconfig = PixelToaster-1.4.pc
+pkconfig = PixelToaster.pc
 
 tests := $(patsubst tests/%.cpp,%,$(wildcard tests/*.cpp))
 demos := $(patsubst demos/%.cpp,%,$(wildcard demos/*.cpp))

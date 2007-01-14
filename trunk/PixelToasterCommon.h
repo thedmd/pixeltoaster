@@ -129,7 +129,7 @@ namespace PixelToaster
 		// only one of the pointers will be non-null, this allows you to avoid
 		// duplicating update code between truecolor and floating point update methods.
 
-		virtual bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels ) = 0;
+		virtual bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels ) { return true; }
 
 		// this defaults is virtual, override it to add your own defaults
 		// but make sure you always call the superclass defaults in your overridden function!

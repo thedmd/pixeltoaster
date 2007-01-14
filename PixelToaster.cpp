@@ -26,7 +26,9 @@
 #endif
 
 #if PIXELTOASTER_PLATFORM == PIXELTOASTER_WINDOWS
-	#include "WindowsPlatform.h"
+	#include "PixelToasterWindows.h"
+	#define TimerClass WindowsTimer
+	#define DisplayClass WindowsDisplay
 #endif
 
 #if PIXELTOASTER_PLATFORM == PIXELTOASTER_NULL

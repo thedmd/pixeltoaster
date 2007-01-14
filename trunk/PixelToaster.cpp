@@ -42,12 +42,20 @@
 
 PixelToaster::DisplayInterface * PixelToaster::createDisplay()
 {
+#ifdef DisplayClass
     return new DisplayClass();
+#else
+	return NULL;
+#endif
 }
 
 PixelToaster::TimerInterface * PixelToaster::createTimer()
 {
+#ifdef TimerClass
     return new TimerClass();
+#else
+	return NULL;
+#endif
 }
 
 

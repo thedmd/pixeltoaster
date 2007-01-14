@@ -1,48 +1,19 @@
-# pixeltoaster makefile for mingw (dynamic linking)
+# pixeltoaster makefile for mingw (new source code layout)
 
-library = libpixeltoaster
+flags = -s -O3 -Wall -ffast-math
 
-flags = -s -O3 -Wall -ffast-math 
-app = -Isource
-dll = -shared -Wl,--out-implib,${library}.a -mwindows -ld3d9 -DPIXELTOASTER_DLL -DPIXELTOASTER_DYNAMIC
+source := PixelToaster.cpp
+headers := $(wildcard PixelToaster*.h)
 
-source := $(wildcard source/*.cpp)
-headers := $(wildcard source/*.h)
-docs := $(wildcard documentation/*)
+%.exe : %.cpp ${headers} makefile
+	g++ $< -o $@ ${flags}
 
-tests := $(patsubst tests/%.cpp,%.exe,$(wildcard tests/*.cpp))
-demos := $(patsubst demos/%.cpp,%.exe,$(wildcard demos/*.cpp))
-examples := $(patsubst examples/%.cpp,%.exe,$(wildcard examples/*.cpp))
+all: PixelToaster
 
-all: ${library}.dll	${examples} ${tests} ${demos}
-
-${library}.dll: ${library}.a 
-${library}.a: ${source} ${headers} makefile.mingw
-	g++ ${source} -o ${library}.dll ${flags} ${dll}
-
-VPATH = tests:examples:demos
-
-%.exe : %.cpp ${library}.dll source/PixelToaster.h makefile.mingw
-	g++ $< -o $@ ${library}.a ${flags} ${app}
-
-test: $(tests)
-	conversion
-	converter
-	profile	
-
-documentation: documentation/html/index.html
-documentation/html/index.html: ${source} ${headers} ${documentation} ${docs}
-	cp source\PixelToaster.h PixelToaster.h
-	doxygen documentation\doxygen.config
-	rm PixelToaster.h
-
-compress: all
-	upx -9 *.exe *.dll
+documentation : ${source} ${headers} doxygen.config
+	doxygen doxygen.config
+	
+docs : documentation
 	
 clean:
-	rm -f ${tests} 
-	rm -f ${demos} 
-	rm -f ${examples} 
-	rm -f ${library}.dll ${library}.a 
-	rm -f PixelToaster.h
-	rm -rf documentation/html
+	rm -rf PixelToaster documentation

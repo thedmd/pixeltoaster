@@ -2,7 +2,7 @@
 // Copyright © 2004-2007 Glenn Fiedler
 // Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
-#include <PixelToaster.h>
+#include "PixelToaster.h"
 
 using namespace PixelToaster;
 
@@ -11,16 +11,16 @@ char * getFormatString(Format format)
 {
     switch (format)
     {
-        case Format::XRGB8888: return "TrueColor";
-        case Format::XBGR8888: return "XBGR8888";
-        case Format::RGB888: return "RGB888";
-        case Format::BGR888: return "BGR888";
-        case Format::RGB565: return "RGB565";
-        case Format::BGR565: return "BGR565";
-        case Format::XRGB1555: return "XRGB1555";
-        case Format::XBGR1555: return "XBGR1555";
-        case Format::XBGRFFFF: return "FloatingPointColor";
-        default: return "Unknown";
+        case Format::XRGB8888: return "truecolor";
+        case Format::XBGR8888: return "xbgr8888";
+        case Format::RGB888: return "rgb888";
+        case Format::BGR888: return "bgr888";
+        case Format::RGB565: return "rgb565";
+        case Format::BGR565: return "bgr565";
+        case Format::XRGB1555: return "xrgb1555";
+        case Format::XBGR1555: return "xbgr1555";
+        case Format::XBGRFFFF: return "floating point";
+        default: return "???";
     }
 }
 
@@ -32,13 +32,13 @@ Timer timer;
 
 void profilePixelConverter(Format format, const Pixel *source, void *destination, int count)
 {
-    printf( "FloatingPointColor -> %s", getFormatString(format) );
+    printf( "   floating point -> %s", getFormatString(format) );
 
     Converter * converter = requestConverter(Format::XBGRFFFF, format);
 
     if ( !converter )
     {
-        printf( "failed: null converter\n" );
+        printf( "\n     failed: null converter\n" );
         exit(1);
     }
 
@@ -61,13 +61,13 @@ void profilePixelConverter(Format format, const Pixel *source, void *destination
 
 void profileIntegerConverter(Format format, const integer32 *source, void *destination, int count)
 {
-    printf( "TrueColor -> %s", getFormatString(format) );
+    printf( "   truecolor -> %s", getFormatString(format) );
 
     Converter * converter = requestConverter( Format::XRGB8888, format );
 
     if ( !converter )
     {
-        printf( "failed: null converter\n" );
+        printf( "\n     failed: null converter\n" );
         exit(1);
     }
 
@@ -110,7 +110,9 @@ int main()
 
     integer8 * destination = new integer8[width*height*16];
 
-	printf( "\nprofiling conversion routines:\n\n" );
+	printf( "\n[ PixelToaster Profiling Suite ]\n\n" );
+
+	printf( "floating point color conversion routines:\n\n" );
 
     profilePixelConverter( Format::XBGRFFFF, &pixelSource[0], destination, (int) pixelSource.size() );
     profilePixelConverter( Format::XRGB8888, &pixelSource[0], destination, (int) pixelSource.size() );
@@ -122,7 +124,7 @@ int main()
     profilePixelConverter( Format::XRGB1555, &pixelSource[0], destination, (int) pixelSource.size() );
     profilePixelConverter( Format::XBGR1555, &pixelSource[0], destination, (int) pixelSource.size() );
 
-	printf( "\n" );
+	printf( "\ntruecolor conversion routines:\n\n" );
 
     profileIntegerConverter( Format::XBGRFFFF, &integerSource[0], destination, (int) integerSource.size() );
     profileIntegerConverter( Format::XRGB8888, &integerSource[0], destination, (int) integerSource.size() );
@@ -133,4 +135,6 @@ int main()
     profileIntegerConverter( Format::BGR565, &integerSource[0], destination, (int) integerSource.size() );
     profileIntegerConverter( Format::XRGB1555, &integerSource[0], destination, (int) integerSource.size() );
     profileIntegerConverter( Format::XBGR1555, &integerSource[0], destination, (int) integerSource.size() );
+
+	printf( "\n" );
 }

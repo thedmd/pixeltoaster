@@ -13,17 +13,16 @@
 #include "PixelToasterConversion.h"
 
 
-// hack!
-#undef PIXELTOASTER_PLATFORM
-#define PIXELTOASTER_PLATFORM PIXELTOASTER_NULL
-
-
 #if PIXELTOASTER_PLATFORM == PIXELTOASTER_UNIX
-	#include "UnixPlatform.h"
+	#include "PixelToasterUnix.h"
+	#define TimerClass UnixTimer
+	#define DisplayClass UnixDisplay
 #endif
 
 #if PIXELTOASTER_PLATFORM == PIXELTOASTER_APPLE
-	#include "ApplePlatform.h"
+	#include "PixelToasterApple.h"
+	#define TimerClass AppleTimer
+	#define DisplayClass AppleDisplay
 #endif
 
 #if PIXELTOASTER_PLATFORM == PIXELTOASTER_WINDOWS

@@ -4,7 +4,7 @@
 	Copyright © 2004-2007 Glenn Fiedler
 
 	This software is provided 'as-is', without any express or implied
-	warranty.  In no event will the authors be held liable for any damages
+	warranty. In no event will the authors be held liable for any damages
 	arising from the use of this software.
 
 	Permission is granted to anyone to use this software for any purpose,
@@ -28,7 +28,7 @@
 #ifndef PIXELTOASTER_H
 #define PIXELTOASTER_H
 
-// current API version (API is not allowed to change in point releases)
+// current API version ( API is not allowed to change in point releases )
 
 #define PIXELTOASTER_VERSION 1.4
 

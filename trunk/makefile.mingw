@@ -4,13 +4,16 @@ flags = -s -O3 -Wall -ffast-math -ld3d9 -mconsole -mwindows -ld3d9
 
 headers := $(wildcard PixelToaster*.h)
 
-all : test profile docs
+all : ExampleImage.exe
 	
 Test.exe : Test.cpp ${headers} makefile.mingw
 		g++ Test.cpp PixelToaster.cpp -o Test.exe ${flags}
 
 Profile.exe : Profile.cpp ${headers} makefile.mingw
 		g++ Profile.cpp PixelToaster.cpp -o Profile.exe ${flags}
+
+ExampleImage.exe : ExampleImage.cpp ${headers} makefile.mingw
+		g++ ExampleImage.cpp PixelToaster.cpp -o ExampleImage.exe ${flags}
 
 documentation : PixelToaster.h ${headers} doxygen.config
 	doxygen doxygen.config

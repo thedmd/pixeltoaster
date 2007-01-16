@@ -1,9 +1,11 @@
 # pixeltoaster makefile for mingw
 
-flags = -s -O3 -Wall -ffast-math -mwindows -ld3d9
+flags = -s -O3 -Wall -ffast-math -ld3d9 -mconsole -mwindows -ld3d9
 
 headers := $(wildcard PixelToaster*.h)
 
+all : test profile docs
+	
 Test.exe : Test.cpp ${headers} makefile.mingw
 		g++ Test.cpp PixelToaster.cpp -o Test.exe ${flags}
 

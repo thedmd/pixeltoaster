@@ -2,7 +2,7 @@
 // Copyright © 2004-2007 Glenn Fiedler
 // Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
-#include <PixelToaster.h>
+#include "PixelToaster.h"
 
 using namespace PixelToaster;
 

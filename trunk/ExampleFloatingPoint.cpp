@@ -2,7 +2,7 @@
 // Pixels are float r,g,b,a values automatically clamped in range [0,1]
 // Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
-#include <PixelToaster.h>
+#include "PixelToaster.h"
 
 using namespace PixelToaster;
 

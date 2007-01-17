@@ -1,14 +1,20 @@
 # pixeltoaster makefile for apple
 
-flags = -O3 -Wall -framework CoreServices -L/usr/X11R6/lib -lX11
+flags = -s -O3 -Wall -framework CoreServices -L/usr/X11R6/lib -lX11
 
+examples := $(patsubst Example%.cpp,Example%,$(wildcard Example*.cpp))
 headers := $(wildcard PixelToaster*.h)
 
-Test : Test.cpp ${headers} makefile.apple
-		g++ Test.cpp PixelToaster.cpp -o Test ${flags}
+all : $(examples)
+	
+Test.exe : Test.cpp ${headers} makefile.mingw
+	g++ Test.cpp PixelToaster.cpp -o Test ${flags}
 
-Profile : Profile.cpp ${headers} makefile.apple
-		g++ Profile.cpp PixelToaster.cpp -o Profile ${flags}
+Profile.exe : Profile.cpp ${headers} makefile.mingw
+	g++ Profile.cpp PixelToaster.cpp -o Profile ${flags}
+
+% : %.cpp ${headers} makefile.mingw
+	g++ $< -o $@ PixelToaster.cpp ${flags}
 
 documentation : PixelToaster.h ${headers} doxygen.config
 	doxygen doxygen.config
@@ -16,10 +22,10 @@ documentation : PixelToaster.h ${headers} doxygen.config
 docs : documentation
 
 test : Test
-	./Test
+	Test
 	
 profile : Profile
-	./Profile
+	Profile
 	
 clean:
-	rm -rf Test Profile documentation
+	rm -rf $(examples) Test Profile documentation

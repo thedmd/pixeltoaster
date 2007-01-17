@@ -1,5 +1,5 @@
-// Events Example
-// How to get keyboard, mouse and system events from a display.
+// Keyboard and Mouse Example
+// How to get keyboard and mouse events from a display
 // Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #include <cstdio>
@@ -20,7 +20,7 @@ public:
 
         display.listener( this );
 
-        if ( !display.open( "Events Example", width, height ) )
+        if ( !display.open( "Keyboard and Mouse Example", width, height ) )
 			return 1;
 
 		// keep updating the display while it is open

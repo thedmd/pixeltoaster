@@ -6,35 +6,32 @@
 
 using namespace PixelToaster;
 
-
-char * getFormatString(Format format)
+char * getFormatString( Format format )
 {
-    switch (format)
+    switch ( format )
     {
-        case Format::XRGB8888: return "truecolor";
-        case Format::XBGR8888: return "xbgr8888";
-        case Format::RGB888: return "rgb888";
-        case Format::BGR888: return "bgr888";
-        case Format::RGB565: return "rgb565";
-        case Format::BGR565: return "bgr565";
-        case Format::XRGB1555: return "xrgb1555";
-        case Format::XBGR1555: return "xbgr1555";
-        case Format::XBGRFFFF: return "floating point";
-        default: return "???";
+        case Format::XRGB8888: 	return "truecolor";
+        case Format::XBGR8888: 	return "xbgr8888";
+        case Format::RGB888: 	return "rgb888";
+        case Format::BGR888: 	return "bgr888";
+        case Format::RGB565: 	return "rgb565";
+        case Format::BGR565: 	return "bgr565";
+        case Format::XRGB1555: 	return "xrgb1555";
+        case Format::XBGR1555: 	return "xbgr1555";
+        case Format::XBGRFFFF: 	return "floating point";
+        default: 				return "???";
     }
 }
-
 
 const float duration = 1.0f;
 
 Timer timer;
 
-
-void profilePixelConverter(Format format, const Pixel *source, void *destination, int count)
+void profilePixelConverter( Format format, const Pixel * source, void * destination, int count )
 {
     printf( "   floating point -> %s", getFormatString(format) );
 
-    Converter * converter = requestConverter(Format::XBGRFFFF, format);
+    Converter * converter = requestConverter( Format::XBGRFFFF, format );
 
     if ( !converter )
     {
@@ -58,8 +55,7 @@ void profilePixelConverter(Format format, const Pixel *source, void *destination
     printf( " = %f ms\n", (double) time / iterations * 1000 );
 }
 
-
-void profileIntegerConverter(Format format, const integer32 *source, void *destination, int count)
+void profileIntegerConverter( Format format, const integer32 *source, void *destination, int count )
 {
     printf( "   truecolor -> %s", getFormatString(format) );
 

@@ -1,7 +1,7 @@
 # pixeltoaster makefile for unix (static linking)
 
 CFLAGS = -O3 -Wall -Isource -DPLATFORM_UNIX
-LDFLAGS = -L/usr/X11R6/lib -lX11 -lrt
+LDFLAGS = -L/usr/X11R6/lib -lX11 -framework CoreServices -lrt
 
 SHELL = /bin/sh
 INSTALL = /usr/bin/install -c
@@ -14,23 +14,30 @@ includedir = $(prefix)/include/PixelToaster-1.4
 libdir = $(prefix)/lib
 pkgconfigdir = $(libdir)/pkgconfig
 
-source := $(wildcard source/*.cpp)
-headers := $(wildcard source/*.h)
-pkconfig = PixelToaster.pc
+source := $(wildcard PixelToaster*.cpp)
+examples := $(patsubst Example%.cpp,Example%,$(wildcard Example*.cpp))
+headers := $(wildcard PixelToaster*.h)
+pkconfig = PixelToaster-1.4.pc
 
-tests := $(patsubst tests/%.cpp,%,$(wildcard tests/*.cpp))
-demos := $(patsubst demos/%.cpp,%,$(wildcard demos/*.cpp))
-examples := $(patsubst examples/%.cpp,%,$(wildcard examples/*.cpp))
+Test.exe : Test.cpp ${headers} makefile.apple
+	g++ Test.cpp PixelToaster.cpp -o Test ${CFLAGS} ${LDFLAGS}
 
-VPATH = tests:examples:demos
+Profile.exe : Profile.cpp ${headers} makefile.apple
+	g++ Profile.cpp PixelToaster.cpp -o Profile ${CFLAGS} ${LDFLAGS}
 
-% : %.cpp ${source} ${headers} makefile.unix
-	g++ $< -o $@ source/PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+% : %.cpp ${headers} makefile.apple
+	g++ $< -o $@ PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
 
-all: ${examples} ${demos} ${tests}
+documentation : PixelToaster.h ${headers} doxygen.config
+	doxygen doxygen.config
 	
-clean:
-	rm -f ${tests} ${demos} ${examples}
+docs : documentation
+
+test : Test
+	Test
+	
+profile : Profile
+	Profile
 
 install: installdirs
 	$(INSTALLDATA) ${source} $(includedir)
@@ -40,3 +47,6 @@ install: installdirs
 installdirs:
 	test -z "$(includedir)" || $(INSTALLDIR) "$(includedir)"
 	test -z "$(pkgconfigdir)" || $(INSTALLDIR) "$(pkgconfigdir)"
+
+clean:
+	rm -rf $(examples) Test Profile documentation

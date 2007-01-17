@@ -9,5 +9,5 @@ Name: PixelToaster
 Description: PixelToaster is a portable open source framebuffer library for C++ (http://pixeltoaster.com)
 Requires: 
 Version: 1.4
-Libs: -L/usr/X11R6/lib -lX11
+Libs: -L/usr/X11R6/lib -lX11 -lrt
 Cflags: -I${includedir}/${pixeltoaster_release_name}

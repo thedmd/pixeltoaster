@@ -1,7 +1,7 @@
 # pixeltoaster makefile for unix (static linking)
 
 CFLAGS = -O3 -Wall -Isource -DPLATFORM_UNIX
-LDFLAGS = -L/usr/X11R6/lib -lX11 -framework CoreServices -lrt
+LDFLAGS = -L/usr/X11R6/lib -lX11 -lrt
 
 SHELL = /bin/sh
 INSTALL = /usr/bin/install -c

@@ -12,7 +12,7 @@ int main()
 
     Timer timer;
 
-    printf( "the theoretical timer resolution is %f microseconds\n\n", 1e6 * timer.resolution() );
+    printf( "theoretical timer resolution is %f microseconds\n\n", 1e6 * timer.resolution() );
 	timer.delta();
     printf( "practical timer resolution is %f microseconds\n\n", 1e6 * timer.delta() );
 

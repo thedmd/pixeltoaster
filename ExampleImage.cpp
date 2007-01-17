@@ -20,7 +20,7 @@ int main()
     int width = 0;
 	int height = 0;
 
-	if ( !load( "resources/image.tga", width, height, pixels ) )
+	if ( !load( "ExampleImage.tga", width, height, pixels ) )
 	{
 		printf( "failed to load image\n" );
 		return 1;
@@ -114,7 +114,7 @@ bool load( const char filename[], int & width, int & height, vector<Pixel> & pix
 
 failure:
 
-	// somebody call the whaaaambulance...
+	// onoes somebody call the whaaaambulance...
 
 	width = 0;
 	height = 0;

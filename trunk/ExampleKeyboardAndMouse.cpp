@@ -13,8 +13,6 @@ public:
 
     int run()
     {
-		// open display
-
         const int width = 320;
         const int height = 240;
 
@@ -22,8 +20,6 @@ public:
 
         if ( !display.open( "Keyboard and Mouse Example", width, height ) )
 			return 1;
-
-		// keep updating the display while it is open
 
         vector<Pixel> pixels( width * height );
 
@@ -50,8 +46,6 @@ public:
     }
 
 protected:
-
-	// respond to events sent back via the listener interface
 
     void onKeyDown( DisplayInterface & display, Key key )
     {

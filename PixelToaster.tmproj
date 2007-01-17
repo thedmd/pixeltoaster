@@ -2,21 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>Test.cpp</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
-			<string>makefile</string>
+			<string>makefile.apple</string>
 			<key>lastUsed</key>
-			<date>2007-01-14T05:21:35Z</date>
+			<date>2007-01-17T07:25:21Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>doxygen.config</string>
 			<key>lastUsed</key>
-			<date>2007-01-14T00:13:08Z</date>
+			<date>2007-01-17T18:25:28Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -40,7 +40,7 @@
 			<key>filename</key>
 			<string>PixelToasterConversion.h</string>
 			<key>lastUsed</key>
-			<date>2007-01-14T01:10:03Z</date>
+			<date>2007-01-17T07:25:24Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -58,9 +58,7 @@
 			<key>filename</key>
 			<string>Test.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-16T06:30:51Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2007-01-17T07:25:23Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -68,33 +66,48 @@
 			<key>lastUsed</key>
 			<date>2007-01-14T05:21:34Z</date>
 		</dict>
+		<dict>
+			<key>filename</key>
+			<string>ExampleTrueColor.cpp</string>
+			<key>lastUsed</key>
+			<date>2007-01-17T07:25:22Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>ExampleFullscreen.cpp</string>
+			<key>lastUsed</key>
+			<date>2007-01-17T07:25:22Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>ExampleFloatingPoint.cpp</string>
+			<key>lastUsed</key>
+			<date>2007-01-17T07:25:22Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>ExampleTimer.cpp</string>
+			<key>lastUsed</key>
+			<date>2007-01-17T07:25:23Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>ExampleKeyboardAndMouse.cpp</string>
+			<key>lastUsed</key>
+			<date>2007-01-17T07:25:22Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>ExampleImage.cpp</string>
+		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>184</integer>
+	<integer>222</integer>
 	<key>metaData</key>
-	<dict>
-		<key>Test.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1257</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1250</integer>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>Test.cpp</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{16, 13}, {1058, 808}}</string>
+	<string>{{16, 13}, {1022, 808}}</string>
 </dict>
 </plist>

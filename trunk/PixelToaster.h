@@ -37,6 +37,7 @@
 #ifdef _MSC_VER
 #pragma warning( disable : 4100 )		// warning C4100: unreferenced formal parameter
 #pragma warning( disable : 4201 )		// warning C4201: nonstandard extension used : nameless struct/union
+#pragma warning( disable : 4996 )		// warning C4201: stupid visual c++ deprecated stuff
 #endif
 
 // platforms

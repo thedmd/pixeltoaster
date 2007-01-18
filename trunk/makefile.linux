@@ -21,7 +21,7 @@ pkconfig = PixelToaster-1.4.pc
 
 all : $(examples)
 
-% : %.cpp ${headers} makefile.apple
+% : %.cpp ${headers} makefile.unix
 	g++ $< -o $@ PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
 
 documentation : PixelToaster.h ${headers} doxygen.config

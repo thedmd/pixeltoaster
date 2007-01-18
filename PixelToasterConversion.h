@@ -71,7 +71,7 @@ namespace PixelToaster
 
 	// floating point conversion routines
 
-    inline void convert_XBGRFFFF_to_XRGB8888( const Pixel source[], integer32 destination[], unsigned int count )
+	inline void convert_XBGRFFFF_to_XRGB8888( const Pixel source[], integer32 destination[], unsigned int count )
     {
         for ( unsigned int i = 0; i < count; ++i )
         {
@@ -485,15 +485,13 @@ namespace PixelToaster
 		#endif
     }
 
-    // stub out the begin/end because we dont need it
+	// declare set of converter classes
 
     class ConverterAdapter : public Converter
     {
         void begin() {};
         void end() {}
     };
-
-	// declare set of converter classes
 
 	#define PIXELTOASTER_CONVERTER( type, source_type, destination_type )								\
 																										\

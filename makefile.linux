@@ -1,4 +1,4 @@
-# pixeltoaster makefile for unix (static linking)
+# pixeltoaster makefile for linux
 
 CFLAGS = -O3 -Wall -Isource -DPLATFORM_UNIX
 LDFLAGS = -L/usr/X11R6/lib -lX11 -lrt

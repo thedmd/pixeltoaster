@@ -1,6 +1,6 @@
-# pixeltoaster makefile for unix (static linking)
+# pixeltoaster makefile for freebsd
 
-CFLAGS = -O3 -Wall -Isource -DPLATFORM_UNIX
+CFLAGS = -O3 -Wall -Isource -I/usr/X11R6/include -DPLATFORM_UNIX
 LDFLAGS = -L/usr/X11R6/lib -lX11 -lrt
 
 SHELL = /bin/sh

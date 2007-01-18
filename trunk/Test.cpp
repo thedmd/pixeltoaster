@@ -1228,30 +1228,7 @@ void test_truecolor_to_bgr565()
 
 // floating point converters
 
-void test_floating_point_to_floating_point()
-{
-	printf( "   floating point -> floating point\n" );
-
-    printf( "     checking identity...\n" );
-
-    for ( unsigned int i = 0; i <= 0x00FFFFFF; i++ )
-    {
-        integer32 a = i;
-        Pixel b;
-        Pixel c;
-
-        convert_XRGB8888_to_XBGRFFFF( &a, &b, 1 );
-        convert_XBGRFFFF_to_XBGRFFFF( &b, &c, 1 );
-
-        if ( b.r != c.r || b.g != c.g || b.b != c.b )
-        {
-            printf( "     failed: %d -> (%f,%f,%f) -> (%f,%f,%f)\n", a, b.r, b.g, b.b, c.r, c.g, c.b);
-            exit( 1 );
-        }
-    }
-
-    printf( "     passed.\n\n" );
-}
+// ...
 
 void test_conversion()
 {
@@ -1262,8 +1239,6 @@ void test_conversion()
 	test_truecolor_to_xrgb1555();
 	test_truecolor_to_bgr565();
 //	test_truecolor_to_rgb565();
-	
-	test_floating_point_to_floating_point();
 }
 
 int main()

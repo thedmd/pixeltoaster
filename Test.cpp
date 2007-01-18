@@ -2440,6 +2440,242 @@ void test_floating_point_to_xbgr8888()
 	printf( "     passed.\n\n" );
 }
 
+void test_floating_point_to_rgb888()
+{
+    printf( "   floating point -> rgb888\n" );
+
+	printf( "     checking one-to-one...\n" );
+
+	for ( unsigned int i = 0; i <= 0x00FFFFFF; i++ )
+	{
+	    integer32 r = ( i & 0x00FF0000 ) >> 16;
+	    integer32 g = ( i & 0x0000FF00 ) >> 8;
+	    integer32 b = ( i & 0x000000FF );
+
+	    integer32 a = 0;
+
+	    char * bytes = (char*) &a;
+
+	    bytes[0] = r;
+	    bytes[1] = g;
+	    bytes[2] = b;
+
+	    Pixel pixel;
+	    integer32 c = 0;
+
+	    convert_RGB888_to_XBGRFFFF( (integer8*) &a, &pixel, 1 );
+	    convert_XBGRFFFF_to_RGB888( &pixel, (integer8*) &c, 1 );
+
+	    if ( a != c )
+	    {
+	        printf( "     failed: %d -> (%f,%f,%f) -> %d\n", a, pixel.r, pixel.g, pixel.b, c );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking black\n" );
+
+	Pixel pixel;
+	pixel.r = 0;
+	pixel.g = 0;
+	pixel.b = 0;
+
+	integer32 value = 0;
+	convert_XBGRFFFF_to_RGB888( &pixel, (integer8*) &value, 1 );
+
+	if ( value != 0 )
+	{
+	    printf( "     black test failed: %d\n", value );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum red\n" );
+
+	pixel.r = 1.0f;
+	pixel.g = 0;
+	pixel.b = 0;
+
+	convert_XBGRFFFF_to_RGB888( &pixel, (integer8*) &value, 1 );
+
+	integer8 * r = (integer8*) &value;
+	integer8 * g = r + 1;
+	integer8 * b = g + 1;
+
+	if ( *r != 0xFF || *g != 0 || *b != 0 )
+	{
+	    printf( "     red test failed: %d\n", value );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum green\n" );
+
+	pixel.r = 0;
+	pixel.g = 1.0f;
+	pixel.b = 0;
+
+	convert_XBGRFFFF_to_RGB888( &pixel, (integer8*) &value, 1 );
+
+	if ( *g != 0xFF || *r != 0 || *b != 0 )
+	{
+	    printf( "     green test failed: %d\n", value );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum blue\n" );
+
+	pixel.r = 0;
+	pixel.g = 0;
+	pixel.b = 1.0f;
+
+	convert_XBGRFFFF_to_RGB888( &pixel, (integer8*) &value, 1 );
+
+	if ( *b != 0xFF || *r != 0 || *g != 0 )
+	{
+	    printf( "     blue test failed: %d\n", value );
+	    exit( 1 );
+	}
+
+	printf( "     checking red channel\n" );
+	{
+	    const int steps = 10000;
+
+	    int distinctValues = 0;
+
+	    pixel.r = 0;
+	    pixel.g = 0;
+	    pixel.b = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i <= steps; i++ )
+	    {
+	        pixel.r = (float) i / (float) steps * 10 - 5;
+
+	        value = 0;
+
+	        convert_XBGRFFFF_to_RGB888( &pixel, (integer8*) &value, 1 );
+
+	        if ( *g!=0 || *b!=0 )
+	        {
+	            printf( "     red channel polluted other channels: (%f,%f,%f) -> %d\n", pixel.r, pixel.g, pixel.b, value );
+	            exit( 1 );
+	        }
+
+	        if ( value != previousDistinctValue )
+	        {
+	            if ( value < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, value );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = value;
+	        }
+	    }
+
+	    if ( distinctValues != 256 )
+	    {
+	        printf( "     red channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking green channel\n" );
+	{
+	    const int steps = 10000;
+
+	    int distinctValues = 0;
+
+	    pixel.r = 0;
+	    pixel.g = 0;
+	    pixel.b = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i <= steps; i++ )
+	    {
+	        pixel.g = (float) i / (float) steps * 10 - 5;
+
+	        value = 0;
+
+	        convert_XBGRFFFF_to_RGB888( &pixel, (integer8*) &value, 1 );
+
+	        if ( *r!=0 || *b!=0 )
+	        {
+	            printf( "     green channel polluted other channels: (%f,%f,%f) -> %d\n", pixel.r, pixel.g, pixel.b, value );
+	            exit( 1 );
+	        }
+
+	        if ( value != previousDistinctValue )
+	        {
+	            if ( value < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, value );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = value;
+	        }
+	    }
+
+	    if ( distinctValues != 256 )
+	    {
+	        printf( "     green channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking blue channel\n" );
+	{
+	    const int steps = 10000;
+
+	    int distinctValues = 0;
+
+	    pixel.r = 0;
+	    pixel.g = 0;
+	    pixel.b = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i <= steps; i++ )
+	    {
+	        pixel.b = (float) i / (float) steps * 10 - 5;
+
+	        value = 0;
+
+	        convert_XBGRFFFF_to_RGB888( &pixel, (integer8*) &value, 1 );
+
+	        if ( *r != 0 || *g != 0 )
+	        {
+	            printf( "     blue channel polluted other channels: (%f,%f,%f) -> %d\n", pixel.r, pixel.g, pixel.b, value );
+	            exit( 1 );
+	        }
+
+	        if ( value != previousDistinctValue )
+	        {
+	            if ( value < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, value );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = value;
+	        }
+	    }
+
+	    if ( distinctValues != 256 )
+	    {
+	        printf( "     blue channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     passed.\n\n" );
+}
+
 void test_conversion()
 {
 	printf( "testing pixel format conversion:\n\n" );
@@ -2455,6 +2691,7 @@ void test_conversion()
 	
 	test_floating_point_to_xrgb8888();
 	test_floating_point_to_xbgr8888();
+	test_floating_point_to_rgb888();
 }
 
 // ----------------------------------------------------------------------------------------
@@ -2472,258 +2709,6 @@ int main()
 	return 0;
 
 /*	
-    printf( "FloatingPointColor -> RGB888\n" );
-    {
-        // verify one-to-one mapping    
-
-        printf("  checking one-to-one...\n");
-
-        for (unsigned int i=0; i<=0x00FFFFFF; i++)
-        {
-            integer32 r = (i&0x00FF0000)>>16;
-            integer32 g = (i&0x0000FF00)>>8;
-            integer32 b = (i&0x000000FF);
-
-            integer32 a = 0;
-
-            char *bytes = (char*)&a;
-
-            bytes[0] = r;
-            bytes[1] = g;
-            bytes[2] = b;
-
-            Pixel pixel;
-            integer32 c = 0;
-
-            convert_RGB888_to_XBGRFFFF((integer8*)&a, &pixel, 1);
-            convert_XBGRFFFF_to_RGB888(&pixel, (integer8*)&c, 1);
-
-            if (a!=c)
-            {
-                printf("  failed: %d -> (%f,%f,%f) -> %d\n", a, pixel.r, pixel.g, pixel.b, c);
-                exit(1);
-            }
-        }
-
-        // verify black
-
-        printf("  checking black\n");
-
-        Pixel pixel;
-        pixel.r = 0;
-        pixel.g = 0;
-        pixel.b = 0;
-
-        integer32 value = 0;
-        convert_XBGRFFFF_to_RGB888(&pixel, (integer8*)&value, 1);
-
-        if (value!=0)
-        {
-            printf("  black test failed: %d\n", value);
-            exit(1);
-        }
-
-        // verify maximum red
-
-        printf("  checking maximum red\n");
-
-        pixel.r = 1.0f;
-        pixel.g = 0;
-        pixel.b = 0;
-
-        convert_XBGRFFFF_to_RGB888(&pixel, (integer8*)&value, 1);
-
-        integer8 *r = (integer8*)&value;
-        integer8 *g = r + 1;
-        integer8 *b = g + 1;
-
-        if (*r!=0xFF || *g!=0 || *b!=0)
-        {
-            printf("  red test failed: %d\n", value);
-            exit(1);
-        }
-
-        // verify maximum green
-
-        printf("  checking maximum green\n");
-
-        pixel.r = 0;
-        pixel.g = 1.0f;
-        pixel.b = 0;
-
-        convert_XBGRFFFF_to_RGB888(&pixel, (integer8*)&value, 1);
-
-        if (*g!=0xFF || *r!=0 || *b!=0)
-        {
-            printf("  green test failed: %d\n", value);
-            exit(1);
-        }
-
-        // verify maximum blue
-
-        printf("  checking maximum blue\n");
-
-        pixel.r = 0;
-        pixel.g = 0;
-        pixel.b = 1.0f;
-
-        convert_XBGRFFFF_to_RGB888(&pixel, (integer8*)&value, 1);
-
-        if (*b!=0xFF || *r!=0 || *g!=0)
-        {
-            printf("  blue test failed: %d\n", value);
-            exit(1);
-        }
-
-        // verify red channel
-
-        printf("  checking red channel\n");
-        {
-            const int steps = 10000;
-
-            int distinctValues = 0;
-
-            pixel.r = 0;
-            pixel.g = 0;
-            pixel.b = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<=steps; i++)
-            {
-                pixel.r = (float) i / (float) steps * 10 - 5;
-
-                value = 0;
-
-                convert_XBGRFFFF_to_RGB888(&pixel, (integer8*)&value, 1);
-
-                if (*g!=0 || *b!=0)
-                {
-                    printf("  red channel polluted other channels: (%f,%f,%f) -> %d\n", pixel.r, pixel.g, pixel.b, value);
-                    exit(1);
-                }
-
-                if (value!=previousDistinctValue)
-                {
-                    if (value<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, value);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = value;
-                }
-            }
-
-            if (distinctValues!=256)
-            {
-                printf("  red channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        // verify green channel
-
-        printf("  checking green channel\n");
-        {
-            const int steps = 10000;
-
-            int distinctValues = 0;
-
-            pixel.r = 0;
-            pixel.g = 0;
-            pixel.b = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<=steps; i++)
-            {
-                pixel.g = (float) i / (float) steps * 10 - 5;
-
-                value = 0;
-
-                convert_XBGRFFFF_to_RGB888(&pixel, (integer8*)&value, 1);
-
-                if (*r!=0 || *b!=0)
-                {
-                    printf("  green channel polluted other channels: (%f,%f,%f) -> %d\n", pixel.r, pixel.g, pixel.b, value);
-                    exit(1);
-                }
-
-                if (value!=previousDistinctValue)
-                {
-                    if (value<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, value);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = value;
-                }
-            }
-
-            if (distinctValues!=256)
-            {
-                printf("  green channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        // verify blue channel
-
-        printf("  checking blue channel\n");
-        {
-            const int steps = 10000;
-
-            int distinctValues = 0;
-
-            pixel.r = 0;
-            pixel.g = 0;
-            pixel.b = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<=steps; i++)
-            {
-                pixel.b = (float) i / (float) steps * 10 - 5;
-
-                value = 0;
-
-                convert_XBGRFFFF_to_RGB888(&pixel, (integer8*)&value, 1);
-
-                if (*r!=0 || *g!=0)
-                {
-                    printf("  blue channel polluted other channels: (%f,%f,%f) -> %d\n", pixel.r, pixel.g, pixel.b, value);
-                    exit(1);
-                }
-
-                if (value!=previousDistinctValue)
-                {
-                    if (value<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, value);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = value;
-                }
-            }
-
-            if (distinctValues!=256)
-            {
-                printf("  blue channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        printf("  passed.\n\n");
-    }
-
-    // ---------------------------------------------------------
-
     printf( "FloatingPointColor -> BGR888\n" );
     {
         // verify one-to-one mapping    

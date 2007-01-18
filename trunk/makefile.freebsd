@@ -39,6 +39,9 @@ ExampleKeyboardAndMouse : ExampleKeyboardAndMouse.cpp ${headers} makefile.freebs
 ExampleImage : ExampleImage.cpp ${headers} makefile.freebsd
 	g++ ExampleImage.cpp -o ExampleImage PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
 
+ExampleMultiDisplay : ExampleMultiDisplay.cpp ${headers} makefile.freebsd
+	g++ ExampleMultiDisplay.cpp -o ExampleMultiDisplay PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+
 Test : Test.cpp ${headers} makefile.freebsd
 	g++ Test.cpp -o Test PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
 

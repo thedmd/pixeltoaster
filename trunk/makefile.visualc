@@ -27,6 +27,9 @@ ExampleKeyboardAndMouse.exe : ExampleKeyboardAndMouse.cpp $(headers) makefile.vi
 ExampleImage.exe : ExampleImage.cpp $(headers) makefile.visualc
 	cl ExampleImage.cpp PixelToaster.cpp $(flags)
 
+ExampleMultiDisplay.exe : ExampleMultiDisplay.cpp $(headers) makefile.visualc
+	cl ExampleMultiDisplay.cpp PixelToaster.cpp $(flags)
+
 Test.exe : Test.cpp $(headers) makefile.visualc
 	cl Test.cpp PixelToaster.cpp $(flags)
 

@@ -45,8 +45,7 @@ profile : Profile.exe
 	Profile
 
 clean:
-	erase $(examples) 
-	erase Test.exe
-	erase Profile.exe
+	erase *.exe
+	erase *.obj
 	erase /Q documentation\*
 	rmdir documentation

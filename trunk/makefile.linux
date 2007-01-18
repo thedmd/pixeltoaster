@@ -21,12 +21,6 @@ pkconfig = PixelToaster-1.4.pc
 
 all : examples
 
-Test.exe : Test.cpp ${headers} makefile.apple
-	g++ Test.cpp PixelToaster.cpp -o Test ${CFLAGS} ${LDFLAGS}
-
-Profile.exe : Profile.cpp ${headers} makefile.apple
-	g++ Profile.cpp PixelToaster.cpp -o Profile ${CFLAGS} ${LDFLAGS}
-
 % : %.cpp ${headers} makefile.apple
 	g++ $< -o $@ PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
 

@@ -1,7 +1,7 @@
 # pixeltoaster makefile for freebsd
 
 CFLAGS = -O3 -Wall -Isource -I/usr/X11R6/include -DPLATFORM_UNIX
-LDFLAGS = -L/usr/X11R6/lib -lX11 -lrt
+LDFLAGS = -L/usr/X11R6/lib -lX11
 
 SHELL = /bin/sh
 INSTALL = /usr/bin/install -c

@@ -1234,7 +1234,7 @@ void test_truecolor_to_rgb565()
 
 	for ( unsigned int i = 0; i <= 0x0000FFFF; i++ )
 	{
-	    integer16 a = i;
+	    integer16 a = (integer16) i;
 	    integer32 b;
 	    integer16 c;
 
@@ -1307,7 +1307,7 @@ void test_truecolor_to_rgb565()
 
 	    for ( int i = 0; i < steps; i++ )
 	    {
-	        input = i << 11;
+	        input = (integer16) ( i << 11 );
 
 	        convert_RGB565_to_XRGB8888( &input, &output, 1 );
 
@@ -1347,7 +1347,7 @@ void test_truecolor_to_rgb565()
 
 	    for ( int i = 0; i < steps; i++ )
 	    {
-	        input = i << 5;
+	        input = integer16( i << 5 );
 
 	        convert_RGB565_to_XRGB8888( &input, &output, 1 );
 
@@ -1387,7 +1387,7 @@ void test_truecolor_to_rgb565()
 
 	    for ( int i = 0; i < steps; i++ )
 	    {
-	        input = i;
+	        input = (integer16) i;
 
 	        convert_RGB565_to_XRGB8888( &input, &output, 1 );
 
@@ -2456,9 +2456,9 @@ void test_floating_point_to_rgb888()
 
 	    char * bytes = (char*) &a;
 
-	    bytes[0] = r;
-	    bytes[1] = g;
-	    bytes[2] = b;
+	    bytes[0] = (integer8) r;
+	    bytes[1] = (integer8) g;
+	    bytes[2] = (integer8) b;
 
 	    Pixel pixel;
 	    integer32 c = 0;
@@ -2692,9 +2692,9 @@ void test_floating_point_to_bgr888()
 
 	    char * bytes = (char*) &a;
 
-	    bytes[0] = b;
-	    bytes[1] = g;
-	    bytes[2] = r;
+	    bytes[0] = (integer8) b;
+	    bytes[1] = (integer8) g;
+	    bytes[2] = (integer8) r;
 
 	    Pixel pixel;
 	    integer32 c = 0;

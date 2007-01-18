@@ -1,63 +1,52 @@
-# pixeltoaster makefile for freebsd
+# pixeltoaster makefile for visualc
 
-CFLAGS = -O3 -Wall -Isource -I/usr/X11R6/include -DPLATFORM_UNIX
-LDFLAGS = -L/usr/X11R6/lib -lX11
+flags = /EHsc /EHc /Oxt /W4 /fp:fast /nologo
 
-SHELL = /bin/sh
-INSTALL = /usr/bin/install -c
-INSTALLDATA = ${INSTALL} -m 644
-INSTALLDIR = ${INSTALL} -d
-
-srcdir = source
-prefix = /usr/local
-includedir = $(prefix)/include/PixelToaster-1.4
-libdir = $(prefix)/lib
-pkgconfigdir = $(libdir)/pkgconfig
-
-source := PixelToaster.cpp
-examples := ExampleTrueColor ExampleFullscreen ExampleFloatingPoint ExampleTimer ExampleKeyboardAndMouse ExampleImage
-headers := PixelToaster.h PixelToasterCommon.h PixelToasterConversion.h PixelToasterUnix.h
+source = PixelToaster.cpp
+examples = ExampleTrueColor.exe ExampleFullscreen.exe ExampleFloatingPoint.exe ExampleTimer.exe ExampleKeyboardAndMouse.exe ExampleImage.exe
+headers = PixelToaster.h PixelToasterCommon.h PixelToasterConversion.h PixelToasterUnix.h
 pkconfig = PixelToaster-1.4.pc
 
 all : $(examples)
 
-ExampleTrueColor : ExampleTrueColor.cpp ${headers} makefile.freebsd
-	g++ ExampleTrueColor.cpp -o ExampleTrueColor PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+ExampleTrueColor.exe : ExampleTrueColor.cpp $(headers) makefile.visualc
+	cl ExampleTrueColor.cpp PixelToaster.cpp $(flags)
 
-ExampleFullscreen : ExampleFullscreen.cpp ${headers} makefile.freebsd
-	g++ ExampleFullscreen.cpp -o ExampleFullscreen PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+ExampleFullscreen.exe : ExampleFullscreen.cpp $(headers) makefile.visualc
+	cl ExampleFullscreen.cpp PixelToaster.cpp $(flags)
 
-ExampleFloatingPoint : ExampleFloatingPoint.cpp ${headers} makefile.freebsd
-	g++ ExampleFloatingPoint.cpp -o ExampleFloatingPoint PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+ExampleFloatingPoint.exe : ExampleFloatingPoint.cpp $(headers) makefile.visualc
+	cl ExampleFloatingPoint.cpp PixelToaster.cpp $(flags)
 
-ExampleTimer : ExampleTimer.cpp ${headers} makefile.freebsd
-	g++ ExampleTimer.cpp -o ExampleTimer PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+ExampleTimer.exe : ExampleTimer.cpp $(headers) makefile.visualc
+	cl ExampleTimer.cpp PixelToaster.cpp $(flags)
 
-ExampleKeyboardAndMouse : ExampleKeyboardAndMouse.cpp ${headers} makefile.freebsd
-	g++ ExampleKeyboardAndMouse.cpp -o ExampleKeyboardAndMouse PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+ExampleKeyboardAndMouse.exe : ExampleKeyboardAndMouse.cpp $(headers) makefile.visualc
+	cl ExampleKeyboardAndMouse.cpp PixelToaster.cpp $(flags)
 
-ExampleImage : ExampleImage.cpp ${headers} makefile.freebsd
-	g++ ExampleImage.cpp -o ExampleImage PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+ExampleImage.exe : ExampleImage.cpp $(headers) makefile.visualc
+	cl ExampleImage.cpp PixelToaster.cpp $(flags)
 
-documentation : PixelToaster.h ${headers} doxygen.config
+Test.exe : Test.cpp $(headers) makefile.visualc
+	cl Test.cpp PixelToaster.cpp $(flags)
+
+Profile.exe : Profile.cpp $(headers) makefile.visualc
+	cl Profile.cpp PixelToaster.cpp $(flags)
+
+documentation : PixelToaster.h $(headers) doxygen.config
 	doxygen doxygen.config
 	
 docs : documentation
 
-test : Test
+test : Test.exe
 	Test
 	
-profile : Profile
+profile : Profile.exe
 	Profile
 
-install: installdirs
-	$(INSTALLDATA) ${source} $(includedir)
-	$(INSTALLDATA) ${headers} $(includedir)
-	$(INSTALLDATA) ${pkconfig} $(pkgconfigdir)
-	
-installdirs:
-	test -z "$(includedir)" || $(INSTALLDIR) "$(includedir)"
-	test -z "$(pkgconfigdir)" || $(INSTALLDIR) "$(pkgconfigdir)"
-
 clean:
-	rm -rf $(examples) Test Profile documentation
+	erase $(examples) 
+	erase Test.exe
+	erase Profile.exe
+	erase /Q documentation\*
+	rmdir documentation

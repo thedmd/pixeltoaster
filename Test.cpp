@@ -651,7 +651,7 @@ void test_truecolor_to_xbgr1555()
 
         for ( unsigned int i =0; i <= 0x00007FFF; i++ )
         {
-            integer16 a = i;
+            integer16 a = (integer16) i;
             integer32 b;
             integer16 c;
 
@@ -724,7 +724,7 @@ void test_truecolor_to_xbgr1555()
 
             for ( int i = 0; i < steps; i++ )
             {
-                input = i;
+                input = (integer16) i;
 
                 convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
@@ -764,7 +764,7 @@ void test_truecolor_to_xbgr1555()
 
             for ( int i = 0; i < steps; i++ )
             {
-                input = i << 5;
+                input = (integer16) i << 5;
 
                 convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
@@ -804,7 +804,7 @@ void test_truecolor_to_xbgr1555()
 
             for ( int i = 0; i < steps; i++ )
             {
-                input = i << 10;
+                input = (integer16) i << 10;
 
                 convert_XBGR1555_to_XRGB8888( &input, &output, 1 );
 
@@ -846,7 +846,7 @@ void test_truecolor_to_xrgb1555()
 
 	for ( unsigned int i = 0; i <= 0x00007FFF; i++ )
 	{
-	    integer16 a = i;
+	    integer16 a = (integer16) i;
 	    integer32 b;
 	    integer16 c;
 
@@ -919,7 +919,7 @@ void test_truecolor_to_xrgb1555()
 
 	    for ( int i = 0; i < steps; i++ )
 	    {
-	        input = i << 10;
+	        input = (integer16) i << 10;
 
 	        convert_XRGB1555_to_XRGB8888( &input, &output, 1 );
 
@@ -959,7 +959,7 @@ void test_truecolor_to_xrgb1555()
 
 	    for ( int i = 0; i < steps; i++ )
 	    {
-	        input = i << 5;
+	        input = (integer16) i << 5;
 
 	        convert_XRGB1555_to_XRGB8888( &input, &output, 1 );
 
@@ -999,7 +999,7 @@ void test_truecolor_to_xrgb1555()
 
 	    for ( int i = 0; i < steps; i++ )
 	    {
-	        input = i;
+	        input = (integer16) i;
 
 	        convert_XRGB1555_to_XRGB8888( &input, &output, 1 );
 
@@ -1040,7 +1040,7 @@ void test_truecolor_to_bgr565()
 
     for ( unsigned int i = 0; i <= 0x0000FFFF; i++ )
     {
-        integer16 a = i;
+        integer16 a = (integer16) i;
         integer32 b;
         integer16 c;
 
@@ -1113,7 +1113,7 @@ void test_truecolor_to_bgr565()
 
         for ( int i = 0; i < steps; i++ )
         {
-            input = i;
+            input = (integer16) i;
 
             convert_BGR565_to_XRGB8888( &input, &output, 1 );
 
@@ -1153,7 +1153,7 @@ void test_truecolor_to_bgr565()
 
         for ( int i = 0; i < steps; i++ )
         {
-            input = i << 5;
+            input = (integer16) i << 5;
 
             convert_BGR565_to_XRGB8888( &input, &output, 1 );
 
@@ -1193,7 +1193,7 @@ void test_truecolor_to_bgr565()
 
         for ( int i = 0; i < steps; i++ )
         {
-            input = i << 11;
+            input = (integer16) i << 11;
 
             convert_BGR565_to_XRGB8888( &input, &output, 1 );
 

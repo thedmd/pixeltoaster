@@ -23,9 +23,9 @@ int main()
         {
             for ( int x = 0; x < width; ++x )
             {
-				pixels[index].r = x < 255 ? x : 255;
-				pixels[index].g = y < 255 ? y : 255;
-				pixels[index].b = x+y < 255 ? x+y : 255;
+				pixels[index].r = (integer8) ( x < 255 ? x : 255 );
+				pixels[index].g = (integer8) ( y < 255 ? y : 255 );
+				pixels[index].b = (integer8) ( x+y < 255 ? x+y : 255 );
 
 				++index;
             }

@@ -43,6 +43,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Profile", "projects\Profile
 		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleMultiDisplay", "projects\ExampleMultiDisplay.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1923}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -85,6 +90,10 @@ Global
 		{8DEC7582-62EF-4108-AB51-BB37A9BF1205}.Debug|Win32.Build.0 = Debug|Win32
 		{8DEC7582-62EF-4108-AB51-BB37A9BF1205}.Release|Win32.ActiveCfg = Release|Win32
 		{8DEC7582-62EF-4108-AB51-BB37A9BF1205}.Release|Win32.Build.0 = Release|Win32
+		{8DEC7582-62EF-4108-AB51-BB37A9BF1923}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8DEC7582-62EF-4108-AB51-BB37A9BF1923}.Debug|Win32.Build.0 = Debug|Win32
+		{8DEC7582-62EF-4108-AB51-BB37A9BF1923}.Release|Win32.ActiveCfg = Release|Win32
+		{8DEC7582-62EF-4108-AB51-BB37A9BF1923}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

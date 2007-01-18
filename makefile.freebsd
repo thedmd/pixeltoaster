@@ -19,6 +19,8 @@ examples := $(patsubst Example%.cpp,Example%,$(wildcard Example*.cpp))
 headers := $(wildcard PixelToaster*.h)
 pkconfig = PixelToaster-1.4.pc
 
+all : examples
+
 Test.exe : Test.cpp ${headers} makefile.apple
 	g++ Test.cpp PixelToaster.cpp -o Test ${CFLAGS} ${LDFLAGS}
 

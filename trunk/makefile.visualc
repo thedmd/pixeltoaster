@@ -1,6 +1,6 @@
 # pixeltoaster makefile for visualc
 
-flags = /EHsc /EHc /O2 /W4 /fp:fast /nologo /Ob2
+flags = /EHsc /EHc /O2 /W4 /fp:fast /nologo /Ob2 /GL /GA
 
 source = PixelToaster.cpp
 examples = ExampleTrueColor.exe ExampleFullscreen.exe ExampleFloatingPoint.exe ExampleTimer.exe ExampleKeyboardAndMouse.exe ExampleImage.exe

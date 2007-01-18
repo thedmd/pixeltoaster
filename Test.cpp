@@ -12,7 +12,7 @@
 using namespace PixelToaster;
 
 
-// converter objects
+// ----------------------------------------------------------------------------------------
 
 bool equal(float a, float b)
 {
@@ -617,7 +617,7 @@ void test_converter_objects()
     }
 }
 
-// truecolor converters
+// ----------------------------------------------------------------------------------------
 
 void test_truecolor_to_truecolor()
 {
@@ -1226,9 +1226,595 @@ void test_truecolor_to_bgr565()
     printf( "     passed.\n\n" );
 }
 
-// floating point converters
+void test_truecolor_to_rgb565()
+{
+    printf( "   truecolor -> rgb565\n" );
 
-// ...
+	printf( "     checking one-to-one...\n" );
+
+	for ( unsigned int i = 0; i <= 0x0000FFFF; i++ )
+	{
+	    integer16 a = i;
+	    integer32 b;
+	    integer16 c;
+
+	    convert_RGB565_to_XRGB8888( &a, &b, 1 );
+	    convert_XRGB8888_to_RGB565( &b, &c, 1 );
+
+	    if ( a != c )
+	    {
+	        printf( "     failed: %d -> %d -> %d\n", a, b, c );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking black\n");
+
+	integer16 input = 0;
+	integer32 output;
+
+	convert_RGB565_to_XRGB8888( &input, &output, 1 );
+
+	if ( output != 0 )
+	{
+	    printf( "    black test failed: %d\n", output );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum red\n" );
+
+	input = 0xF800;
+
+	convert_RGB565_to_XRGB8888( &input, &output, 1 );
+
+	if ( output != 0x00F80000 )     // note: slightly reduced dynamic range
+	{
+	    printf( "     red test failed: %d\n", output );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum green\n" );
+
+	input = 0x000007E0;         
+
+	convert_RGB565_to_XRGB8888( &input, &output, 1 );
+
+	if ( output != 0x0000FC00 )
+	{
+	    printf( "     green test failed: %d\n", output );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum blue\n" );
+
+	input = 0x0000001F;
+
+	convert_RGB565_to_XRGB8888( &input, &output, 1 );
+
+	if ( output != 0x000000F8 )    
+	{
+	    printf( "     blue test failed: %d\n", output );
+	    exit( 1 );
+	}
+
+	printf( "     checking red channel\n" );
+	{
+	    const int steps = 32;
+
+	    int distinctValues = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i < steps; i++ )
+	    {
+	        input = i << 11;
+
+	        convert_RGB565_to_XRGB8888( &input, &output, 1 );
+
+	        if ( output & 0x0000FFFF )
+	        {
+	            printf( "     red channel polluted other channels: %d -> %d\n", input, output );
+	            exit( 1 );
+	        }
+
+	        if ( output != previousDistinctValue )
+	        {
+	            if ( output < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = output;
+	        }
+	    }
+
+	    if ( distinctValues != 32 )
+	    {
+	        printf( "     red channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking green channel\n" );
+	{
+	    const int steps = 64;
+
+	    int distinctValues = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i < steps; i++ )
+	    {
+	        input = i << 5;
+
+	        convert_RGB565_to_XRGB8888( &input, &output, 1 );
+
+	        if ( output & 0x00FF00FF )
+	        {
+	            printf( "     green channel polluted other channels: %d -> %d\n", input, output );
+	            exit( 1 );
+	        }
+
+	        if ( output != previousDistinctValue )
+	        {
+	            if ( output < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = output;
+	        }
+	    }
+
+	    if ( distinctValues != 64 )
+	    {
+	        printf( "     green channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking blue channel\n" );
+	{
+	    const int steps = 32;
+
+	    int distinctValues = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i < steps; i++ )
+	    {
+	        input = i;
+
+	        convert_RGB565_to_XRGB8888( &input, &output, 1 );
+
+	        if ( output & 0x00FFFF00 )
+	        {
+	            printf( "     blue channel polluted other channels: %d -> %d\n", input, output );
+	            exit( 1 );
+	        }
+
+	        if ( output != previousDistinctValue )
+	        {
+	            if ( output < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = output;
+	        }
+	    }
+
+	    if ( distinctValues != 32 )
+	    {
+	        printf( "     blue channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     passed.\n\n" );
+}
+
+void test_truecolor_to_bgr888()
+{
+    printf( "   truecolor -> bgr888\n" );
+
+	printf( "     checking one-to-one...\n" );
+
+	for ( unsigned int i = 0; i <= 0x00FFFFFF; i++ )
+	{
+	    integer32 a = i;
+	    integer32 b = 0;
+	    integer32 c;
+
+	    convert_XRGB8888_to_BGR888( &a, (integer8*) &b, 1 );
+	    convert_BGR888_to_XRGB8888( (integer8*) &b, &c, 1 );
+
+	    if ( a != c )
+	    {
+	        printf( "     failed: %d -> %d -> %d\n", a, b, c );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking black\n" );
+
+	integer32 input = 0;
+	integer32 output = 0;
+
+	integer8 * output_b = (integer8*) &output;
+	integer8 * output_g = ( (integer8*) &output ) + 1;
+	integer8 * output_r = ( (integer8*) &output ) + 2;
+
+	convert_XRGB8888_to_BGR888( &input, (integer8*) &output, 1 );
+
+	if ( output != 0 )
+	{
+	    printf( "     black test failed: %d\n", output );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum red\n" );
+
+	input = 0x00FF0000;
+
+	convert_XRGB8888_to_BGR888( &input, (integer8*) &output, 1 );
+
+	if ( *output_r != 0xFF )
+	{
+	    printf( "     red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum green\n" );
+
+	input = 0x0000FF00;
+
+	convert_XRGB8888_to_BGR888( &input, (integer8*) &output, 1 );
+
+	if ( *output_g != 0xFF )
+	{
+	    printf( "     red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum blue\n" );
+
+	input = 0x000000FF;
+
+	convert_XRGB8888_to_BGR888( &input, (integer8*) &output, 1 );
+
+	if ( *output_b != 0xFF )
+	{
+	    printf( "     red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b );
+	    exit( 1 );
+	}
+
+	printf( "     checking red channel\n" );
+	{
+	    const int steps = 256;
+
+	    int distinctValues = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i < steps; i++ )
+	    {
+	        input = i << 16;
+
+	        convert_XRGB8888_to_BGR888( &input, (integer8*) &output, 1 );
+
+	        if ( *output_g || *output_b )
+	        {
+	            printf( "     red channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b );
+	            exit( 1 );
+	        }
+
+	        if ( *output_r!=previousDistinctValue )
+	        {
+	            if ( *output_r < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_r );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = *output_r;
+	        }
+	    }
+
+	    if ( distinctValues != 256 )
+	    {
+	        printf( "     red channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking green channel\n" );
+	{
+	    const int steps = 256;
+
+	    int distinctValues = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i < steps; i++ )
+	    {
+	        input = i << 8;
+
+	        convert_XRGB8888_to_BGR888( &input, (integer8*) &output, 1 );
+
+ 	        if ( *output_r || *output_b )
+	        {
+	            printf( "     green channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b );
+	            exit( 1 );
+	        }
+
+	        if ( *output_g != previousDistinctValue )
+	        {
+	            if ( *output_g < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_g );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = *output_g;
+	        }
+	    }
+
+	    if ( distinctValues != 256 )
+	    {
+	        printf( "     green channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking blue channel\n" );
+	{
+	    const int steps = 256;
+
+	    int distinctValues = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i < steps; i++ )
+	    {
+	        input = i;
+
+	        convert_XRGB8888_to_BGR888( &input, (integer8*) &output, 1 );
+
+	        if ( *output_r || *output_g )
+	        {
+	            printf( "     blue channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b );
+	            exit( 1 );
+	        }
+
+	        if ( *output_b != previousDistinctValue )
+	        {
+	            if ( *output_b < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_b );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = *output_b;
+	        }
+	    }
+
+	    if ( distinctValues != 256 )
+	    {
+	        printf( "     blue channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     passed.\n\n" );
+}
+
+void test_truecolor_to_rgb888()
+{
+    printf( "   truecolor -> rgb888\n" );
+
+	printf( "     checking one-to-one...\n" );
+
+	for ( unsigned int i = 0; i <= 0x00FFFFFF; i++ )
+	{
+	    integer32 a = i;
+	    integer32 b = 0;
+	    integer32 c;
+
+	    convert_XRGB8888_to_RGB888( &a, (integer8*) &b, 1 );
+	    convert_RGB888_to_XRGB8888( (integer8*) &b, &c, 1 );
+
+	    if ( a != c )
+	    {
+	        printf( "     failed: %d -> %d -> %d\n", a, b, c );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking black\n" );
+
+	integer32 input = 0;
+	integer32 output = 0;
+
+	integer8 * output_r = (integer8*) &output;
+	integer8 * output_g = ( (integer8*) &output ) + 1;
+	integer8 * output_b = ( (integer8*) &output ) + 2;
+
+	convert_XRGB8888_to_RGB888( &input, (integer8*) &output, 1 );
+
+	if ( output != 0 )
+	{
+	    printf( "     black test failed: %d\n", output );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum red\n" );
+
+	input = 0x00FF0000;
+
+	convert_XRGB8888_to_RGB888( &input, (integer8*)&output, 1 );
+
+	if ( *output_r != 0xFF )
+	{
+	    printf( "     red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum green\n" );
+
+	input = 0x0000FF00;
+
+	convert_XRGB8888_to_RGB888( &input, (integer8*) &output, 1 );
+
+	if ( *output_g != 0xFF )
+	{
+	    printf( "     red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b );
+	    exit( 1 );
+	}
+
+	printf( "     checking maximum blue\n" );
+
+	input = 0x000000FF;
+
+	convert_XRGB8888_to_RGB888( &input, (integer8*) &output, 1 );
+
+	if ( *output_b != 0xFF )
+	{
+	    printf( "     red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b );
+	    exit( 1 );
+	}
+
+	printf( "     checking red channel\n" );
+	{
+	    const int steps = 256;
+
+	    int distinctValues = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i < steps; i++ )
+	    {
+	        input = i << 16;
+
+	        convert_XRGB8888_to_RGB888( &input, (integer8*) &output, 1 );
+
+	        if ( *output_g || *output_b )
+	        {
+	            printf( "     red channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b );
+	            exit( 1 );
+	        }
+
+	        if ( *output_r != previousDistinctValue )
+	        {
+ 	            if ( *output_r < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_r );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = *output_r;
+	        }
+	    }
+
+	    if ( distinctValues != 256 )
+	    {
+	        printf( "     red channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking green channel\n" );
+	{
+	    const int steps = 256;
+
+	    int distinctValues = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i < steps; i++ )
+	    {
+	        input = i << 8;
+
+	        convert_XRGB8888_to_RGB888( &input, (integer8*) &output, 1 );
+
+	        if ( *output_r || *output_b )
+	        {
+	            printf( "     green channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b );
+	            exit( 1 );
+	        }
+
+	        if ( *output_g != previousDistinctValue )
+	        {
+	            if ( *output_g < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_g );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = *output_g;
+	        }
+	    }
+
+	    if ( distinctValues != 256 )
+	    {
+	        printf( "     green channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     checking blue channel\n" );
+	{
+	    const int steps = 256;
+
+	    int distinctValues = 0;
+
+	    integer32 previousDistinctValue = 0xFFFFFFFF;
+
+	    for ( int i = 0; i < steps; i++ )
+	    {
+	        input = i;
+
+	        convert_XRGB8888_to_RGB888( &input, (integer8*) &output, 1 );
+
+	        if ( *output_r || *output_g )
+	        {
+	            printf( "     blue channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b );
+	            exit( 1 );
+	        }
+
+	        if ( *output_b != previousDistinctValue )
+	        {
+	            if ( *output_b < previousDistinctValue && previousDistinctValue != 0xFFFFFFFF )
+	            {
+	                printf( "     blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_b );
+	                exit( 1 );
+	            }
+
+	            distinctValues++;
+	            previousDistinctValue = *output_b;
+	        }
+	    }
+
+	    if ( distinctValues != 256 )
+	    {
+	        printf( "     blue channel distinct value check failed: %d distinct values\n", distinctValues );
+	        exit( 1 );
+	    }
+	}
+
+	printf( "     passed.\n\n" );
+}
 
 void test_conversion()
 {
@@ -1238,8 +1824,13 @@ void test_conversion()
 	test_truecolor_to_xbgr1555();
 	test_truecolor_to_xrgb1555();
 	test_truecolor_to_bgr565();
-//	test_truecolor_to_rgb565();
+	test_truecolor_to_rgb565();
+	test_truecolor_to_bgr888();
+	test_truecolor_to_rgb888();
 }
+
+// ----------------------------------------------------------------------------------------
+
 
 int main()
 {
@@ -1248,651 +1839,11 @@ int main()
 	test_conversion();
 	//test_converter_objects();
 	
-	printf( "\ntest completed successfully!\n\n" );
+	printf( "test completed successfully!\n\n" );
 
 	return 0;
 
 /*	
-    // ---------------------------------------------------------
-
-    printf( "TrueColor -> RGB565\n" );
-    {
-        // verify one-to-one
-
-        printf("  checking one-to-one...\n");
-
-        for (unsigned int i=0; i<=0x0000FFFF; i++)
-        {
-            integer16 a = i;
-            integer32 b;
-            integer16 c;
-
-            convert_RGB565_to_XRGB8888(&a, &b, 1);
-            convert_XRGB8888_to_RGB565(&b, &c, 1);
-
-            if (a!=c)
-            {
-                printf("  failed: %d -> %d -> %d\n", a, b, c);
-                exit(1);
-            }
-        }
-
-        // verify black
-
-        printf("  checking black\n");
-
-        integer16 input = 0;
-        integer32 output;
-
-        convert_RGB565_to_XRGB8888(&input, &output, 1);
-
-        if (output!=0)
-        {
-            printf("  black test failed: %d\n", output);
-            exit(1);
-        }
-
-        // verify maximum red
-
-        printf("  checking maximum red\n");
-
-        input = 0xF800;
-
-        convert_RGB565_to_XRGB8888(&input, &output, 1);
-
-        if (output!=0x00F80000)     // note slightly reduced dynamic range
-        {
-            printf("  red test failed: %d\n", output);
-            exit(1);
-        }
-
-        // verify maximum green
-
-        printf("  checking maximum green\n");
-
-        input = 0x000007E0;         
-
-        convert_RGB565_to_XRGB8888(&input, &output, 1);
-
-        if (output!=0x0000FC00)
-        {
-            printf("  green test failed: %d\n", output);
-            exit(1);
-        }
-
-        // verify maximum blue
-
-        printf("  checking maximum blue\n");
-
-        input = 0x0000001F;
-
-        convert_RGB565_to_XRGB8888(&input, &output, 1);
-
-        if (output!=0x000000F8)    
-        {
-            printf("  blue test failed: %d\n", output);
-            exit(1);
-        }
-
-        // verify red channel
-
-        printf("  checking red channel\n");
-        {
-            const int steps = 32;
-
-            int distinctValues = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<steps; i++)
-            {
-                input = i << 11;
-
-                convert_RGB565_to_XRGB8888(&input, &output, 1);
-
-                if (output&0x0000FFFF)
-                {
-                    printf("  red channel polluted other channels: %d -> %d\n", input, output);
-                    exit(1);
-                }
-
-                if (output!=previousDistinctValue)
-                {
-                    if (output<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = output;
-                }
-            }
-
-            if (distinctValues!=32)
-            {
-                printf("  red channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        // verify green channel
-
-        printf("  checking green channel\n");
-        {
-            const int steps = 64;
-
-            int distinctValues = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<steps; i++)
-            {
-                input = i << 5;
-
-                convert_RGB565_to_XRGB8888(&input, &output, 1);
-
-                if (output&0x00FF00FF)
-                {
-                    printf("  green channel polluted other channels: %d -> %d\n", input, output);
-                    exit(1);
-                }
-
-                if (output!=previousDistinctValue)
-                {
-                    if (output<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = output;
-                }
-            }
-
-            if (distinctValues!=64)
-            {
-                printf("  green channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        // verify blue channel
-
-        printf("  checking blue channel\n");
-        {
-            const int steps = 32;
-
-            int distinctValues = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<steps; i++)
-            {
-                input = i;
-
-                convert_RGB565_to_XRGB8888(&input, &output, 1);
-
-                if (output&0x00FFFF00)
-                {
-                    printf("  blue channel polluted other channels: %d -> %d\n", input, output);
-                    exit(1);
-                }
-
-                if (output!=previousDistinctValue)
-                {
-                    if (output<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, output);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = output;
-                }
-            }
-
-            if (distinctValues!=32)
-            {
-                printf("  blue channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        printf("  passed.\n\n");
-    }
-
-    // ---------------------------------------------------------
-
-    printf( "TrueColor -> BGR888\n" );
-    {
-        // verify one-to-one
-
-        printf("  checking one-to-one...\n");
-
-        for (unsigned int i=0; i<=0x00FFFFFF; i++)
-        {
-            integer32 a = i;
-            integer32 b = 0;
-            integer32 c;
-
-            convert_XRGB8888_to_BGR888(&a, (integer8*)&b, 1);
-            convert_BGR888_to_XRGB8888((integer8*)&b, &c, 1);
-
-            if (a!=c)
-            {
-                printf("  failed: %d -> %d -> %d\n", a, b, c);
-                exit(1);
-            }
-        }
-
-        // verify black
-
-        printf("  checking black\n");
-
-        integer32 input = 0;
-        integer32 output = 0;
-
-        integer8 *output_b = (integer8*)&output;
-        integer8 *output_g = ((integer8*)&output) + 1;
-        integer8 *output_r = ((integer8*)&output) + 2;
-
-        convert_XRGB8888_to_BGR888(&input, (integer8*)&output, 1);
-
-        if (output!=0)
-        {
-            printf("  black test failed: %d\n", output);
-            exit(1);
-        }
-
-        // verify maximum red
-
-        printf("  checking maximum red\n");
-
-        input = 0x00FF0000;
-
-        convert_XRGB8888_to_BGR888(&input, (integer8*)&output, 1);
-
-        if (*output_r!=0xFF)
-        {
-            printf("  red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b);
-            exit(1);
-        }
-
-        // verify maximum green
-
-        printf("  checking maximum green\n");
-
-        input = 0x0000FF00;
-
-        convert_XRGB8888_to_BGR888(&input, (integer8*)&output, 1);
-
-        if (*output_g!=0xFF)
-        {
-            printf("  red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b);
-            exit(1);
-        }
-
-        // verify maximum blue
-
-        printf("  checking maximum blue\n");
-
-        input = 0x000000FF;
-
-        convert_XRGB8888_to_BGR888(&input, (integer8*)&output, 1);
-
-        if (*output_b!=0xFF)
-        {
-            printf("  red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b);
-            exit(1);
-        }
-
-        // verify red channel
-
-        printf("  checking red channel\n");
-        {
-            const int steps = 256;
-
-            int distinctValues = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<steps; i++)
-            {
-                input = i << 16;
-
-                convert_XRGB8888_to_BGR888(&input, (integer8*)&output, 1);
-
-                if (*output_g || *output_b)
-                {
-                    printf("  red channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b);
-                    exit(1);
-                }
-
-                if (*output_r!=previousDistinctValue)
-                {
-                    if (*output_r<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_r);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = *output_r;
-                }
-            }
-
-            if (distinctValues!=256)
-            {
-                printf("  red channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        // verify green channel
-
-        printf("  checking green channel\n");
-        {
-            const int steps = 256;
-
-            int distinctValues = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<steps; i++)
-            {
-                input = i << 8;
-
-                convert_XRGB8888_to_BGR888(&input, (integer8*)&output, 1);
-
-                if (*output_r || *output_b)
-                {
-                    printf("  green channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b);
-                    exit(1);
-                }
-
-                if (*output_g!=previousDistinctValue)
-                {
-                    if (*output_g<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_g);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = *output_g;
-                }
-            }
-
-            if (distinctValues!=256)
-            {
-                printf("  green channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        // verify blue channel
-
-        printf("  checking blue channel\n");
-        {
-            const int steps = 256;
-
-            int distinctValues = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<steps; i++)
-            {
-                input = i;
-
-                convert_XRGB8888_to_BGR888(&input, (integer8*)&output, 1);
-
-                if (*output_r || *output_g)
-                {
-                    printf("  blue channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b);
-                    exit(1);
-                }
-
-                if (*output_b!=previousDistinctValue)
-                {
-                    if (*output_b<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_b);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = *output_b;
-                }
-            }
-
-            if (distinctValues!=256)
-            {
-                printf("  blue channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        printf("  passed.\n\n");
-    }
-
-    // ---------------------------------------------------------
-
-    printf( "TrueColor -> RGB888\n" );
-    {
-        // verify one-to-one
-
-        printf("  checking one-to-one...\n");
-
-        for (unsigned int i=0; i<=0x00FFFFFF; i++)
-        {
-            integer32 a = i;
-            integer32 b = 0;
-            integer32 c;
-
-            convert_XRGB8888_to_RGB888(&a, (integer8*)&b, 1);
-            convert_RGB888_to_XRGB8888((integer8*)&b, &c, 1);
-
-            if (a!=c)
-            {
-                printf("  failed: %d -> %d -> %d\n", a, b, c);
-                exit(1);
-            }
-        }
-
-        // verify black
-
-        printf("  checking black\n");
-
-        integer32 input = 0;
-        integer32 output = 0;
-
-        integer8 *output_r = (integer8*)&output;
-        integer8 *output_g = ((integer8*)&output) + 1;
-        integer8 *output_b = ((integer8*)&output) + 2;
-
-        convert_XRGB8888_to_RGB888(&input, (integer8*)&output, 1);
-
-        if (output!=0)
-        {
-            printf("  black test failed: %d\n", output);
-            exit(1);
-        }
-
-        // verify maximum red
-
-        printf("  checking maximum red\n");
-
-        input = 0x00FF0000;
-
-        convert_XRGB8888_to_RGB888(&input, (integer8*)&output, 1);
-
-        if (*output_r!=0xFF)
-        {
-            printf("  red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b);
-            exit(1);
-        }
-
-        // verify maximum green
-
-        printf("  checking maximum green\n");
-
-        input = 0x0000FF00;
-
-        convert_XRGB8888_to_RGB888(&input, (integer8*)&output, 1);
-
-        if (*output_g!=0xFF)
-        {
-            printf("  red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b);
-            exit(1);
-        }
-
-        // verify maximum blue
-
-        printf("  checking maximum blue\n");
-
-        input = 0x000000FF;
-
-        convert_XRGB8888_to_RGB888(&input, (integer8*)&output, 1);
-
-        if (*output_b!=0xFF)
-        {
-            printf("  red test failed: %d (%d,%d,%d)\n", output, *output_r, *output_g, *output_b);
-            exit(1);
-        }
-
-        // verify red channel
-
-        printf("  checking red channel\n");
-        {
-            const int steps = 256;
-
-            int distinctValues = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<steps; i++)
-            {
-                input = i << 16;
-
-                convert_XRGB8888_to_RGB888(&input, (integer8*)&output, 1);
-
-                if (*output_g || *output_b)
-                {
-                    printf("  red channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b);
-                    exit(1);
-                }
-
-                if (*output_r!=previousDistinctValue)
-                {
-                    if (*output_r<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  red channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_r);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = *output_r;
-                }
-            }
-
-            if (distinctValues!=256)
-            {
-                printf("  red channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        // verify green channel
-
-        printf("  checking green channel\n");
-        {
-            const int steps = 256;
-
-            int distinctValues = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<steps; i++)
-            {
-                input = i << 8;
-
-                convert_XRGB8888_to_RGB888(&input, (integer8*)&output, 1);
-
-                if (*output_r || *output_b)
-                {
-                    printf("  green channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b);
-                    exit(1);
-                }
-
-                if (*output_g!=previousDistinctValue)
-                {
-                    if (*output_g<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  green channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_g);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = *output_g;
-                }
-            }
-
-            if (distinctValues!=256)
-            {
-                printf("  green channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        // verify blue channel
-
-        printf("  checking blue channel\n");
-        {
-            const int steps = 256;
-
-            int distinctValues = 0;
-
-            integer32 previousDistinctValue = 0xFFFFFFFF;
-
-            for (int i=0; i<steps; i++)
-            {
-                input = i;
-
-                convert_XRGB8888_to_RGB888(&input, (integer8*)&output, 1);
-
-                if (*output_r || *output_g)
-                {
-                    printf("  blue channel polluted other channels: %d -> (%d,%d,%d)\n", input, *output_r, *output_g, *output_b);
-                    exit(1);
-                }
-
-                if (*output_b!=previousDistinctValue)
-                {
-                    if (*output_b<previousDistinctValue && previousDistinctValue!=0xFFFFFFFF)
-                    {
-                        printf("  blue channel monotonic non-decreasing check failed: %d->%d\n", previousDistinctValue, *output_b);
-                        exit(1);
-                    }
-
-                    distinctValues++;
-                    previousDistinctValue = *output_b;
-                }
-            }
-
-            if (distinctValues!=256)
-            {
-                printf("  blue channel distinct value check failed: %d distinct values\n", distinctValues);
-                exit(1);
-            }
-        }
-
-        printf("  passed.\n\n");
-    }
-
-    // ---------------------------------------------------------
-
     printf( "TrueColor -> XBGR8888\n" );
     {
         // verify one-to-one

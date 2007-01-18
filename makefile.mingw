@@ -7,12 +7,6 @@ headers := $(wildcard PixelToaster*.h)
 
 all : $(examples)
 	
-Test.exe : Test.cpp ${headers} makefile.mingw
-	g++ Test.cpp PixelToaster.cpp -o Test.exe ${flags}
-
-Profile.exe : Profile.cpp ${headers} makefile.mingw
-	g++ Profile.cpp PixelToaster.cpp -o Profile.exe ${flags}
-
 %.exe : %.cpp ${headers} makefile.mingw
 	g++ $< -o $@ PixelToaster.cpp ${flags}
 

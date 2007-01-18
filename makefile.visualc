@@ -1,0 +1,63 @@
+# pixeltoaster makefile for freebsd
+
+CFLAGS = -O3 -Wall -Isource -I/usr/X11R6/include -DPLATFORM_UNIX
+LDFLAGS = -L/usr/X11R6/lib -lX11
+
+SHELL = /bin/sh
+INSTALL = /usr/bin/install -c
+INSTALLDATA = ${INSTALL} -m 644
+INSTALLDIR = ${INSTALL} -d
+
+srcdir = source
+prefix = /usr/local
+includedir = $(prefix)/include/PixelToaster-1.4
+libdir = $(prefix)/lib
+pkgconfigdir = $(libdir)/pkgconfig
+
+source := PixelToaster.cpp
+examples := ExampleTrueColor ExampleFullscreen ExampleFloatingPoint ExampleTimer ExampleKeyboardAndMouse ExampleImage
+headers := PixelToaster.h PixelToasterCommon.h PixelToasterConversion.h PixelToasterUnix.h
+pkconfig = PixelToaster-1.4.pc
+
+all : $(examples)
+
+ExampleTrueColor : ExampleTrueColor.cpp ${headers} makefile.freebsd
+	g++ ExampleTrueColor.cpp -o ExampleTrueColor PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+
+ExampleFullscreen : ExampleFullscreen.cpp ${headers} makefile.freebsd
+	g++ ExampleFullscreen.cpp -o ExampleFullscreen PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+
+ExampleFloatingPoint : ExampleFloatingPoint.cpp ${headers} makefile.freebsd
+	g++ ExampleFloatingPoint.cpp -o ExampleFloatingPoint PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+
+ExampleTimer : ExampleTimer.cpp ${headers} makefile.freebsd
+	g++ ExampleTimer.cpp -o ExampleTimer PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+
+ExampleKeyboardAndMouse : ExampleKeyboardAndMouse.cpp ${headers} makefile.freebsd
+	g++ ExampleKeyboardAndMouse.cpp -o ExampleKeyboardAndMouse PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+
+ExampleImage : ExampleImage.cpp ${headers} makefile.freebsd
+	g++ ExampleImage.cpp -o ExampleImage PixelToaster.cpp ${CFLAGS} ${LDFLAGS}
+
+documentation : PixelToaster.h ${headers} doxygen.config
+	doxygen doxygen.config
+	
+docs : documentation
+
+test : Test
+	Test
+	
+profile : Profile
+	Profile
+
+install: installdirs
+	$(INSTALLDATA) ${source} $(includedir)
+	$(INSTALLDATA) ${headers} $(includedir)
+	$(INSTALLDATA) ${pkconfig} $(pkgconfigdir)
+	
+installdirs:
+	test -z "$(includedir)" || $(INSTALLDIR) "$(includedir)"
+	test -z "$(pkgconfigdir)" || $(INSTALLDIR) "$(pkgconfigdir)"
+
+clean:
+	rm -rf $(examples) Test Profile documentation

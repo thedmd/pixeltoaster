@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="ExampleFloatingPoint"
-	ProjectGUID="{8DEC7582-62EF-4108-AB51-BB37A9BF1234}"
-	RootNamespace="ExampleFloatingPoint"
+	Name="Profile"
+	ProjectGUID="{8DEC7582-62EF-4108-AB51-BB37A9BF1205}"
+	RootNamespace="Profile"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -169,7 +169,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\ExampleFloatingPoint.cpp"
+			RelativePath="..\Profile.cpp"
 			>
 		</File>
 	</Files>

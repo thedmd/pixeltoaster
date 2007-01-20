@@ -11,18 +11,108 @@ your pixels to the display.
 
 Take a look at the example programs to see just how easy it is!
 
+
 [ Installation ]
 
  * Windows:
 
+	PixelToaster for Windows requires DirectX 9.0.
+	
+	First you must make sure you have the latest DirectX 9.0 installed.
+	
+	Visual C++ Users:
+	
+	    - Install the latest DirectX SDK so you have its headers and libs
+	
+		- If you are using Visual C++ Express, you need to install the 
+		  Platform SDK if you havent already. Follow the instructions on
+		  the Visual C++ Express site.
+	
+		- If you plan on building PixelToaster from the command line (nmake)
+		  make sure you add the appropriate directories to your LIB and INCLUDE
+		  environment variables
+		
+		- To use the solution file, just open PixelToaster.sln and batch build
+		  everything. PixelToaster.dll and PixelToaster.lib will be created in 
+		  /build as well as executables for all the example programs.
+		
+		- To use nmake, open "Visual Studio XXXX Command Prompt" to get a cmd
+		  line with the path and environment fully setup, then type:
+		
+		      nmake -f makefile.visualc
+				
+		- The solution file only supports the latest Visual Studio 2005,
+		  if you have an earlier version of Visual C++, you'll need to use
+		  nmake or create your own solution/project files.
+		
+	MinGW Users:
+	
+		- You *DO NOT* need to install the DirectX SDK
+		
+		- Make sure your MinGW installation includes the Windows and DirectX
+		  headers. The easiest way to do this is to simply install the entire
+		  MinGW package instead of the smaller pieces. The full package
+		  contains everything you need to build PixelToaster.
+		
+		- Go to the command line and type:
+		
+		      mingw32-make -f makefile.mingw
+		 
+		- All the example programs will be built for you
+		
+		- You can use PixelToaster with Dev-C++ or any other IDE 
+		  on top of MinGW, just as long as you setup your own project files.
+	
  * UNIX:
 
-	The supported display on these platforms
+	The supported display on these platforms is XWindows.
+	
+	This includes MacOS X because there is no native Cocoa display yet :(
+	
+	If you would like to help out this project, the best thing you can do
+	is implement a native MacOS X display for us!
+
+	Until then, MacOS X users, make sure you have both the X11 SDK,
+	and XWindows binaries installed. You can install them from the
+	development tools CD that came with MacOS X.
+
+	To compile the example programs, just use make:
+	
+		make -f makefile.linux
+		make -f makefile.bsd
+		make -f makefile.apple
+
+	Pick the correct line based on your platform obviously,
+	I like to speed things up a bit my using a symbolic link:
+	
+	For example on MacOSX, i just go:
+	
+		ln -s makefile.apple makefile
+		make
+		
+	So everything is easy from this point on:
+	
+		make docs
+		make profile
+		make test
+		make all
+		make clean
+		
+	Have fun!
 
 
 [ How to Use PixelToaster ]
 
-...
+The API of PixelToaster is so easy to use, just look at the example programs
+and you'll get the idea quickly.
+
+However, what isnt obvious at first, is exactly what to do with the pixels!
+
+Obviously, I cant teach software rendering in a few pages, but here is a quick 
+tutorial to get you started...
+
+
+[ Pixels in Memory ]
 
 
 [ Pixel Format ]

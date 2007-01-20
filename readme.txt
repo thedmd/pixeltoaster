@@ -61,7 +61,7 @@ your pixels to the display.
 		- You can use PixelToaster with Dev-C++ or any other IDE 
 		  on top of MinGW, just as long as you setup your own project files.
 	
- * UNIX:
+ * UNIX: FreeBSD, Linux and MacOSX
 
 	The supported display on these platforms is XWindows.
 	
@@ -90,10 +90,10 @@ your pixels to the display.
 		
 	So everything is easy from this point on:
 	
-		make profile
-		make docs
 		make test
+		make profile
 		make all
+		make docs
 		make clean
 
 	In order to make docs, you'll need to have doxygen installed:
@@ -123,7 +123,7 @@ tutorial to get you started...
 Pixels are laid out in memory sequentially from top to bottom, left to right.
 
 You can visualize this by rearranging each line of the image into a single chain,
-each line bolted on at the end of the one above it, in one long chain.
+each line bolted on at the end of the one above it, in one long line.
 
 Lets say we have an image of dimensions 320x240, that is:
 
@@ -143,7 +143,7 @@ We can find the index of a pixel given its (x,y) coordinates as follows:
 	
 So we can set get this pixel as follows:
 
-	pixel[index] = Pixel( 0, 0, 1 );		// set to blue
+	pixel[index].r = Pixel( 0, 0, 1 );		// set to blue
 	
 If you think about this closely, you are starting from the top-left of the screen,
 advancing past all the whole lines above the line you want (y*width). This gets
@@ -200,7 +200,6 @@ Here are some examples:
 	really bright white = (1000000,1000000,1000000) ... !!!
 
 	
-
 [ Working in TrueColor ]
 
 In truecolor, pixels are packed into 32bit integer values, like this:
@@ -255,7 +254,7 @@ the color will wrap around from light to dark and vice versa.
 
     * ExampleFullscreen
         - how to open a fullscreen display
-        - currently only supported in windows (DirectX 9.0)
+        - fullscreen output is currently only supported in windows (DirectX 9.0)
 
     * ExampleKeyboardAndMouse
 		- how to receive keyboard and mouse events from a display
@@ -268,8 +267,6 @@ the color will wrap around from light to dark and vice versa.
 		
 	* ExampleMultiDisplay
 	    - how to work with multiple displays (windowed only)
-	 	- currently each display opens on top of each other under windows
-	 	- but they all work and receive events properly!
 
 
 [ Licence ]

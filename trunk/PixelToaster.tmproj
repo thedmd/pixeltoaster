@@ -2,21 +2,45 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>Test.cpp</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
 			<string>makefile.apple</string>
 			<key>lastUsed</key>
-			<date>2007-01-17T07:25:21Z</date>
+			<date>2007-01-18T07:18:26Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>makefile.freebsd</string>
+			<key>lastUsed</key>
+			<date>2007-01-18T07:18:28Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>makefile.linux</string>
+			<key>lastUsed</key>
+			<date>2007-01-18T07:18:29Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>makefile.mingw</string>
+			<key>lastUsed</key>
+			<date>2007-01-18T07:54:50Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>doxygen.config</string>
 			<key>lastUsed</key>
 			<date>2007-01-17T18:25:28Z</date>
-			<key>selected</key>
-			<true/>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>PixelToaster-1.4.pc</string>
+			<key>lastUsed</key>
+			<date>2007-01-18T00:05:04Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -56,55 +80,97 @@
 		</dict>
 		<dict>
 			<key>filename</key>
+			<string>PixelToasterWindows.h</string>
+		</dict>
+		<dict>
+			<key>filename</key>
 			<string>Test.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-17T07:25:23Z</date>
+			<date>2007-01-18T07:54:50Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>Profile.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-14T05:21:34Z</date>
+			<date>2007-01-18T07:18:34Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>ExampleTrueColor.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-17T07:25:22Z</date>
+			<date>2007-01-17T22:44:02Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>ExampleFullscreen.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-17T07:25:22Z</date>
+			<date>2007-01-17T22:44:02Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>ExampleFloatingPoint.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-17T07:25:22Z</date>
+			<date>2007-01-17T22:44:02Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>ExampleTimer.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-17T07:25:23Z</date>
+			<date>2007-01-17T22:41:59Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>ExampleKeyboardAndMouse.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-17T07:25:22Z</date>
+			<date>2007-01-17T22:44:04Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>ExampleImage.cpp</string>
+			<key>lastUsed</key>
+			<date>2007-01-17T22:44:04Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>222</integer>
 	<key>metaData</key>
-	<dict/>
+	<dict>
+		<key>Profile.cpp</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>52</integer>
+				<key>line</key>
+				<integer>114</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>96</integer>
+		</dict>
+		<key>Test.cpp</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>2930</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>2901</integer>
+		</dict>
+	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>Profile.cpp</string>
+		<string>Test.cpp</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

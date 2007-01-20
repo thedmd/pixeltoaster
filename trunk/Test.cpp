@@ -2922,7 +2922,7 @@ void test_floating_point_to_rgb565()
 
     for ( unsigned int i = 0; i <= 0x0000FFFF; i++ )
     {
-        integer16 a = i;
+        integer16 a = (integer16) i;
         Pixel b;
         integer16 c;
 
@@ -3137,7 +3137,7 @@ void test_floating_point_to_bgr565()
 
     for ( unsigned int i = 0; i <= 0x0000FFFF; i++ )
     {
-        integer16 a = i;
+        integer16 a = (integer16) i;
         Pixel b;
         integer16 c;
 
@@ -3352,7 +3352,7 @@ void test_floating_point_to_xrgb1555()
 
     for ( unsigned int i = 0; i <= 0x00007FFF; i++ )
     {
-        integer16 a = i;
+        integer16 a = (integer16) i;
         Pixel b;
         integer16 c;
 
@@ -3567,7 +3567,7 @@ void test_floating_point_to_xbgr1555()
 
     for ( unsigned int i = 0; i <= 0x00007FFF; i++ )
     {
-        integer16 a = i;
+        integer16 a = (integer16) i;
         Pixel b;
         integer16 c;
 

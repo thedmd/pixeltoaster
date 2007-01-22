@@ -143,7 +143,7 @@ We can find the index of a pixel given its (x,y) coordinates as follows:
     
 So we can set get this pixel as follows:
 
-    pixel[index].r = Pixel( 0, 0, 1 );		// set to blue
+    pixel[index] = Pixel( 0, 0, 1 );		// set to blue
     
 If you think about this closely, you are starting from the top-left of the screen,
 advancing past all the whole lines above the line you want (y*width). This gets

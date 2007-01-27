@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>Test.cpp</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -52,7 +50,7 @@
 			<key>filename</key>
 			<string>PixelToaster.h</string>
 			<key>lastUsed</key>
-			<date>2007-01-14T01:10:04Z</date>
+			<date>2007-01-21T01:55:08Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -86,15 +84,15 @@
 			<key>filename</key>
 			<string>Test.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-18T07:54:50Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2007-01-21T01:55:10Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>Profile.cpp</string>
 			<key>lastUsed</key>
-			<date>2007-01-18T07:18:34Z</date>
+			<date>2007-01-21T01:55:10Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -136,41 +134,7 @@
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>222</integer>
 	<key>metaData</key>
-	<dict>
-		<key>Profile.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>52</integer>
-				<key>line</key>
-				<integer>114</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>96</integer>
-		</dict>
-		<key>Test.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>27</integer>
-				<key>line</key>
-				<integer>2930</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>2901</integer>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>Profile.cpp</string>
-		<string>Test.cpp</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

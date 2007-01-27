@@ -5,8 +5,8 @@ PixelToaster is a library for C++ programmers who want to write their own
 software rendering routines, instead of using hardware accelerated 
 rendering with OpenGL or Direct3D.
 
-To use PixelToaster, all you need to do is ‘open’ a display at the desired 
-resolution, then each frame, render into an array of pixels and ‘update’ 
+To use PixelToaster, all you need to do is "open" a display at the desired 
+resolution, then each frame, render into an array of pixels and "update" 
 your pixels to the display.
 
 

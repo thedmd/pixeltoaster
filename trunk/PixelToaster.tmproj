@@ -8,7 +8,9 @@
 			<key>filename</key>
 			<string>makefile.apple</string>
 			<key>lastUsed</key>
-			<date>2007-01-18T07:18:26Z</date>
+			<date>2007-01-29T07:20:14Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -20,13 +22,13 @@
 			<key>filename</key>
 			<string>makefile.linux</string>
 			<key>lastUsed</key>
-			<date>2007-01-18T07:18:29Z</date>
+			<date>2007-01-27T23:48:34Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>makefile.mingw</string>
 			<key>lastUsed</key>
-			<date>2007-01-18T07:54:50Z</date>
+			<date>2007-01-27T23:48:35Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -91,8 +93,6 @@
 			<string>Profile.cpp</string>
 			<key>lastUsed</key>
 			<date>2007-01-21T01:55:10Z</date>
-			<key>selected</key>
-			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>

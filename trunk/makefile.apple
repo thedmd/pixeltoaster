@@ -1,18 +1,12 @@
 # pixeltoaster makefile for apple
 
-flags = -s -O3 -Wall -framework CoreServices -L/usr/X11R6/lib -lX11
+flags = -O3 -Wall -framework CoreServices -L/usr/X11R6/lib -lX11
 
 examples := $(patsubst Example%.cpp,Example%,$(wildcard Example*.cpp))
 headers := $(wildcard PixelToaster*.h)
 
 all : $(examples)
 	
-Test.exe : Test.cpp ${headers} makefile.apple
-	g++ Tet.cpp PixelToaster.cpp -o Test ${flags}
-
-Profile.exe : Profile.cpp ${headers} makefile.apple
-	g++ Profile.cpp PixelToaster.cpp -o Profile ${flags}
-
 % : %.cpp ${headers} makefile.apple
 	g++ $< -o $@ PixelToaster.cpp ${flags}
 

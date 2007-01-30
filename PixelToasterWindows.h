@@ -569,8 +569,6 @@ namespace PixelToaster
 
 					if ( _listener )
 						_listener->onKeyPressed( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
-
-					return DefWindowProc( hWnd, uMsg, wParam, lParam );
 				}
 				break;
 
@@ -583,8 +581,6 @@ namespace PixelToaster
 						_listener->onKeyUp( display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key] );
 
 					down[key] = false;
-
-					return DefWindowProc( hWnd, uMsg, wParam, lParam );
 				}
 				break;
 
@@ -697,11 +693,10 @@ namespace PixelToaster
 				}
 				break;
 
-				default:
-					return DefWindowProc( hWnd, uMsg, wParam, lParam );
+				default: break;
 			}
 
-			return 0;
+			return DefWindowProc( hWnd, uMsg, wParam, lParam );
 		}
 
 		// system menu item ids

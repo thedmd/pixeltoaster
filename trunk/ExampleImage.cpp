@@ -20,7 +20,8 @@ int main()
     int width = 0;
 	int height = 0;
 
-	if ( !load( "ExampleImage.tga", width, height, pixels ) )
+	if ( !load( "ExampleImage.tga", width, height, pixels ) &&
+		 !load( "../ExampleImage.tga", width, height, pixels ) )
 	{
 		printf( "failed to load image\n" );
 		return 1;

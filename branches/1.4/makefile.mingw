@@ -1,0 +1,25 @@
+# pixeltoaster makefile for mingw
+
+flags = -s -O3 -Wall -ffast-math -ld3d9 -mconsole -mwindows -ld3d9
+
+examples := $(patsubst Example%.cpp,Example%.exe,$(wildcard Example*.cpp))
+headers := $(wildcard PixelToaster*.h)
+
+all : $(examples)
+	
+%.exe : %.cpp ${headers} makefile.mingw
+	g++ $< -o $@ PixelToaster.cpp ${flags}
+
+documentation : PixelToaster.h ${headers} doxygen.config
+	doxygen doxygen.config
+	
+docs : documentation
+
+test : Test.exe
+	Test
+	
+profile : Profile.exe
+	Profile
+	
+clean:
+	rm -rf *.exe documentation

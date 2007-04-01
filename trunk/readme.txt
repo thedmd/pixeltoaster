@@ -1,4 +1,4 @@
-
+﻿
 [ Introduction ]
 
 PixelToaster is a library for C++ programmers who want to write their own
@@ -72,7 +72,8 @@ your pixels to the display.
 
     Until then, MacOS X users, make sure you have both the X11 SDK,
     and XWindows binaries installed. You can install them from the
-    development tools CD that came with MacOS X.
+    development tools CD that came with MacOS X. ps. On MacOSX you 
+    need to run your pixeltoaster binaries from inside an xterm.
 
     To compile the example programs, just use make:
     

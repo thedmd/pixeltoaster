@@ -201,13 +201,22 @@ namespace PixelToaster
 		void close()
 		{	
 			if (image_)
+			{
 				XDestroyImage(image_);
+				image_ = 0;
+			}
 
 			if (display_ && window_)
+			{
 				XDestroyWindow(display_, window_);
+				window_ = 0;
+			}
 			
 			if (display_)
+			{
 				XCloseDisplay(display_);
+				display_ = 0;
+			}
 
 			DisplayAdapter::close();			// note: this calls our virtual defaults method
 		}
@@ -257,6 +266,14 @@ namespace PixelToaster
 			pumpEvents();
 
 			return true;
+		}
+		
+		void title( const char title[] )
+		{
+			DisplayAdapter::title(title);
+			
+			if (display_ && window_)
+				::XStoreName(display_, window_, title);
 		}
 
 	protected:

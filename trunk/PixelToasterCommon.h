@@ -8,6 +8,20 @@
 
 namespace PixelToaster
 {
+	// glenn's magical strcpy replacement with bram's template touch ...
+	template <int n> void magical_strcpy( char (&dest)[n], const char src[] )
+	{		
+		unsigned int i = 0;
+		while ( i < n - 1 )
+		{
+			if ( src[i] == 0 )
+				break;
+			dest[i] = src[i];
+			i++;
+		}
+		dest[i] = 0;
+	}
+
 	// derive your platform's display implementation from this and it will handle all the mundane details for you
 
 	class DisplayAdapter : public DisplayInterface
@@ -32,17 +46,7 @@ namespace PixelToaster
 		{
 			close();
 
-			// glenn's magical strncpy replacement...
-			unsigned int i = 0;
-			while ( i < sizeof(_title) - 1 )
-			{
-				if ( title[i] == 0 )
-					break;
-				_title[i] = title[i];
-				i++;
-			}
-			_title[i] = 0;
-			
+			magical_strcpy(_title, title);			
 			_width = width;
 			_height = height;
 			_output = output;
@@ -81,6 +85,11 @@ namespace PixelToaster
 		const char * title() const
 		{
 			return _title;
+		}
+
+		void title( const char title[] )
+		{
+			magical_strcpy(_title, title);
 		}
 
 		int width() const

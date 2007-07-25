@@ -774,6 +774,7 @@ assert( ! (a == b) );
         virtual bool update( const TrueColorPixel pixels[] ) = 0;
 
         virtual const char * title() const = 0;
+		virtual void title( const char title[] ) = 0;
         virtual int width() const = 0;
         virtual int height() const = 0;
         virtual Mode mode() const = 0;
@@ -975,6 +976,14 @@ while ( display.open() )
             else
                 return "";
         }
+
+		/// Set display title
+
+		void title( const char title[] )
+		{
+			if (internal)
+				internal->title(title);
+		}
 
         /// Get display width
 

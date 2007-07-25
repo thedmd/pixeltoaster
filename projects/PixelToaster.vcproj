@@ -21,6 +21,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
+			BuildLogFile="$(IntDir)\BuildLog-$(TargetName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -45,6 +46,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName="$(TargetDir)$(TargetName).pdb"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
@@ -61,6 +63,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="..\build\$(ProjectName)-Debug.dll"
+				GenerateDebugInformation="true"
 				ImportLibrary="..\build\PixelToaster-Debug.lib"
 			/>
 			<Tool
@@ -95,6 +98,7 @@
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
+			BuildLogFile="$(IntDir)\BuildLog-$(TargetName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -122,6 +126,7 @@
 				BufferSecurityCheck="false"
 				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName="$(TargetDir)$(TargetName).pdb"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
@@ -138,6 +143,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="..\build\$(ProjectName).dll"
+				GenerateDebugInformation="true"
 				ImportLibrary="..\build\PixelToaster.lib"
 			/>
 			<Tool

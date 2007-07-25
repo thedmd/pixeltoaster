@@ -416,6 +416,23 @@ namespace PixelToaster
 			return window;
 		}
 
+		// title management
+
+		void title( const char title[] )
+		{
+			if ( !window )
+				return;
+
+#ifdef UNICODE
+			wchar_t unicodeTitle[1024];
+			MultiByteToWideChar( CP_ACP, 0, title, -1, unicodeTitle, sizeof(unicodeTitle) );
+			SetWindowText( window, unicodeTitle );
+#else
+			SetWindowText( window, title );
+#endif
+
+		}
+
 		// listener management
 
 		void listener( Listener * listener )
@@ -1220,6 +1237,14 @@ namespace PixelToaster
 			}
 
 			return true;
+		}
+
+		void title( const char title[] )
+		{
+			DisplayAdapter::title( title );
+
+			if ( window )
+				window->title( title );
 		}
 
 		void listener( Listener * listener )

@@ -2,10 +2,11 @@
 // Copyright © 2004-2007 Glenn Fiedler
 // Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
-// display implementation (reuse unix x11 display for now...)
-
 #define PIXELTOASTER_NO_UNIX_TIMER
+#include "CoreServices/CoreServices.h"
 #include "PixelToasterUnix.h"
+
+// display implementation (reuse unix x11 display for now...)
 
 namespace PixelToaster
 {
@@ -16,8 +17,6 @@ namespace PixelToaster
 }
 
 // timer implementation
-
-#include "CoreServices/CoreServices.h"
 
 namespace PixelToaster
 {

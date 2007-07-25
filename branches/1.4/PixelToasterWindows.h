@@ -466,8 +466,10 @@ namespace PixelToaster
 				case WM_QUIT:
 				case WM_CLOSE:
 					if ( _listener )
+					{
 						if ( _listener->onClose( display->wrapper() ? *display->wrapper() : *display ) )
 							adapter->exit();
+					}
 					else
 						adapter->exit();
 					break;

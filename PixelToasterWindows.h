@@ -907,9 +907,19 @@ namespace PixelToaster
 			if ( !surface )
 				return false;
 
-			D3DLOCKED_RECT lock;
 
-			if ( FAILED( surface->LockRect( &lock, NULL, D3DLOCK_NOSYSLOCK ) ) )
+			RECT rect, *pRect = 0;
+			if (dirtyBox)
+			{
+				rect.left = dirtyBox->xBegin;
+				rect.right = dirtyBox->yEnd;
+				rect.top = dirtyBox->yBegin;
+				rect.bottom = dirtyBox->yEnd;
+				pRect = &rect;
+			}
+
+			D3DLOCKED_RECT lock;
+			if ( FAILED( surface->LockRect( &lock, pRect, D3DLOCK_NOSYSLOCK ) ) )
 				return false;
 
 			unsigned char * dest = static_cast<unsigned char*>(lock.pBits);
@@ -941,7 +951,6 @@ namespace PixelToaster
 				const int boxWidth = box.xEnd - box.xBegin;
 				const int offset = box.yBegin * width + box.xBegin;
 				source += (box.yBegin * width + box.xBegin) * bytesPerSourcePixel;
-				dest += box.yBegin * bytesPerDestLine + box.xBegin * bytesPerDestPixel;
 
 				for ( int y = box.yBegin; y < box.yEnd; ++y )
 				{

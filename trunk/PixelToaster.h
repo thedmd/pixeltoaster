@@ -30,7 +30,7 @@
 
 // current API version ( API is not allowed to change in point releases )
 
-#define PIXELTOASTER_VERSION 1.4
+#define PIXELTOASTER_VERSION 1.5
 
 // disable annoying visual c++ warnings
 
@@ -751,6 +751,18 @@ assert( ! (a == b) );
         Code code;
     };
 
+	// Rectangular range of pixels: [xBegin, xEnd) x [yBegin, yEnd)
+	// 
+	struct Rectangle
+	{
+		int xBegin;	///< first column in range
+		int xEnd;	///< one past last column in range
+		int yBegin;	///< first row in range
+		int yEnd;	///< one past last row in range
+		Rectangle(): xBegin(0), xEnd(0), yBegin(0), yEnd(0) {}
+		Rectangle(int xb, int xe, int yb, int ye): xBegin(xb), xEnd(xe), yBegin(yb), yEnd(ye) {}
+	};
+
 	// internal factory methods
 
 	PIXELTOASTER_API class DisplayInterface * createDisplay();
@@ -770,8 +782,8 @@ assert( ! (a == b) );
 
 		virtual bool open() const = 0;
 
-        virtual bool update( const FloatingPointPixel pixels[] ) = 0;
-        virtual bool update( const TrueColorPixel pixels[] ) = 0;
+        virtual bool update( const FloatingPointPixel pixels[], const Rectangle* dirtyBox = 0 ) = 0;
+        virtual bool update( const TrueColorPixel pixels[], const Rectangle* dirtyBox = 0 ) = 0;
 
         virtual const char * title() const = 0;
 		virtual void title( const char title[] ) = 0;
@@ -915,13 +927,21 @@ while ( display.open() )
         /// You can calculate the offset for a pixel in the linear array as follows: int offset = width*y + x;
         /// This is the correct update method to call when the display was opened in Mode::FloatingPoint,
         /// however it is safe to call this method even when operating in Mode::TrueColor if you wish.
+		///
+		/// The dirty box acts as a @b hint to the update function that only pixels inside that box have been changed
+		/// since last update.  The update function does not need to respect this hint and may do a full update
+		/// instead.  In particular, it will do this if it can avoid a buffer copy when matching formats are found.
+		/// That's why you still need to provide a full buffer of pixels, and the ones outside dirtyBox should 
+		/// be the same pixels as the previous call.
+		///
         /// @param pixels the pixels to copy to the screen.
+ 		/// @param dirtyBox range of pixels that have been changed since last call.
         /// @returns true if the update was successful.
 
-        bool update( const class FloatingPointPixel pixels[] )
+        bool update( const class FloatingPointPixel pixels[], const Rectangle * dirtyBox = 0 )
         {
             if ( internal )
-                return internal->update( pixels );
+                return internal->update( pixels, dirtyBox );
             else
                 return false;
         }
@@ -932,13 +952,21 @@ while ( display.open() )
         /// You can calculate the offset for a pixel in the linear array as follows: int offset = width*y + x;
         /// This is the natural update method to call when the display was opened in Mode::TrueColor,
         /// however it is safe to call this method even when operating in Mode::FloatingPoint if you wish.
+ 		///
+		/// The dirty box acts as a @b hint to the update function that only pixels inside that box have been changed
+		/// since last update.  The update function does not need to respect this hint and may do a full update
+		/// instead.  In particular, it will do this if it can avoid a buffer copy when matching formats are found.
+		/// That's why you still need to provide a full buffer of pixels, and the ones outside dirtyBox should 
+		/// be the same pixels as the previous call.
+		///
         /// @param pixels the pixels to copy to the screen.
+		/// @param dirtyBox range of pixels that have been changed since last call.
         /// @returns true if the update was successful.
 
-        bool update( const TrueColorPixel pixels[] )
+        bool update( const TrueColorPixel pixels[], const Rectangle * dirtyBox = 0 )
         {
             if (internal)
-                return internal->update( pixels );
+                return internal->update( pixels, dirtyBox );
             else
                 return false;
         }
@@ -950,9 +978,9 @@ while ( display.open() )
         /// @param pixels the pixels to copy to the screen.
         /// @returns true if the update was successful.
 
-		bool update( const vector<FloatingPointPixel> & pixels )
+		bool update( const vector<FloatingPointPixel> & pixels, const Rectangle * dirtyBox = 0 )
         {
-			return update( &pixels[0] );
+			return update( &pixels[0], dirtyBox );
         }
 
         /// Update display with standard vector of truecolor pixels.
@@ -960,9 +988,9 @@ while ( display.open() )
         /// @param pixels the pixels to copy to the screen.
         /// @returns true if the update was successful.
 
-		bool update( const vector<TrueColorPixel> & pixels )
+		bool update( const vector<TrueColorPixel> & pixels, const Rectangle * dirtyBox = 0 )
         {
-			return update( &pixels[0] );
+			return update( &pixels[0], dirtyBox );
         }
 
 #endif

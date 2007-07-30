@@ -66,18 +66,18 @@ namespace PixelToaster
 			return _open;
 		}
 
-		bool update( const TrueColorPixel pixels[] )
+		bool update( const TrueColorPixel pixels[], const Rectangle * dirtyBox )
 		{
 			if ( pixels )
-				return update( pixels, 0 );
+				return update( pixels, 0, dirtyBox );
 			else
 				return false;
 		}
 
-		bool update( const FloatingPointPixel pixels[] )
+		bool update( const FloatingPointPixel pixels[], const Rectangle * dirtyBox )
 		{
 			if ( pixels )
-				return update( 0, pixels );
+				return update( 0, pixels, dirtyBox );
 			else
 				return false;
 		}
@@ -138,7 +138,7 @@ namespace PixelToaster
 		// only one of the pointers will be non-null, this allows you to avoid
 		// duplicating update code between truecolor and floating point update methods.
 
-		virtual bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels ) { return true; }
+		virtual bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels, const Rectangle * dirtyBox ) { return true; }
 
 		// this defaults is virtual, override it to add your own defaults
 		// but make sure you always call the superclass defaults in your overridden function!

@@ -887,7 +887,7 @@ namespace PixelToaster
 		/// update the device pixels.
 		/// @returns true if the update succeeded, false otherwise.
 
-		bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels )
+		bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels, const Rectangle * dirtyBox )
 		{
 			// handle device loss
 
@@ -909,53 +909,48 @@ namespace PixelToaster
 
 			D3DLOCKED_RECT lock;
 
-			if ( FAILED( surface->LockRect( &lock, NULL, D3DLOCK_DISCARD ) ) )
+			if ( FAILED( surface->LockRect( &lock, NULL, D3DLOCK_NOSYSLOCK ) ) )
 				return false;
 
-			unsigned char * data = (unsigned char*) lock.pBits;
-			const int pitch = lock.Pitch;
+			unsigned char * dest = static_cast<unsigned char*>(lock.pBits);
+			const int bytesPerDestPixel = sizeofFormat(format);
+			const int bytesPerDestLine = lock.Pitch;
 
-			unsigned char * line = data;
-
+			Converter * converter = 0;
+			const unsigned char * source = 0;
+			int bytesPerSourcePixel = 0;
 			if ( floatingPointPixels )
 			{
-				Converter * converter = requestConverter( Format::XBGRFFFF, format );
-
-				if ( converter )
-				{
-					converter->begin();
-
-					const Pixel * source = floatingPointPixels;
-
-					for ( int y = 0; y < height; ++y )
-					{
-						converter->convert( source, line, width );
-						source += width;
-						line += pitch; 
-					}
-
-					converter->end();
-				}
+				converter = requestConverter( Format::XBGRFFFF, format );
+				source = reinterpret_cast<const unsigned char*>(floatingPointPixels);
+				bytesPerSourcePixel = sizeof(FloatingPointPixel);
 			}
-			else if ( trueColorPixels )
+			else
 			{
-				Converter * converter = requestConverter( Format::XRGB8888, format );
+				converter = requestConverter( Format::XRGB8888, format );
+				source = reinterpret_cast<const unsigned char*>(trueColorPixels);
+				bytesPerSourcePixel = sizeof(TrueColorPixel);
+			}
+			const int bytesPerSourceLine = width * bytesPerSourcePixel;
 
-				if (converter)
+			if ( converter )
+			{
+				converter->begin();
+
+				const Rectangle box = dirtyBox ? *dirtyBox : Rectangle(0, width, 0, height);
+				const int boxWidth = box.xEnd - box.xBegin;
+				const int offset = box.yBegin * width + box.xBegin;
+				source += (box.yBegin * width + box.xBegin) * bytesPerSourcePixel;
+				dest += box.yBegin * bytesPerDestLine + box.xBegin * bytesPerDestPixel;
+
+				for ( int y = box.yBegin; y < box.yEnd; ++y )
 				{
-					converter->begin();
-
-					const TrueColorPixel * source = trueColorPixels;
-
-					for ( int y = 0; y < height; y++ )
-					{
-						converter->convert( source, line, width );
-						source += width;
-						line += pitch; 
-					}
-
-					converter->end();
+					converter->convert( source, dest, boxWidth );
+					source += bytesPerSourceLine;
+					dest += bytesPerDestLine;
 				}
+
+				converter->end();
 			}
 
 			surface->UnlockRect();
@@ -1030,6 +1025,20 @@ namespace PixelToaster
 				case Format::RGB565: return D3DFMT_R5G6B5;
 				case Format::XRGB1555: return D3DFMT_X1R5G5B5;
 				default: return D3DFMT_UNKNOWN;
+			}
+		}
+
+		int sizeofFormat( Format format )
+		{
+			switch ( format )
+			{
+				case Format::XBGRFFFF: return 16;
+				case Format::XRGB8888: return 4;
+				case Format::XBGR8888: return 4;
+				case Format::RGB888: return 3;
+				case Format::RGB565: return 2;
+				case Format::XRGB1555: return 2;
+				default: return 0;
 			}
 		}
 
@@ -1206,7 +1215,7 @@ namespace PixelToaster
 			DisplayAdapter::close();
 		}
 
-		bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels )
+		bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels, const Rectangle * dirtyBox )
 		{
 			if ( shutdown )
 			{
@@ -1228,7 +1237,7 @@ namespace PixelToaster
 				window->update();
 
 			if ( device )
-				device->update( trueColorPixels, floatingPointPixels );
+				device->update( trueColorPixels, floatingPointPixels, dirtyBox );
 
 			if ( window && !window->visible() )
 			{
@@ -1269,7 +1278,7 @@ namespace PixelToaster
 					SelectObject( dc, brush );
 					RECT rect;
 					GetClientRect( window->handle(), &rect );
-					Rectangle( dc, 0, 0, rect.right, rect.bottom );
+					::Rectangle( dc, 0, 0, rect.right, rect.bottom );
 					DeleteObject( brush );
 					ReleaseDC( window->handle(), dc );
 				}

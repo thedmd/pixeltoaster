@@ -221,7 +221,7 @@ namespace PixelToaster
 			DisplayAdapter::close();			// note: this calls our virtual defaults method
 		}
 
-		bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels )
+		bool update( const TrueColorPixel * trueColorPixels, const FloatingPointPixel * floatingPointPixels, const Rectangle * dirtyBox )
 		{
 			if (isShuttingDown_)
 			{

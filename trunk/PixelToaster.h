@@ -180,10 +180,10 @@ namespace PixelToaster
 
 		FloatingPointPixel()
 		{
-			a = 0.0f;
 			r = 0.0f;
 			g = 0.0f;
 			b = 0.0f;
+			a = 0.0f;
 		}
 
 		/// This convenience constructor lets you specify color and alpha values at creation
@@ -196,10 +196,10 @@ namespace PixelToaster
 			this->a = a;
 		}
 
-        float a;        ///< alpha component (unused)
-        float b;        ///< blue component
-        float g;        ///< green component
         float r;        ///< red component
+        float g;        ///< green component
+        float b;        ///< blue component
+        float a;        ///< alpha component (unused)
     };          
 
 	/// since floating point color is the default, we setup a typedef to allow users to shortcut it just to "Pixel"

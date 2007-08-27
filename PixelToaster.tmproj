@@ -9,8 +9,6 @@
 			<string>makefile.apple</string>
 			<key>lastUsed</key>
 			<date>2007-01-29T07:20:14Z</date>
-			<key>selected</key>
-			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -52,7 +50,9 @@
 			<key>filename</key>
 			<string>PixelToaster.h</string>
 			<key>lastUsed</key>
-			<date>2007-01-21T01:55:08Z</date>
+			<date>2007-01-29T08:10:21Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>

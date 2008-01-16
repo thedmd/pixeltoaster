@@ -61,20 +61,11 @@ your pixels to the display.
         - You can use PixelToaster with Dev-C++ or any other IDE 
           on top of MinGW, just as long as you setup your own project files.
     
- * UNIX: FreeBSD, Linux and MacOSX
+ * UNIX: FreeBSD, Linux and Mac OS X
 
-    The supported display on these platforms is XWindows.
-    
-    This includes MacOS X because there is no native Cocoa display yet :(
-    
-    If you would like to help out this project, the best thing you can do
-    is implement a native MacOS X display for us!
-
-    Until then, MacOS X users, make sure you have both the X11 SDK,
-    and XWindows binaries installed. You can install them from the
-    development tools CD that came with MacOS X. ps. On MacOSX you 
-    need to run your pixeltoaster binaries from inside an xterm.
-
+    The supported display on FreeBSD and Linux is XWindows,
+    on Mac OS X Cocoa/OpenGL is used.
+        
     To compile the example programs, just use make:
     
         make -f makefile.linux
@@ -84,7 +75,7 @@ your pixels to the display.
     Pick the correct line based on your platform obviously,
     I like to speed things up a bit my using a symbolic link:
     
-    For example on MacOSX, i just go:
+    For example on Mac OS X, I just go:
     
         ln -s makefile.apple makefile
         make
@@ -256,6 +247,7 @@ the color will wrap around from light to dark and vice versa.
     * ExampleFullscreen
         - how to open a fullscreen display
         - fullscreen output is currently only supported in windows (DirectX 9.0)
+          and Mac OS X.
 
     * ExampleKeyboardAndMouse
         - how to receive keyboard and mouse events from a display

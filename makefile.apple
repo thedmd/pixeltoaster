@@ -1,25 +1,48 @@
 # pixeltoaster makefile for apple
 
-flags = -O3 -Wall -framework CoreServices -L/usr/X11R6/lib -lX11
+# use the default SDK
+sdk =
 
-examples := $(patsubst Example%.cpp,Example%,$(wildcard Example*.cpp))
-headers := $(wildcard PixelToaster*.h)
+# Uncomment the next line if you want to build your binary on 10.5 Leopard, but want to run it on 10.4 Tiger
+#sdk = -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk
+
+# build 32-bit native only
+archs = 
+
+# to build universal binaries use:
+#archs = -arch i386 -arch ppc
+
+# when building for 10.5 Leopard you can use the following instead to build 4-way universal binaries
+#archs = -arch i386 -arch x86_64 -arch ppc -arch ppc64
+
+flags   = -O3 -Wall $(sdk) $(archs)
+ldflags = -framework CoreServices -framework Cocoa -framework OpenGL
+
+examples  := $(patsubst Example%.cpp,Example%,$(wildcard Example*.cpp))
+headers	  := $(wildcard PixelToaster*.h)
+corefiles := PixelToaster.cpp PixelToasterApple.mm
+coreobjs  := PixelToaster.o PixelToasterApple.o
 
 all : $(examples)
-	
-% : %.cpp ${headers} makefile.apple
-	g++ $< -o $@ PixelToaster.cpp ${flags}
+
+$(coreobjs) : $(corefiles) $(headers) makefile.apple
+	g++ -c $(corefiles) $(flags)
+
+% : %.cpp ${headers} ${coreobjs} makefile.apple
+	g++ $< ${coreobjs} ${flags} ${ldflags} -o $@
 
 documentation : PixelToaster.h ${headers} doxygen.config
 	doxygen doxygen.config
 	
 docs : documentation
 
+.PHONY:	test
 test : Test
-	Test
-	
+	./Test
+
+.PHONY:	profile
 profile : Profile
-	Profile
+	./Profile
 	
 clean:
-	rm -rf $(examples) Test Profile documentation
+	rm -rf $(examples) $(coreobjs) Test Profile documentation

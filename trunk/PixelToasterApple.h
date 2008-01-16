@@ -1,25 +1,76 @@
 // Apple MacOS X Platform
-// Copyright © 2004-2007 Glenn Fiedler
+// Copyright Â© 2004-2007 Glenn Fiedler
 // Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
-#define PIXELTOASTER_NO_UNIX_TIMER
+// native Cocoa output implemented by Thorsten Schaaps <bitpull@aixplosive.de>
+
+#ifndef PIXELTOASTER_APPLE_USE_X11
+	#define PIXELTOASTER_APPLE_USE_X11	0
+#endif
+
 #include "CoreServices/CoreServices.h"
-#include "PixelToasterUnix.h"
 
-// display implementation (reuse unix x11 display for now...)
+#if PIXELTOASTER_APPLE_USE_X11
+	#define PIXELTOASTER_NO_UNIX_TIMER
+	#include "PixelToasterUnix.h"
+#endif
 
+// display implementation
 namespace PixelToaster
 {
-	class AppleDisplay : public UnixDisplay 
-	{
-		// ...
-	}; 
-}
+	#if !PIXELTOASTER_APPLE_USE_X11		
+		class AppleDisplay : public DisplayAdapter
+		{
+			class AppleDisplayPrivate;
+			
+		public:
+			AppleDisplay();
+			
+			virtual ~AppleDisplay();
+			
+			virtual bool open( const char title[],
+												 int width, int height,
+												 Output output,
+												 Mode mode );
+			
+			virtual void close();
+			
+			virtual bool update( const TrueColorPixel *			trueColorPixels,
+													 const FloatingPointPixel * floatingPointPixels,
+													 const Rectangle *					dirtyBox );
+			
+			virtual void title( const char title[] );
+			
+			virtual bool windowed();
+			
+			virtual bool fullscreen();
 
-// timer implementation
+			virtual void listener( Listener * listener );
+			
+			void setShouldClose()  { _shouldClose = true; }
 
-namespace PixelToaster
-{
+			void setShouldToggle() { _shouldToggle = true; }
+
+			void shutdown();
+
+		protected:
+			
+			virtual void defaults();
+
+		private:
+
+			AppleDisplayPrivate*	_private;
+			bool									_shouldClose;
+			bool									_shouldToggle;
+		}; 
+	#else
+		class AppleDisplay : public UnixDisplay 
+		{
+			// ...
+		}; 
+	#endif
+
+	// timer implementation
 	class AppleTimer : public TimerInterface
 	{
 	public:
@@ -73,6 +124,6 @@ namespace PixelToaster
 	
 		double _time;               ///< current time in seconds
 		UInt64 _timeCounter;        ///< time counter in microseconds
-		UInt64 _deltaCounter;		///< delta counter in microseconds
+		UInt64 _deltaCounter;				///< delta counter in microseconds
 	};
 }

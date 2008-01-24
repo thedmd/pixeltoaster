@@ -1088,8 +1088,13 @@
 		- (void)windowDidResignKey:(NSNotification*)notification
 		{
 			PARAMETER_UNUSED(notification)
-			if(displayListener && display)
+			if( displayListener && display )
 				displayListener->onActivate( display->wrapper() ? *display->wrapper() : *display, false );
+
+			// if the display is fullscreen, but the window lost the focus
+			// switch to windowed mode (happens on Cmd-Shift-Q / Log out user..)
+			if( display->output() == Output::Fullscreen )
+				display->setShouldToggle();
 		}
 
 		- (void)windowDidBecomeKey:(NSNotification*)notification
@@ -1785,8 +1790,13 @@
 			[ _private->view copyTrueColorPixelsUsingOpenGL: trueColorPixels
 																	floatingPointPixels: floatingPointPixels
 																						dirtyRect: _shouldToggle ? 0 : dirtyBox ];
+						
 			_shouldToggle = false;
 		
+			// If the window is still hidden, now is a good time to make it visible
+			if( ! [ _private->window isVisible ] )
+				[ _private->window makeKeyAndOrderFront: nil ];
+						
 			_private->pumpMessages();
 				
 			return true;
@@ -1818,6 +1828,7 @@
 			{
 				displayID = [ _private->view displayID ];
 				[ _private->view fadeOutDisplay ];
+				[ _private->window orderOut: nil ];
 			}
 
 			[ _private->view clearGLContext ];
@@ -1860,10 +1871,7 @@
 				[ window setFrame: frameRect display: NO ];
 			}
 			[ window setContentView: _private->view ];
-
-			// Show the window.
-			[ window makeKeyAndOrderFront: nil ];
-		
+			
 			DisplayAdapter::windowed();
 		
 			if( [ _private->view setFullscreen:NO ] == NO )
@@ -1875,7 +1883,9 @@
 			NSOpenGLContext *context = [ _private->view openGLContext ];
 
 			[ context setView: _private->view ];
-				
+
+			// fade in display, note that the window is still hidden
+			// it will be made visible after the first update() call
 			if ( outputWasFullscreen )
 				[ _private->view fadeInDisplay ];
 
@@ -1891,6 +1901,9 @@
 		
 			if( output() == Output::Fullscreen )
 				return true;
+			
+			[ _private->view hideCursor ];
+			[ _private->view fadeOutDisplay ];
 		
 			// if a window already exists, save frame to restore later
 			if( _private->window != nil )
@@ -1906,9 +1919,6 @@
 				_private->oldWindowFrame = NSZeroRect;
 			}
 
-			[ _private->view hideCursor ];
-			[ _private->view fadeOutDisplay ];
-
 			// set state to fullscreen
 			DisplayAdapter::fullscreen();
 
@@ -1918,8 +1928,9 @@
 				return false;
 			}
 
-			// TODO: in case of first init: instead of fade in, just reset the gamma settings (we have a black screen anyway)
-			[ _private->view fadeInDisplay ];
+			// for now: instead of fade in, just reset the gamma settings (we have a black screen anyway)
+			// TODO: correct solution for later would be to do the fade in asynchronously
+			CGDisplayRestoreColorSyncSettings();
 
 			return true;
 		}

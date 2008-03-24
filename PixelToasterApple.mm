@@ -19,7 +19,8 @@
 	using namespace PixelToaster;
 
 	#ifndef PIXELTOASTER_APPLE_ALLOW_ZOOM
-		// adds Zoom1x, 2x, 3x, 4x to "Window" menu
+		// adds Zoom1x, 2x, 3x, 4x to "Window" menu and allows
+		// resizing the window by dragging the lower right corner
 		#define PIXELTOASTER_APPLE_ALLOW_ZOOM				1
 	#endif
 
@@ -992,6 +993,28 @@
 			glFlush();
 		}
 
+		-(void)blitOpenGLTexture
+		{
+			if( glTexture == 0 )
+				return;
+
+			const	int	 width		= display->width();
+			const int	 height		= display->height();
+		
+			[ [ self openGLContext ] makeCurrentContext ];
+
+			glBegin( GL_QUADS ); 
+				glTexCoord2i( 0,		 0			); glVertex2f( -1.0f,  1.0f ); 
+				glTexCoord2i( width, 0			); glVertex2f(  1.0f,  1.0f ); 
+				glTexCoord2i( width, height ); glVertex2f(  1.0f, -1.0f ); 
+				glTexCoord2i( 0,		 height ); glVertex2f( -1.0f, -1.0f ); 
+			glEnd();
+
+			[ [ self openGLContext ] flushBuffer ];
+	
+			[ NSOpenGLContext clearCurrentContext ];
+		}
+		
 		-(void)copyTrueColorPixelsUsingOpenGL:(const TrueColorPixel*)trueColorPixels
 											floatingPointPixels:(const FloatingPointPixel*)floatingPointPixels
 																dirtyRect:(const Rectangle*) dirtyBox
@@ -1102,6 +1125,20 @@
 			PARAMETER_UNUSED(notification)
 			if(displayListener && display)
 				displayListener->onActivate( display->wrapper() ? *display->wrapper() : *display, true );
+		}
+
+		-(void)windowWillResize:(NSNotification *)notification
+		{
+			PARAMETER_UNUSED(notification)
+			[ self reshape ];
+			[ self blitOpenGLTexture ];
+		}
+
+		-(void)windowDidResize:(NSNotification *)notification
+		{
+			PARAMETER_UNUSED(notification)
+			[ self reshape ];
+			[ self blitOpenGLTexture ];
 		}
 
 		- (BOOL)windowShouldClose:(NSNotification *)notification
@@ -1496,10 +1533,14 @@
 				if( defaultKeyHandlers )
 				{
 					[ [ NSApp mainMenu ] performKeyEquivalent: theEvent ];
-				}
-			
-				if( defaultKeyHandlers && ( key == Key::Escape ) )
-					[ window performClose:nil ];
+
+					if( ( key == Key::Escape ) && ( modifiers == 0 ) )
+						[ window performClose:nil ];
+
+					// TODO: instead of just leaving fullscreen: minimize and set a flag.. on app_activate, reenter fullscreen
+					if( ( key == Key::Tab ) && ( modifiers == NSCommandKeyMask ) )
+						display->setShouldToggle();
+				}				
 			}
 		
 			void handleKeyUp( NSEvent* theEvent )
@@ -1693,8 +1734,14 @@
 		static const float WINDOW_OFFSET_Y = 25.0f;
 		static const float WINDOW_OFFSET_X = 30.0f;
 	
-		static const unsigned int PIXELTOASTER_WINDOW_STYLE = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask;
-	
+		#if PIXELTOASTER_APPLE_ALLOW_ZOOM
+			static const unsigned int PIXELTOASTER_WINDOW_STYLE = NSTitledWindowMask | NSClosableWindowMask |
+																														NSMiniaturizableWindowMask | NSResizableWindowMask;
+		#else
+			static const unsigned int PIXELTOASTER_WINDOW_STYLE = NSTitledWindowMask | NSClosableWindowMask |
+			 																											NSMiniaturizableWindowMask;
+		#endif
+		
 		bool AppleDisplay::open( const char title[], int width, int height, Output output, Mode mode )
 		{
 			// not using "output" in the next call to suppress unwanted fade operations

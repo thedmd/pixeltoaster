@@ -69,6 +69,16 @@ namespace PixelToaster
         return value.i & 0x07C0000;
     }
 
+		inline float uint8ToFloat( integer8 input )
+		{
+		  FloatInteger value;
+
+			value.i = ( input << 15 ) | ( 127 << 23 );
+			value.f -= 1.0f;
+
+			return value.f;
+		}
+		
 	// floating point conversion routines
 
 	inline void convert_XBGRFFFF_to_XRGB8888( const Pixel source[], integer32 destination[], unsigned int count )
@@ -87,9 +97,9 @@ namespace PixelToaster
     {
         for ( unsigned int i = 0; i < count; ++i )
         {
-            destination[i].r = float( ( source[i] >> 16 ) & 0xFF ) * 1.0f / 255.0f;
-            destination[i].g = float( ( source[i] >> 8 )  & 0xFF ) * 1.0f / 255.0f;
-            destination[i].b = float( ( source[i] )       & 0xFF ) * 1.0f / 255.0f;
+					destination[i].r = uint8ToFloat( source[i] >> 16 );
+					destination[i].g = uint8ToFloat( source[i] >> 8 );
+					destination[i].b = uint8ToFloat( source[i] );
         }
     }
 
@@ -109,9 +119,9 @@ namespace PixelToaster
     {
         for ( unsigned int i = 0; i < count; ++i )
         {
-            destination[i].r = float( ( source[i]       ) & 0xFF ) * 1.0f / 255.0f;
-            destination[i].g = float( ( source[i] >> 8  ) & 0xFF ) * 1.0f / 255.0f;
-            destination[i].b = float( ( source[i] >> 16 ) & 0xFF ) * 1.0f / 255.0f;
+            destination[i].r = uint8ToFloat( source[i] );
+            destination[i].g = uint8ToFloat( source[i] >> 8 );
+            destination[i].b = uint8ToFloat( source[i] >> 16 );
         }
     }
 
@@ -135,13 +145,9 @@ namespace PixelToaster
     {
         for ( unsigned int i = 0; i < count; ++i )
         {
-            integer32 r = source[0];
-            integer32 g = source[1];
-            integer32 b = source[2];
-
-            destination[i].r = float(r) * 1.0f / 255.0f;
-            destination[i].g = float(g) * 1.0f / 255.0f;
-            destination[i].b = float(b) * 1.0f / 255.0f;
+						destination[i].r = uint8ToFloat( source[0] );
+						destination[i].g = uint8ToFloat( source[1] );
+						destination[i].b = uint8ToFloat( source[2] );
 
             source += 3;
         }
@@ -167,13 +173,9 @@ namespace PixelToaster
     {
         for ( unsigned int i = 0;  i < count; ++i )
         {
-            integer32 b = source[0];
-            integer32 g = source[1];
-            integer32 r = source[2];
-
-            destination[i].r = float(r) * 1.0f / 255.0f;
-            destination[i].g = float(g) * 1.0f / 255.0f;
-            destination[i].b = float(b) * 1.0f / 255.0f;
+						destination[i].r = uint8ToFloat( source[2] );
+						destination[i].g = uint8ToFloat( source[1] );
+						destination[i].b = uint8ToFloat( source[0] );
 
             source += 3;
         }
@@ -195,15 +197,15 @@ namespace PixelToaster
     {
         for ( unsigned int i = 0; i < count; ++i )
         {
-            integer32 color = (integer32) source[i];
+            const integer32 color = (integer32) source[i];
 
-            integer32 r = ( color & 0x0000F800 ) >> 11;
-            integer32 g = ( color & 0x000007E0 ) >> 5;
-            integer32 b = ( color & 0x0000001F );
+            const integer8 r = ( color & 0x0000F800 ) >> 8;
+            const integer8 g = ( color & 0x000007E0 ) >> 3;
+            const integer8 b = ( color & 0x0000001F ) << 3;
 
-            destination[i].r = float(r) * 1.0f / 31.0f;
-            destination[i].g = float(g) * 1.0f / 63.0f;
-            destination[i].b = float(b) * 1.0f / 31.0f;
+						destination[i].r = uint8ToFloat( r );
+						destination[i].g = uint8ToFloat( g );
+						destination[i].b = uint8ToFloat( b );
         }
     }
 
@@ -223,15 +225,15 @@ namespace PixelToaster
     {
         for ( unsigned int i = 0; i < count; ++i )
         {
-            integer32 color = (integer32) source[i];
+            const integer32 color = (integer32) source[i];
 
-            integer32 b = ( color & 0x0000F800 ) >> 11;
-            integer32 g = ( color & 0x000007E0 ) >> 5;
-            integer32 r = ( color & 0x0000001F );
+            const integer8 b = ( color & 0x0000F800 ) >> 8;
+            const integer8 g = ( color & 0x000007E0 ) >> 3;
+            const integer8 r = ( color & 0x0000001F ) << 3;
 
-            destination[i].r = float(r) * 1.0f / 31.0f;
-            destination[i].g = float(g) * 1.0f / 63.0f;
-            destination[i].b = float(b) * 1.0f / 31.0f;
+						destination[i].r = uint8ToFloat( r );
+						destination[i].g = uint8ToFloat( g );
+						destination[i].b = uint8ToFloat( b );
         }
     }
 
@@ -251,15 +253,15 @@ namespace PixelToaster
     {
         for ( unsigned int i = 0; i < count; ++i )
         {
-            integer32 color = (integer32) source[i];
+            const integer32 color = (integer32) source[i];
 
-            integer32 r = ( color & 0x00007C00 ) >> 10;
-            integer32 g = ( color & 0x000003E0 ) >> 5;
-            integer32 b = ( color & 0x0000001F );
+            const integer8 r = ( color & 0x00007C00 ) >> 7;
+            const integer8 g = ( color & 0x000003E0 ) >> 2;
+            const integer8 b = ( color & 0x0000001F ) << 3;
 
-            destination[i].r = float(r) * 1.0f / 31.0f;
-            destination[i].g = float(g) * 1.0f / 31.0f;
-            destination[i].b = float(b) * 1.0f / 31.0f;
+						destination[i].r = uint8ToFloat( r );
+						destination[i].g = uint8ToFloat( g );
+						destination[i].b = uint8ToFloat( b );
         }
     }
 
@@ -279,15 +281,15 @@ namespace PixelToaster
     {
         for ( unsigned int i = 0; i < count; ++i )
         {
-            integer32 color = (integer32) source[i];
+            const integer32 color = (integer32) source[i];
 
-            integer32 b = ( color & 0x00007C00 ) >> 10;
-            integer32 g = ( color & 0x000003E0 ) >> 5;
-            integer32 r = ( color & 0x0000001F );
+            const integer8 b = ( color & 0x00007C00 ) >> 7;
+            const integer8 g = ( color & 0x000003E0 ) >> 2;
+            const integer8 r = ( color & 0x0000001F ) << 3;
 
-            destination[i].r = float(r) * 1.0f / 31.0f;
-            destination[i].g = float(g) * 1.0f / 31.0f;
-            destination[i].b = float(b) * 1.0f / 31.0f;
+						destination[i].r = uint8ToFloat( r );
+						destination[i].g = uint8ToFloat( g );
+						destination[i].b = uint8ToFloat( b );
         }
     }
 

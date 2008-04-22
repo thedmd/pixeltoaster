@@ -20,16 +20,20 @@ namespace PixelToaster
         float f;
         int i;
     };
-      
+
+    inline integer32 clamp_positive(integer32 value)
+ 		{	
+			return (value - (value & (((int)value)>>31)));
+		}
+		
     inline integer32 clamped_fraction_8( float input )
     {
         FloatInteger value;
 
         value.f = input;
+				value.i = clamp_positive( value.i );
 
-        if ( value.i <= 0 )
-            return 0;
-        else if ( value.i >= 0x3F7FFFFF )
+        if ( value.i >= 0x3F7FFFFF )
             return 0x07F8000;
         
         value.f += 1.0f;
@@ -42,10 +46,9 @@ namespace PixelToaster
         FloatInteger value;
       
         value.f = input;
-      
-        if ( value.i <= 0)
-            return 0;
-        else if ( value.i >= 0x3F7FFFFF )
+ 				value.i = clamp_positive( value.i );
+
+        if ( value.i >= 0x3F7FFFFF )
             return 0x07E0000;
 
         value.f += 1.0f;
@@ -58,10 +61,9 @@ namespace PixelToaster
         FloatInteger value;
       
         value.f = input;
+				value.i = clamp_positive( value.i );
 
-        if ( value.i <= 0 )
-            return 0;
-        else if ( value.i >= 0x3F7FFFFF )
+        if ( value.i >= 0x3F7FFFFF )
             return 0x07C0000;
 
         value.f += 1.0f;
@@ -73,8 +75,8 @@ namespace PixelToaster
 		{
 		  FloatInteger value;
 
-			value.i = ( input << 15 ) | ( 127 << 23 );
-			value.f -= 1.0f;
+			value.i = input | ( 142L << 23 );
+			value.f -= 32768.0f;
 
 			return value.f;
 		}

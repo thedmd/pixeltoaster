@@ -1340,7 +1340,7 @@ int main()
 		/// eg. Escape quits without you needing to do anything. default is true.
 		/// override and return false if you dont want default key handlers.
 
-		bool defaultKeyHandlers() const { return true; }
+		virtual bool defaultKeyHandlers() const { return true; }
 
         /// On key down.
         /// Called once only when a key is pressed and held.

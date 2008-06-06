@@ -500,7 +500,6 @@ namespace PixelToaster
 					updateSystemMenu();
 					break;
 
-				case WM_QUIT:
 				case WM_CLOSE:
 					if ( _listener )
 					{
@@ -509,7 +508,7 @@ namespace PixelToaster
 					}
 					else
 						adapter->exit();
-					break;
+					return 0;
 
 				case WM_SETCURSOR:
 					if ( LOWORD( lParam ) == HTCLIENT )

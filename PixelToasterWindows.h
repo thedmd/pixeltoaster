@@ -1091,7 +1091,7 @@ namespace PixelToaster
 				*(memory++) = 0; 
 		}
 
-		bool createDevice( LPDIRECT3D9 direct3d, int width, int height, Format format, bool windowed )
+		bool createDevice( LPDIRECT3D9 direct3d, int width, int height, Format format, bool windowed, D3DDEVTYPE devType = D3DDEVTYPE_HAL )
 		{
 			this->deviceFormat = format;
 
@@ -1139,9 +1139,9 @@ namespace PixelToaster
 
 			device.reset();
 
-			if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_HARDWARE_VERTEXPROCESSING, &presentation, device.address() ) ) )
-				if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_MIXED_VERTEXPROCESSING, &presentation, device.address() ) ) )
-					if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &presentation, device.address() ) ) )
+			if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, devType, window, D3DCREATE_HARDWARE_VERTEXPROCESSING, &presentation, device.address() ) ) )
+				if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, devType, window, D3DCREATE_MIXED_VERTEXPROCESSING, &presentation, device.address() ) ) )
+					if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, devType, window, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &presentation, device.address() ) ) )
 						device.reset();
 
 			// double buffered fallback
@@ -1150,9 +1150,9 @@ namespace PixelToaster
 			{
 				presentation.BackBufferCount = 1;
 
-				if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_HARDWARE_VERTEXPROCESSING, &presentation, device.address() ) ) )
-					if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_MIXED_VERTEXPROCESSING, &presentation, device.address() ) ) )
-						if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &presentation, device.address() ) ) )
+				if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, devType, window, D3DCREATE_HARDWARE_VERTEXPROCESSING, &presentation, device.address() ) ) )
+					if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, devType, window, D3DCREATE_MIXED_VERTEXPROCESSING, &presentation, device.address() ) ) )
+						if ( FAILED( direct3d->CreateDevice( D3DADAPTER_DEFAULT, devType, window, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &presentation, device.address() ) ) )
 							device.reset();
 			}
 
@@ -1196,13 +1196,23 @@ namespace PixelToaster
 		{
 			// create device
 
+			bool tryRefDevice = false;
 			if ( !( mode == Mode::FloatingPoint && createDevice( direct3d, width, height, Format::XBGRFFFF, windowed ) ) )
 				if ( !createDevice( direct3d, width, height, Format::XRGB8888, windowed ) )
 					if ( !createDevice( direct3d, width, height, Format::XBGR8888, windowed ) )
 						if ( !createDevice( direct3d, width, height, Format::RGB888, windowed ) )
 							if ( !createDevice( direct3d, width, height, Format::RGB565, windowed ) )
 								if ( !createDevice(direct3d, width, height, Format::XRGB1555, windowed ) )
-									return;
+									tryRefDevice = true;
+
+			// try to create reference device if nothing else works
+
+			if (tryRefDevice)
+			{
+				if ( !( mode == Mode::FloatingPoint && createDevice( direct3d, width, height, Format::XBGRFFFF, windowed, D3DDEVTYPE_REF ) ) )
+					if ( !createDevice( direct3d, width, height, Format::XRGB8888, windowed, D3DDEVTYPE_REF ) )
+						return;
+			}
 
 			// create surface
 

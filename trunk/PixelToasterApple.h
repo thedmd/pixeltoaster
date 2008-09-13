@@ -124,6 +124,6 @@ namespace PixelToaster
 	
 		double _time;               ///< current time in seconds
 		UInt64 _timeCounter;        ///< time counter in microseconds
-		UInt64 _deltaCounter;				///< delta counter in microseconds
+		UInt64 _deltaCounter;		///< delta counter in microseconds
 	};
 }

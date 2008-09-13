@@ -930,7 +930,7 @@ namespace PixelToaster
 			if (dirtyBox)
 			{
 				rect.left = dirtyBox->xBegin;
-				rect.right = dirtyBox->yEnd;
+				rect.right = dirtyBox->xEnd;
 				rect.top = dirtyBox->yBegin;
 				rect.bottom = dirtyBox->yEnd;
 				pRect = &rect;

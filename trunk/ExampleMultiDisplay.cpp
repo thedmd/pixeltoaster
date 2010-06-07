@@ -3,6 +3,7 @@
 // Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #include "PixelToaster.h"
+#include <stdio.h>
 
 using namespace PixelToaster;
 

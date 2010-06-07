@@ -3,10 +3,12 @@
 // Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #include "PixelToaster.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 using namespace PixelToaster;
 
-char * getFormatString( Format format )
+const char * getFormatString( Format format )
 {
     switch ( format )
     {

@@ -1220,6 +1220,7 @@
 			AppleDisplayPrivate( AppleDisplay* theDisplay )
 					: window(0), view(0),
 						oldWindowFrame(NSZeroRect),
+						listener(nil),
 						display( theDisplay )
 			{
 			}

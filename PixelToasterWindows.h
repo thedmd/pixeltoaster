@@ -1119,7 +1119,7 @@ namespace PixelToaster
 				if ( bestWidth == 0 )
 					return false;
 
-				scalesUp = width != bestHeight || height != bestHeight;
+				scalesUp = width != bestWidth || height != bestHeight;
 				drawAsQuad |= scalesUp;
 				width = bestWidth;
 				height = bestHeight;

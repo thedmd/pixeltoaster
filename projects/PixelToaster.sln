@@ -1,52 +1,27 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual C++ Express 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PixelToaster", "PixelToaster.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BFFF56}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PixelToaster", "PixelToaster.vcxproj", "{8DEC7582-62EF-4108-AB51-BB37A9BFFF56}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleFloatingPoint", "ExampleFloatingPoint.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1234}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleFloatingPoint", "ExampleFloatingPoint.vcxproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1234}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleFullscreen", "ExampleFullscreen.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1200}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleFullscreen", "ExampleFullscreen.vcxproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1200}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleImage", "ExampleImage.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1201}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleImage", "ExampleImage.vcxproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1201}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleKeyboardAndMouse", "ExampleKeyboardAndMouse.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1202}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleKeyboardAndMouse", "ExampleKeyboardAndMouse.vcxproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1202}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleTimer", "ExampleTimer.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1203}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleTimer", "ExampleTimer.vcxproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1203}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleTrueColor", "ExampleTrueColor.vcproj", "{B3A51BAA-E4AB-47D0-832E-D5DBB21FD004}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleTrueColor", "ExampleTrueColor.vcxproj", "{B3A51BAA-E4AB-47D0-832E-D5DBB21FD004}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1206}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test.vcxproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1206}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Profile", "Profile.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1205}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Profile", "Profile.vcxproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1205}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleMultiDisplay", "ExampleMultiDisplay.vcproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1923}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DEC7582-62EF-4108-AB51-BB37A9BFFF56} = {8DEC7582-62EF-4108-AB51-BB37A9BFFF56}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleMultiDisplay", "ExampleMultiDisplay.vcxproj", "{8DEC7582-62EF-4108-AB51-BB37A9BF1923}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,5 +72,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DC95D6E9-F3C2-41E1-8E05-9EC8A3A4B28D}
 	EndGlobalSection
 EndGlobal

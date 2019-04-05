@@ -19,7 +19,7 @@ your pixels to the display.
     First you must make sure you have the latest DirectX Runtime installed.
     
     Visual C++ Users:
-    - Install the latest DirectX SDK so you have its headers and libs
+    - ~~Install the latest DirectX SDK so you have its headers and libs~~
     - If you are using Visual C++ Express, you need to install the 
       Platform SDK if you havent already. Follow the instructions on
       the Visual C++ Express site.

@@ -1,5 +1,5 @@
 ﻿
-[ Introduction ]
+## Introduction
 
 PixelToaster is a library for C++ programmers who want to write their own
 software rendering routines, instead of using hardware accelerated 
@@ -10,7 +10,7 @@ resolution, then each frame, render into an array of pixels and "update"
 your pixels to the display.
 
 
-[ Installation ]
+## Installation
 
  * Windows:
 
@@ -19,47 +19,41 @@ your pixels to the display.
     First you must make sure you have the latest DirectX Runtime installed.
     
     Visual C++ Users:
-    
-        - Install the latest DirectX SDK so you have its headers and libs
-    
-        - If you are using Visual C++ Express, you need to install the 
-          Platform SDK if you havent already. Follow the instructions on
-          the Visual C++ Express site.
-    
-        - If you plan on building PixelToaster from the command line (nmake)
-          make sure you add the appropriate DirectX directories to your LIB 
-          and INCLUDE environment variables
-        
-        - To use the solution file, just open PixelToaster.sln select the
-          example project you want to build (right click, make active project), 
-          and press F5 to build & run. For speed, switch to "Release"
-        
-        - The solution file only supports the latest Visual Studio 2005,
-          so if you have an earlier version of Visual C++, you'll need to use
-          nmake or create your own solution/project files.
+    - Install the latest DirectX SDK so you have its headers and libs
+    - If you are using Visual C++ Express, you need to install the 
+      Platform SDK if you havent already. Follow the instructions on
+      the Visual C++ Express site.
+    - If you plan on building PixelToaster from the command line (nmake)
+      make sure you add the appropriate DirectX directories to your LIB 
+      and INCLUDE environment variables
+    - To use the solution file, just open PixelToaster.sln select the
+      example project you want to build (right click, make active project), 
+      and press F5 to build & run. For speed, switch to "Release"
+    - The solution file only supports the latest Visual Studio 2005,
+      so if you have an earlier version of Visual C++, you'll need to use
+      nmake or create your own solution/project files.
 
-        - To use nmake, open "Visual Studio XXXX Command Prompt" to get a cmd
-          line with the path and environment fully setup, then type:
-        
-              nmake -f makefile.visualc
+    - To use nmake, open "Visual Studio XXXX Command Prompt" to get a cmd
+      line with the path and environment fully setup, then type:
+
+          nmake -f makefile.visualc
                         
     MinGW Users:
-    
-        - You *DO NOT* need to install the DirectX SDK
-        
-        - Make sure your MinGW installation includes the Windows and DirectX
-          headers. The easiest way to do this is to simply install the entire
-          MinGW package instead of the smaller pieces. The full package
-          contains everything you need to build PixelToaster.
-        
-        - Go to the command line and type:
-        
-              mingw32-make -f makefile.mingw
-         
-        - All the example programs will be built for you
-        
-        - You can use PixelToaster with Dev-C++ or any other IDE 
-          on top of MinGW, just as long as you setup your own project files.
+    - You *DO NOT* need to install the DirectX SDK
+
+    - Make sure your MinGW installation includes the Windows and DirectX
+      headers. The easiest way to do this is to simply install the entire
+      MinGW package instead of the smaller pieces. The full package
+      contains everything you need to build PixelToaster.
+
+    - Go to the command line and type:
+
+          mingw32-make -f makefile.mingw
+
+    - All the example programs will be built for you
+
+    - You can use PixelToaster with Dev-C++ or any other IDE 
+      on top of MinGW, just as long as you setup your own project files.
     
  * UNIX: FreeBSD, Linux and Mac OS X
 
@@ -99,7 +93,7 @@ your pixels to the display.
     Have fun!
 
 
-[ How to Use PixelToaster ]
+## How to Use PixelToaster
 
 The API of PixelToaster is so easy to use, just look at the example programs
 and you'll get the idea quickly.
@@ -110,7 +104,7 @@ Obviously, I cant teach software rendering in a few pages, but here is a quick
 tutorial to get you started...
 
 
-[ Pixels in Memory ]
+## Pixels in Memory
 
 Pixels are laid out in memory sequentially from top to bottom, left to right.
 
@@ -143,7 +137,7 @@ you to the start of the line you want, so all if you have to do now is add "x"
 and you have the index of the pixel at (x,y).
 
 
-[ Pixel Format ]
+## Pixel Format
 
 You have the choice of working in truecolor or floating point color.
 
@@ -157,7 +151,7 @@ increased dynamic range and high precision of floating point make it a very
 interesting format to work in.
 
 
-[ Working in Floating Point Color ]
+## Working in Floating Point Color
 
 Floating point pixels made up of four floating point values:
 
@@ -192,7 +186,7 @@ Here are some examples:
     really bright white = (1000000,1000000,1000000) ... !!!
 
     
-[ Working in TrueColor ]
+## Working in TrueColor
 
 In truecolor, pixels are packed into 32bit integer values, like this:
 
@@ -236,33 +230,33 @@ in the range [0,255] when working with it - if you go outside this range
 the color will wrap around from light to dark and vice versa.
 
 
-[ Example Programs ]
+## Example Programs
 
-    * ExampleFloatingPoint
-        - how to open a display in floating point color and get pixels on the screen
+* ExampleFloatingPoint
+    - how to open a display in floating point color and get pixels on the screen
 
-    * ExampleTrueColor
-        - the same thing, but in truecolor
+* ExampleTrueColor
+    - the same thing, but in truecolor
 
-    * ExampleFullscreen
-        - how to open a fullscreen display
-        - fullscreen output is currently only supported in windows (DirectX 9.0)
-          and Mac OS X.
+* ExampleFullscreen
+    - how to open a fullscreen display
+    - fullscreen output is currently only supported in windows (DirectX 9.0)
+      and Mac OS X.
 
-    * ExampleKeyboardAndMouse
-        - how to receive keyboard and mouse events from a display
-        
-    * ExampleTimer
-        - how to use the high resolution timer
-    
-    * ExampleImage
-        - how to load a TGA image and display it
-        
-    * ExampleMultiDisplay
-        - how to work with multiple displays (windowed only)
+* ExampleKeyboardAndMouse
+    - how to receive keyboard and mouse events from a display
+
+* ExampleTimer
+    - how to use the high resolution timer
+
+* ExampleImage
+    - how to load a TGA image and display it
+
+* ExampleMultiDisplay
+    - how to work with multiple displays (windowed only)
 
 
-[ Licence ]
+## Licence
 
     PixelToaster Framebuffer Library.
 

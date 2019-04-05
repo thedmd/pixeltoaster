@@ -1,0 +1,5 @@
+build/*
+projects/.vs
+projects/Debug
+projects/Release
+projects/*.vcxproj.user

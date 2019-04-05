@@ -1,5 +1,5 @@
 // Windows Platform
-// Copyright ï¿½ 2006-2007 Glenn Fiedler
+// Copyright © 2006-2007 Glenn Fiedler
 // Part of the PixelToaster Framebuffer Library - http://www.pixeltoaster.com
 
 #define VC_EXTRALEAN 
@@ -1104,10 +1104,10 @@ namespace PixelToaster
 					D3DDISPLAYMODE mode;
 					if ( SUCCEEDED( direct3d->EnumAdapterModes( D3DADAPTER_DEFAULT, fmt, i, &mode ) ) )
 					{
-						if ( mode.Width >= width && mode.Height >= height && ( bestWidth == 0 || mode.Width <= bestWidth && mode.Height <= bestHeight ) )
+						if ( (int) mode.Width >= width && (int) mode.Height >= height && ( bestWidth == 0 || (int) mode.Width <= bestWidth && (int) mode.Height <= bestHeight ) )
 						{
-							bestWidth = mode.Width;
-							bestHeight = mode.Height;
+							bestWidth = (int) mode.Width;
+							bestHeight = (int) mode.Height;
 						}
 					}
 				}

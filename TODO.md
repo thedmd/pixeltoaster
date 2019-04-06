@@ -1,0 +1,22 @@
+Original TODO list imported from original repository:
+
+- [x] Pass over code and check on macosx
+- [x] Consolidate library into smaller number of header files
+	- [x] PixelToaster.h
+	- [x] PixelToasterWindows.h
+	- [x] PixelToasterUnix.h
+	- [x] PixelToasterApple.h
+	- [x] PixelToasterConversion.h
+- [x] Simplify profile into suite and setup make profile
+- [ ] Simplify test programs into a single test suite
+	- [x] TestConverters
+	- [ ] TestConversion - todo: remaining conversion routines
+	- [ ] Add comprehensive unit tests for each class in PixelToaster
+- [x] Get examples working within new source code layout
+- [x] Quickly pass over doxygen code and check on macosx
+- [ ] Check makefile.unix on freebsd box - may need to split into makefile.linux, makefile.freebsd?
+- [ ] Solid documentation improvement pass over
+- [ ] Create makefile.vc on windows
+- [ ] Create project files (vc6) on windows
+- [ ] Refactor and cleanup windows code to work better in single header
+- [ ] Add release notes and basic how to use documentation to release

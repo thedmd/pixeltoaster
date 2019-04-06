@@ -10,116 +10,114 @@ using namespace PixelToaster;
 class Application : public Listener
 {
 public:
-
     int run()
     {
-        const int width = 320;
+        const int width  = 320;
         const int height = 240;
 
-        display.listener( this );
+        display.listener(this);
 
-        if ( !display.open( "Keyboard and Mouse Example", width, height ) )
-			return 1;
+        if (!display.open("Keyboard and Mouse Example", width, height))
+            return 1;
 
-        vector<Pixel> pixels( width * height );
+        vector<Pixel> pixels(width * height);
 
-        while ( display.open() )
+        while (display.open())
         {
-			unsigned int index = 0;
+            unsigned int index = 0;
 
-			for ( int y = 0; y < height; ++y )
-			{
-				for ( int x = 0; x < width; ++x )
-				{
-					pixels[index].r = 0.3f + (x + y) * 0.00125f;
-					pixels[index].g = 0.7f + (x + y) * 0.001f;
-					pixels[index].b = 0.5f + (x + y) * 0.0008f;
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    pixels[index].r = 0.3f + (x + y) * 0.00125f;
+                    pixels[index].g = 0.7f + (x + y) * 0.001f;
+                    pixels[index].b = 0.5f + (x + y) * 0.0008f;
 
-					++index;
-				}
-			}
+                    ++index;
+                }
+            }
 
-            display.update( pixels );
+            display.update(pixels);
         }
 
-		return 0;
+        return 0;
     }
 
 protected:
-
-    void onKeyDown( DisplayInterface & display, Key key )
+    void onKeyDown(DisplayInterface& display, Key key)
     {
-        printf( "onKeyDown: key=%s\n", getKeyString(key) );
+        printf("onKeyDown: key=%s\n", getKeyString(key));
     }
 
-    void onKeyPressed( DisplayInterface & display, Key key )
+    void onKeyPressed(DisplayInterface& display, Key key)
     {
-        printf( "onKeyPressed: key=%s\n", getKeyString(key) );
+        printf("onKeyPressed: key=%s\n", getKeyString(key));
     }
 
-    void onKeyUp( DisplayInterface & display, Key key )
+    void onKeyUp(DisplayInterface& display, Key key)
     {
-        printf( "onKeyUp: key=%s\n", getKeyString(key) );
+        printf("onKeyUp: key=%s\n", getKeyString(key));
     }
 
-    void onMouseButtonDown( DisplayInterface & display, Mouse mouse )
+    void onMouseButtonDown(DisplayInterface& display, Mouse mouse)
     {
-        printf( "onMouseButtonDown: buttons=%d,%d,%d x=%f, y=%f\n", 
-                mouse.buttons.left, 
-                mouse.buttons.middle, 
-                mouse.buttons.right, 
-                mouse.x, 
-                mouse.y );
+        printf("onMouseButtonDown: buttons=%d,%d,%d x=%f, y=%f\n",
+               mouse.buttons.left,
+               mouse.buttons.middle,
+               mouse.buttons.right,
+               mouse.x,
+               mouse.y);
     }
 
-    void onMouseButtonUp( DisplayInterface & display, Mouse mouse )
+    void onMouseButtonUp(DisplayInterface& display, Mouse mouse)
     {
-        printf( "onMouseButtonUp: buttons=%d,%d,%d x=%f, y=%f\n", 
-                mouse.buttons.left, 
-                mouse.buttons.middle, 
-                mouse.buttons.right, 
-                mouse.x, 
-                mouse.y );
+        printf("onMouseButtonUp: buttons=%d,%d,%d x=%f, y=%f\n",
+               mouse.buttons.left,
+               mouse.buttons.middle,
+               mouse.buttons.right,
+               mouse.x,
+               mouse.y);
     }
 
-    void onMouseMove( DisplayInterface & display, Mouse mouse )
+    void onMouseMove(DisplayInterface& display, Mouse mouse)
     {
-        printf( "onMouseMove: buttons=%d,%d,%d x=%f, y=%f\n", 
-                mouse.buttons.left, 
-                mouse.buttons.middle, 
-                mouse.buttons.right, 
-                mouse.x, 
-                mouse.y );
+        printf("onMouseMove: buttons=%d,%d,%d x=%f, y=%f\n",
+               mouse.buttons.left,
+               mouse.buttons.middle,
+               mouse.buttons.right,
+               mouse.x,
+               mouse.y);
     }
 
-    void onActivate( DisplayInterface & display, bool active )
+    void onActivate(DisplayInterface& display, bool active)
     {
-        printf( "onActivate: active=%d\n", active );
+        printf("onActivate: active=%d\n", active);
     }
 
-    void onOpen( DisplayInterface & display )
-	{
-		printf( "onOpen: \"%s\", %d x %d ", display.title(), display.width(), display.height() );
-		switch ( display.mode() )
-		{
-			case Mode::TrueColor: printf( "truecolor" ); break;
-			case Mode::FloatingPoint: printf( "floating point" ); break;
-		}
-		switch ( display.output() )
-		{
-			case Output::Windowed: printf( " (windowed)\n" ); break;
-			case Output::Fullscreen: printf( " (fullscreen)\n" ); break;
-			default: break;
-		}
+    void onOpen(DisplayInterface& display)
+    {
+        printf("onOpen: \"%s\", %d x %d ", display.title(), display.width(), display.height());
+        switch (display.mode())
+        {
+            case Mode::TrueColor: printf("truecolor"); break;
+            case Mode::FloatingPoint: printf("floating point"); break;
+        }
+        switch (display.output())
+        {
+            case Output::Windowed: printf(" (windowed)\n"); break;
+            case Output::Fullscreen: printf(" (fullscreen)\n"); break;
+            default: break;
+        }
     }
 
-    bool onClose( DisplayInterface & display )
+    bool onClose(DisplayInterface& display)
     {
-		printf( "onClose" );
+        printf("onClose");
         return true;
     }
 
-    const char * getKeyString( Key key )
+    const char* getKeyString(Key key)
     {
         switch (key)
         {
@@ -236,10 +234,8 @@ protected:
     }
 
 private:
-
-	Display display;
+    Display display;
 };
-
 
 int main()
 {

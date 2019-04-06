@@ -7,119 +7,116 @@
 
 using namespace PixelToaster;
 
-
-bool load( const char filename[], int & width, int & height, vector<Pixel> & pixels );
-
+bool load(const char filename[], int& width, int& height, vector<Pixel>& pixels);
 
 int main()
 {
-	// load image and show it on the screen
+    // load image and show it on the screen
 
-	vector<Pixel> pixels;
+    vector<Pixel> pixels;
 
-    int width = 0;
-	int height = 0;
+    int width  = 0;
+    int height = 0;
 
-	if ( !load( "ExampleImage.tga", width, height, pixels ) &&
-		 !load( "../ExampleImage.tga", width, height, pixels ) )
-	{
-		printf( "failed to load image\n" );
-		return 1;
-	}
+    if (!load("ExampleImage.tga", width, height, pixels) &&
+        !load("../ExampleImage.tga", width, height, pixels))
+    {
+        printf("failed to load image\n");
+        return 1;
+    }
 
-	Display display( "Image Example", width, height );
+    Display display("Image Example", width, height);
 
-    while ( display.open() )
-		display.update( pixels );
+    while (display.open())
+        display.update(pixels);
 
-	return 0;
+    return 0;
 }
 
-
-bool load( const char filename[], int & width, int & height, vector<Pixel> & pixels )
+bool load(const char filename[], int& width, int& height, vector<Pixel>& pixels)
 {
-	unsigned int index = 0;
+    unsigned int index = 0;
 
-	vector<unsigned char> buffer;
+    vector<unsigned char> buffer;
 
-	// open file for binary reading
+    // open file for binary reading
 
-	FILE * file = fopen( filename, "rb" );
+    FILE* file = fopen(filename, "rb");
 
-	if ( !file )
-	{
-		printf( "failed to open file\n" );
-		return false;
-	}
+    if (!file)
+    {
+        printf("failed to open file\n");
+        return false;
+    }
 
-	// read 18 byte TGA header
-	
-	unsigned char header[18];
+    // read 18 byte TGA header
 
-	if ( !fread( header, 18, 1, file ) )
-	{
-		printf( "failed to read header\n" );
-		goto failure;
-	}
+    unsigned char header[18];
 
-	// fail if not uncompressed rgb format
+    if (!fread(header, 18, 1, file))
+    {
+        printf("failed to read header\n");
+        goto failure;
+    }
 
-	if ( header[2] != 2 )
-	{
-		printf( "tga must be uncompressed rgb format\n" );
-		goto failure;
-	}
+    // fail if not uncompressed rgb format
 
-	// fail if not 24 bits per pixel
+    if (header[2] != 2)
+    {
+        printf("tga must be uncompressed rgb format\n");
+        goto failure;
+    }
 
-	if ( header[16] != 24 )
-	{
-		printf( "tga must be 24 bits per pixel\n" );
-		goto failure;
-	}
+    // fail if not 24 bits per pixel
 
-	// read image pixels
+    if (header[16] != 24)
+    {
+        printf("tga must be 24 bits per pixel\n");
+        goto failure;
+    }
 
-	width = ( header[13] << 8 ) | header[12];
-	height = ( header[15] << 8 ) | header[14];
+    // read image pixels
 
-	buffer.resize( width * height * 3, 0 );
+    width  = (header[13] << 8) | header[12];
+    height = (header[15] << 8) | header[14];
 
-	if ( !fread( &buffer[0], buffer.size(), 1, file ) )
-	{
-		printf( "failed to read image pixel data\n" );
-		goto failure;
-	}
+    buffer.resize(width * height * 3, 0);
 
-	fclose( file );
-	
-	// convert 24 bit image pixels to floating point color
+    if (!fread(&buffer[0], buffer.size(), 1, file))
+    {
+        printf("failed to read image pixel data\n");
+        goto failure;
+    }
 
-	pixels.resize( width * height );
+    fclose(file);
 
-	for ( int y = 0; y < height; ++y )
-	{
-		for ( int x = 0; x < width; ++x )
-		{
-			Pixel & pixel = pixels[index];
+    // convert 24 bit image pixels to floating point color
 
-			pixel.b = buffer[index*3+0] * 1.0f / 255.0f;
-			pixel.g = buffer[index*3+1] * 1.0f / 255.0f;
-			pixel.r = buffer[index*3+2] * 1.0f / 255.0f;
+    pixels.resize(width * height);
 
-			++index;
-		}
-	}
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            Pixel& pixel = pixels[index];
 
-	return true;
+            pixel.b = buffer[index * 3 + 0] * 1.0f / 255.0f;
+            pixel.g = buffer[index * 3 + 1] * 1.0f / 255.0f;
+            pixel.r = buffer[index * 3 + 2] * 1.0f / 255.0f;
+
+            ++index;
+        }
+    }
+
+    return true;
 
 failure:
 
-	// onoes somebody call the whaaaambulance...
+    // onoes somebody call the whaaaambulance...
 
-	width = 0;
-	height = 0;
-	fclose( file );
-	
-	return false;
+    width  = 0;
+    height = 0;
+    fclose(file);
+
+    return false;
 }

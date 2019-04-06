@@ -8,29 +8,29 @@ using namespace PixelToaster;
 
 int main()
 {
-    const int width = 320;
+    const int width  = 320;
     const int height = 240;
 
-	Display display( "TrueColor Example", width, height, Output::Default, Mode::TrueColor );
+    Display display("TrueColor Example", width, height, Output::Default, Mode::TrueColor);
 
-	vector<TrueColorPixel> pixels( width * height );
+    vector<TrueColorPixel> pixels(width * height);
 
-    while ( display.open() )
+    while (display.open())
     {
         unsigned int index = 0;
 
-        for ( int y = 0; y < height; ++y )
+        for (int y = 0; y < height; ++y)
         {
-            for ( int x = 0; x < width; ++x )
+            for (int x = 0; x < width; ++x)
             {
-				pixels[index].r = (integer8) ( x < 255 ? x : 255 );
-				pixels[index].g = (integer8) ( y < 255 ? y : 255 );
-				pixels[index].b = (integer8) ( x+y < 255 ? x+y : 255 );
+                pixels[index].r = (integer8)(x < 255 ? x : 255);
+                pixels[index].g = (integer8)(y < 255 ? y : 255);
+                pixels[index].b = (integer8)(x + y < 255 ? x + y : 255);
 
-				++index;
+                ++index;
             }
         }
 
-		display.update( pixels );
+        display.update(pixels);
     }
 }

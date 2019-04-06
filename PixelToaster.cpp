@@ -39,21 +39,21 @@
 #    error unknown pixeltoaster platform!
 #endif
 
-PixelToaster::DisplayInterface* PixelToaster::createDisplay()
+PIXELTOASTER_API PixelToaster::DisplayInterface* PixelToaster::createDisplay()
 {
 #ifdef DisplayClass
     return new DisplayClass();
 #else
-    return NULL;
+    return nullptr;
 #endif
 }
 
-PixelToaster::TimerInterface* PixelToaster::createTimer()
+PIXELTOASTER_API PixelToaster::TimerInterface* PixelToaster::createTimer()
 {
 #ifdef TimerClass
     return new TimerClass();
 #else
-    return NULL;
+    return nullptr;
 #endif
 }
 
@@ -77,7 +77,7 @@ PixelToaster::Converter_XRGB8888_to_BGR565   converter_XRGB8888_to_BGR565;
 PixelToaster::Converter_XRGB8888_to_XRGB1555 converter_XRGB8888_to_XRGB1555;
 PixelToaster::Converter_XRGB8888_to_XBGR1555 converter_XRGB8888_to_XBGR1555;
 
-PixelToaster::Converter* PixelToaster::requestConverter(PixelToaster::Format source, PixelToaster::Format destination)
+PIXELTOASTER_API PixelToaster::Converter* PixelToaster::requestConverter(PixelToaster::Format source, PixelToaster::Format destination)
 {
     if (source == Format::XBGRFFFF)
     {
@@ -94,7 +94,7 @@ PixelToaster::Converter* PixelToaster::requestConverter(PixelToaster::Format sou
             case Format::XBGR1555: return &converter_XBGRFFFF_to_XBGR1555;
 
             default:
-                return NULL;
+                return nullptr;
         }
     }
     else if (source == Format::XRGB8888)
@@ -112,9 +112,9 @@ PixelToaster::Converter* PixelToaster::requestConverter(PixelToaster::Format sou
             case Format::XBGR1555: return &converter_XRGB8888_to_XBGR1555;
 
             default:
-                return NULL;
+                return nullptr;
         }
     }
 
-    return NULL;
+    return nullptr;
 }

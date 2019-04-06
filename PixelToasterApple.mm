@@ -65,7 +65,7 @@ static const int FADE_STEPS = 30;
 #    pragma mark Objective-C classes
 #    pragma mark -
 
-@interface PTApplication : NSApplication {
+@interface PTApplication : NSApplication <NSApplicationDelegate> {
 @private
     BOOL messageLoopIsRunning;
 }
@@ -189,7 +189,7 @@ static const int FADE_STEPS = 30;
         NSMenuItem* hideOthersItem = [appMenu addItemWithTitle:@"Hide Others"
                                                         action:@selector(hideOtherApplications:)
                                                  keyEquivalent:@"h"];
-        [hideOthersItem setKeyEquivalentModifierMask:(NSAlternateKeyMask | NSCommandKeyMask)];
+        [hideOthersItem setKeyEquivalentModifierMask:(NSEventModifierFlagOption | NSEventModifierFlagCommand)];
 
         // Show All
         [appMenu addItemWithTitle:@"Show All"
@@ -311,7 +311,7 @@ static const int FADE_STEPS = 30;
 
 #    pragma mark -
 
-@interface PixelToasterView : NSView {
+@interface PixelToasterView : NSView <NSWindowDelegate> {
 @private
     NSOpenGLContext*     _openGLContext;
     NSOpenGLPixelFormat* _pixelFormat;
@@ -1213,7 +1213,7 @@ public:
 
         if (display->output() == Output::Fullscreen)
         {
-            CGMouseDelta deltaX, deltaY;
+            int32_t deltaX = 0, deltaY = 0;
             CGGetLastMouseDelta(&deltaX, &deltaY);
 
             fullscreenMouseX += deltaX;
@@ -1256,7 +1256,7 @@ public:
         switch (button)
         {
             case 1:
-                ctrlWasPressed = (0 != ([theEvent modifierFlags] & NSControlKeyMask));
+                ctrlWasPressed = (0 != ([theEvent modifierFlags] & NSEventModifierFlagControl));
                 if (ctrlWasPressed)
                     mouse.buttons.right = true;
                 else
@@ -1497,7 +1497,7 @@ public:
                 [window performClose:nil];
 
             // TODO: instead of just leaving fullscreen: minimize and set a flag.. on app_activate, reenter fullscreen
-            if ((key == Key::Tab) && (modifiers == NSCommandKeyMask))
+            if ((key == Key::Tab) && (modifiers == NSEventModifierFlagCommand))
                 display->setShouldToggle();
         }
     }
@@ -1512,48 +1512,48 @@ public:
     // modifier status changed
     void handleFlagsChanged(NSEvent* theEvent)
     {
-        unsigned long newModifiers     = ([theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask);
+        unsigned long newModifiers     = ([theEvent modifierFlags] & NSEventModifierFlagDeviceIndependentFlagsMask);
         unsigned long changedModifiers = newModifiers ^ modifiers;
         modifiers                      = newModifiers;
 
         if (listener == 0)
             return;
 
-        if ((changedModifiers & NSAlphaShiftKeyMask) != 0)
+        if ((changedModifiers & NSEventModifierFlagCapsLock) != 0)
         {
-            if ((newModifiers & NSAlphaShiftKeyMask) != 0)
+            if ((newModifiers & NSEventModifierFlagCapsLock) != 0)
                 listener->onKeyDown(display->wrapper() ? *display->wrapper() : *display, Key::CapsLock);
             else
                 listener->onKeyUp(display->wrapper() ? *display->wrapper() : *display, Key::CapsLock);
         }
 
-        if ((changedModifiers & NSCommandKeyMask) != 0)
+        if ((changedModifiers & NSEventModifierFlagCommand) != 0)
         {
-            if ((newModifiers & NSCommandKeyMask) != 0)
+            if ((newModifiers & NSEventModifierFlagCommand) != 0)
                 listener->onKeyDown(display->wrapper() ? *display->wrapper() : *display, Key::Meta);
             else
                 listener->onKeyUp(display->wrapper() ? *display->wrapper() : *display, Key::Meta);
         }
 
-        if ((changedModifiers & NSShiftKeyMask) != 0)
+        if ((changedModifiers & NSEventModifierFlagShift) != 0)
         {
-            if ((newModifiers & NSShiftKeyMask) != 0)
+            if ((newModifiers & NSEventModifierFlagShift) != 0)
                 listener->onKeyDown(display->wrapper() ? *display->wrapper() : *display, Key::Shift);
             else
                 listener->onKeyUp(display->wrapper() ? *display->wrapper() : *display, Key::Shift);
         }
 
-        if ((changedModifiers & NSControlKeyMask) != 0)
+        if ((changedModifiers & NSEventModifierFlagControl) != 0)
         {
-            if ((newModifiers & NSControlKeyMask) != 0)
+            if ((newModifiers & NSEventModifierFlagControl) != 0)
                 listener->onKeyDown(display->wrapper() ? *display->wrapper() : *display, Key::Control);
             else
                 listener->onKeyUp(display->wrapper() ? *display->wrapper() : *display, Key::Control);
         }
 
-        if ((changedModifiers & NSAlternateKeyMask) != 0)
+        if ((changedModifiers & NSEventModifierFlagOption) != 0)
         {
-            if ((newModifiers & NSAlternateKeyMask) != 0)
+            if ((newModifiers & NSEventModifierFlagOption) != 0)
                 listener->onKeyDown(display->wrapper() ? *display->wrapper() : *display, Key::Alt);
             else
                 listener->onKeyUp(display->wrapper() ? *display->wrapper() : *display, Key::Alt);
@@ -1575,39 +1575,40 @@ public:
         {
             // the contentView may be nil in fullscreen mode,
             // but the delegate is set even in this case
-            PixelToasterView* eventDelegate = [eventWindow delegate];
+            id<NSWindowDelegate> eventDelegate = [eventWindow delegate];
             if (eventDelegate && [eventDelegate isKindOfClass:[PixelToasterView class]])
             {
-                AppleDisplay* eventDisplay = [eventDelegate display];
-                receiver                   = eventDisplay->_private;
+                PixelToasterView* pixelToasterDelegate = (PixelToasterView*)eventDelegate;
+                AppleDisplay*     eventDisplay         = [pixelToasterDelegate display];
+                receiver                               = eventDisplay->_private;
             }
         }
 
         switch (eventType)
         {
-            case NSLeftMouseDown:
+            case NSEventTypeLeftMouseDown:
                 receiver->handleMouseDown(event, 1);
                 // delegate event to app so activation events get handled
                 [NSApp sendEvent:event];
                 break;
-            case NSLeftMouseUp:
+            case NSEventTypeLeftMouseUp:
                 receiver->handleMouseUp(event, 1);
                 [NSApp sendEvent:event];
                 break;
-            case NSRightMouseDown: receiver->handleMouseDown(event, 2); break;
-            case NSRightMouseUp: receiver->handleMouseUp(event, 2); break;
-            case NSOtherMouseDown: receiver->handleMouseDown(event, [event buttonNumber]); break;
-            case NSOtherMouseUp: receiver->handleMouseUp(event, [event buttonNumber]); break;
+            case NSEventTypeRightMouseDown: receiver->handleMouseDown(event, 2); break;
+            case NSEventTypeRightMouseUp: receiver->handleMouseUp(event, 2); break;
+            case NSEventTypeOtherMouseDown: receiver->handleMouseDown(event, [event buttonNumber]); break;
+            case NSEventTypeOtherMouseUp: receiver->handleMouseUp(event, [event buttonNumber]); break;
 
-            case NSLeftMouseDragged:
-            case NSRightMouseDragged:
-            case NSOtherMouseDragged:
-            case NSMouseMoved: receiver->handleMouseMoved(event); break;
+            case NSEventTypeLeftMouseDragged:
+            case NSEventTypeRightMouseDragged:
+            case NSEventTypeOtherMouseDragged:
+            case NSEventTypeMouseMoved: receiver->handleMouseMoved(event); break;
 
-            case NSKeyDown: receiver->handleKeyDown(event); break;
-            case NSKeyUp: receiver->handleKeyUp(event); break;
-            case NSFlagsChanged: receiver->handleFlagsChanged(event); break;
-            case NSScrollWheel: break; // TODO: if PixelToaster adds scrollwheel support..
+            case NSEventTypeKeyDown: receiver->handleKeyDown(event); break;
+            case NSEventTypeKeyUp: receiver->handleKeyUp(event); break;
+            case NSEventTypeFlagsChanged: receiver->handleFlagsChanged(event); break;
+            case NSEventTypeScrollWheel: break; // TODO: if PixelToaster adds scrollwheel support..
             default:
                 [NSApp sendEvent:event];
                 break;
@@ -1620,7 +1621,7 @@ public:
         AutoreleasePoolAutoPtr pool;
 
         NSEvent* event;
-        while (nil != (event = [NSApp nextEventMatchingMask:NSAnyEventMask
+        while (nil != (event = [NSApp nextEventMatchingMask:NSEventMaskAny
                                                   untilDate:[NSDate distantPast] // do not block
                                                      inMode:NSDefaultRunLoopMode
                                                     dequeue:YES]))
@@ -1696,8 +1697,8 @@ static const float WINDOW_OFFSET_Y = 25.0f;
 static const float WINDOW_OFFSET_X = 30.0f;
 
 #    if PIXELTOASTER_APPLE_ALLOW_ZOOM
-static const unsigned int PIXELTOASTER_WINDOW_STYLE = NSTitledWindowMask | NSClosableWindowMask |
-                                                      NSMiniaturizableWindowMask | NSResizableWindowMask;
+static const unsigned int PIXELTOASTER_WINDOW_STYLE = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
+                                                      NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable;
 #    else
 static const unsigned int PIXELTOASTER_WINDOW_STYLE = NSTitledWindowMask | NSClosableWindowMask |
                                                       NSMiniaturizableWindowMask;

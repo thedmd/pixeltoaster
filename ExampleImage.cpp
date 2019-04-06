@@ -5,6 +5,11 @@
 #include <cstdio>
 #include "PixelToaster.h"
 
+#ifdef PIXELTOASTER_NO_STL
+#    include <vector>
+using std::vector;
+#endif
+
 using namespace PixelToaster;
 
 bool load(const char filename[], int& width, int& height, vector<Pixel>& pixels);
@@ -28,7 +33,13 @@ int main()
     Display display("Image Example", width, height);
 
     while (display.open())
+    {
+#ifdef PIXELTOASTER_NO_STL
+        display.update(pixels.data());
+#else
         display.update(pixels);
+#endif
+    }
 
     return 0;
 }

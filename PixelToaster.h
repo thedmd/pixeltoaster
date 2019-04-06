@@ -35,6 +35,7 @@
 // disable annoying visual c++ warnings
 
 #ifdef _MSC_VER
+#    pragma warning(push)
 #    pragma warning(disable : 4100) // warning C4100: unreferenced formal parameter
 #    pragma warning(disable : 4201) // warning C4201: nonstandard extension used : nameless struct/union
 #    pragma warning(disable : 4996) // warning C4201: stupid visual c++ deprecated stuff
@@ -126,18 +127,14 @@
 #    include <vector>
 #endif
 
-#ifndef NULL
-#    define NULL 0
-#endif
-
 namespace PixelToaster {
 #ifndef PIXELTOASTER_NO_STL
-using namespace std;
+using std::vector;
 #endif
 
-typedef unsigned int   integer32; ///< unsigned 32 bit integer
-typedef unsigned short integer16; ///< unsigned 16 bit integer
-typedef unsigned char  integer8;  ///< unsigned 8 bit integer
+using integer32 = unsigned int;   ///< unsigned 32 bit integer
+using integer16 = unsigned short; ///< unsigned 16 bit integer
+using integer8  = unsigned char;  ///< unsigned 8 bit integer
 
 /** \brief Represents a pixel in floating point color mode.
 
@@ -202,7 +199,7 @@ public:
 
 /// since floating point color is the default, we setup a typedef to allow users to shortcut it just to "Pixel"
 
-typedef FloatingPointPixel Pixel;
+using Pixel = FloatingPointPixel;
 
 /** \brief Represents a pixel in truecolor mode.
 
@@ -775,15 +772,15 @@ PIXELTOASTER_API class Converter*        requestConverter(Format source, Format 
 class DisplayInterface
 {
 public:
-    virtual ~DisplayInterface(){};
+    virtual ~DisplayInterface() = default;
 
     virtual bool open(const char title[], int width, int height, Output output = Output::Default, Mode mode = Mode::FloatingPoint) = 0;
     virtual void close()                                                                                                           = 0;
 
     virtual bool open() const = 0;
 
-    virtual bool update(const FloatingPointPixel pixels[], const Rectangle* dirtyBox = 0) = 0;
-    virtual bool update(const TrueColorPixel pixels[], const Rectangle* dirtyBox = 0)     = 0;
+    virtual bool update(const FloatingPointPixel pixels[], const Rectangle* dirtyBox = nullptr) = 0;
+    virtual bool update(const TrueColorPixel pixels[], const Rectangle* dirtyBox = nullptr)     = 0;
 
     virtual const char* title() const             = 0;
     virtual void        title(const char title[]) = 0;
@@ -874,12 +871,12 @@ public:
     /// Destructor.
     /// Closes the display if it is still open.
 
-    ~Display()
+    virtual ~Display() override
     {
         if (internal)
         {
             delete internal;
-            internal = 0;
+            internal = nullptr;
         }
     }
 
@@ -892,7 +889,7 @@ public:
     /// @param mode the mode of operation for the display. you can choose between true color mode and floating point color mode.
     /// @returns true if the display open was successful.
 
-    bool open(const char title[], int width, int height, Output output = Output::Default, Mode mode = Mode::FloatingPoint)
+    bool open(const char title[], int width, int height, Output output = Output::Default, Mode mode = Mode::FloatingPoint) override
     {
         if (internal)
             return internal->open(title, width, height, output, mode);
@@ -904,7 +901,7 @@ public:
     /// Closes the display window or leaves fullscreen mode.
     /// This method is safe to call even if the display not open.
 
-    void close()
+    void close() override
     {
         if (internal)
             internal->close();
@@ -912,7 +909,7 @@ public:
 
     /// Check if display is open.
 
-    bool open() const
+    bool open() const override
     {
         if (internal)
             return internal->open();
@@ -937,7 +934,7 @@ public:
     /// @param dirtyBox range of pixels that have been changed since last call.
     /// @returns true if the update was successful.
 
-    bool update(const class FloatingPointPixel pixels[], const Rectangle* dirtyBox = 0)
+    bool update(const class FloatingPointPixel pixels[], const Rectangle* dirtyBox = nullptr) override
     {
         if (internal)
             return internal->update(pixels, dirtyBox);
@@ -962,7 +959,7 @@ public:
     /// @param dirtyBox range of pixels that have been changed since last call.
     /// @returns true if the update was successful.
 
-    bool update(const TrueColorPixel pixels[], const Rectangle* dirtyBox = 0)
+    bool update(const TrueColorPixel pixels[], const Rectangle* dirtyBox = nullptr) override
     {
         if (internal)
             return internal->update(pixels, dirtyBox);
@@ -977,9 +974,9 @@ public:
     /// @param pixels the pixels to copy to the screen.
     /// @returns true if the update was successful.
 
-    bool update(const vector<FloatingPointPixel>& pixels, const Rectangle* dirtyBox = 0)
+    bool update(const vector<FloatingPointPixel>& pixels, const Rectangle* dirtyBox = nullptr)
     {
-        return update(&pixels[0], dirtyBox);
+        return update(pixels.data(), dirtyBox);
     }
 
     /// Update display with standard vector of truecolor pixels.
@@ -987,16 +984,16 @@ public:
     /// @param pixels the pixels to copy to the screen.
     /// @returns true if the update was successful.
 
-    bool update(const vector<TrueColorPixel>& pixels, const Rectangle* dirtyBox = 0)
+    bool update(const vector<TrueColorPixel>& pixels, const Rectangle* dirtyBox = nullptr)
     {
-        return update(&pixels[0], dirtyBox);
+        return update(pixels.data(), dirtyBox);
     }
 
 #endif
 
     /// Get display title
 
-    const char* title() const
+    const char* title() const override
     {
         if (internal)
             return internal->title();
@@ -1006,7 +1003,7 @@ public:
 
     /// Set display title
 
-    void title(const char title[])
+    void title(const char title[]) override
     {
         if (internal)
             internal->title(title);
@@ -1014,7 +1011,7 @@ public:
 
     /// Get display width
 
-    int width() const
+    int width() const override
     {
         if (internal)
             return internal->width();
@@ -1024,7 +1021,7 @@ public:
 
     /// Get display height
 
-    int height() const
+    int height() const override
     {
         if (internal)
             return internal->height();
@@ -1034,7 +1031,7 @@ public:
 
     /// Get display mode
 
-    Mode mode() const
+    Mode mode() const override
     {
         if (internal)
             return internal->mode();
@@ -1044,7 +1041,7 @@ public:
 
     /// Get display output
 
-    Output output() const
+    Output output() const override
     {
         if (internal)
             return internal->output();
@@ -1056,7 +1053,7 @@ public:
     /// Implement the Listener interface and pass in an pointer to an instance of your object to recieve display events such as keyboard and mouse input.
     ///	@param listener the listener object. pass in 0 if you want to remove the current listener.
 
-    void listener(class Listener* listener)
+    void listener(class Listener* listener) override
     {
         if (internal)
             internal->listener(listener);
@@ -1065,20 +1062,20 @@ public:
     /// Get current listener object.
     /// @returns the currrent listener object pointer. null if there is no listener.
 
-    class Listener* listener() const
+    class Listener* listener() const override
     {
         if (internal)
             return internal->listener();
         else
-            return 0;
+            return nullptr;
     }
 
-    void wrapper(class DisplayInterface* wrapper)
+    void wrapper(class DisplayInterface* wrapper) override
     {
         // wrapper is always this
     }
 
-    class DisplayInterface* wrapper()
+    class DisplayInterface* wrapper() override
     {
         return this;
     }
@@ -1092,7 +1089,7 @@ private:
 class TimerInterface
 {
 public:
-    virtual ~TimerInterface(){};
+    virtual ~TimerInterface()           = default;
     virtual void   reset()              = 0;
     virtual double time()               = 0;
     virtual double delta()              = 0;
@@ -1140,7 +1137,7 @@ public:
     ~Timer()
     {
         delete internal;
-        internal = NULL;
+        internal = nullptr;
     }
 
     /// Resets current time to zero.
@@ -1329,7 +1326,7 @@ int main()
 class Listener
 {
 public:
-    virtual ~Listener(){};
+    virtual ~Listener() = default;
 
     /// Called by display to ask if you want default key handlers to be applied,
     /// eg. Escape quits without you needing to do anything. default is true.
@@ -1409,11 +1406,15 @@ public:
 class Converter
 {
 public:
-    virtual ~Converter(){};
+    virtual ~Converter()                                                    = default;
     virtual void begin()                                                    = 0;
     virtual void convert(const void* source, void* destination, int pixels) = 0;
     virtual void end()                                                      = 0;
 };
 } // namespace PixelToaster
+
+#ifdef _MSC_VER
+#    pragma warning(pop)
+#endif
 
 #endif

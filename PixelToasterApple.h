@@ -9,6 +9,7 @@
 #endif
 
 #include "CoreServices/CoreServices.h"
+#include <mach/mach_time.h>
 
 #if PIXELTOASTER_APPLE_USE_X11
 #    define PIXELTOASTER_NO_UNIX_TIMER
@@ -27,24 +28,24 @@ public:
 
     virtual ~AppleDisplay();
 
-    virtual bool open(const char title[],
-                      int width, int height,
-                      Output output,
-                      Mode   mode);
+    bool open(const char title[],
+              int width, int height,
+              Output output,
+              Mode   mode) override;
 
-    virtual void close();
+    void close() override;
 
-    virtual bool update(const TrueColorPixel*     trueColorPixels,
-                        const FloatingPointPixel* floatingPointPixels,
-                        const Rectangle*          dirtyBox);
+    bool update(const TrueColorPixel*     trueColorPixels,
+                const FloatingPointPixel* floatingPointPixels,
+                const Rectangle*          dirtyBox) override;
 
-    virtual void title(const char title[]);
+    void title(const char title[]) override;
 
-    virtual bool windowed();
+    bool windowed() override;
 
-    virtual bool fullscreen();
+    bool fullscreen() override;
 
-    virtual void listener(Listener* listener);
+    void listener(Listener* listener) override;
 
     void setShouldClose() { _shouldClose = true; }
 
@@ -53,7 +54,7 @@ public:
     void shutdown();
 
 protected:
-    virtual void defaults();
+    void defaults() override;
 
 private:
     AppleDisplayPrivate* _private;
@@ -73,52 +74,53 @@ class AppleTimer : public TimerInterface
 public:
     AppleTimer()
     {
+        mach_timebase_info_data_t timebase;
+        mach_timebase_info(&timebase);
+        _resolution = (double)timebase.numer / ((double)timebase.denom * 1.0e9);
+
         reset();
     }
 
     void reset()
     {
-        Microseconds((UnsignedWide*)&_timeCounter);
-        _deltaCounter = _timeCounter;
+        _deltaCounter = mach_absolute_time();
         _time         = 0;
     }
 
     double time()
     {
-        UInt64 counter;
-        Microseconds((UnsignedWide*)&counter);
-        UInt64 delta = counter - _timeCounter;
-        _timeCounter = counter;
-        _time += delta / 1000000.0;
+        uint64_t counter = mach_absolute_time();
+        uint64_t delta   = counter - _timeCounter;
+        _timeCounter     = counter;
+        _time += delta * _resolution;
         return _time;
     }
 
     double delta()
     {
-        UInt64 counter;
-        Microseconds((UnsignedWide*)&counter);
-        UInt64 delta  = counter - _deltaCounter;
-        _deltaCounter = counter;
-        return delta / 1000000.0;
+        uint64_t counter = mach_absolute_time();
+        uint64_t delta   = counter - _deltaCounter;
+        _deltaCounter    = counter;
+        return delta * _resolution;
     }
 
     double resolution()
     {
-        return 1.0 / 1000000.0; // microseconds
+        return _resolution;
     }
 
     void wait(double seconds)
     {
-        UInt64 counter;
-        Microseconds((UnsignedWide*)&counter);
-        UInt64 finish = counter + UInt64(seconds * 1000000);
+        uint64_t counter = mach_absolute_time();
+        uint64_t finish  = counter + uint64_t(seconds / _resolution);
         while (counter < finish)
-            Microseconds((UnsignedWide*)&counter);
+            counter = mach_absolute_time();
     }
 
 private:
-    double _time;         ///< current time in seconds
-    UInt64 _timeCounter;  ///< time counter in microseconds
-    UInt64 _deltaCounter; ///< delta counter in microseconds
+    double   _time;         ///< current time in seconds
+    uint64_t _timeCounter;  ///< time counter in timebase
+    uint64_t _deltaCounter; ///< delta counter in timebase
+    double   _resolution;
 };
 } // namespace PixelToaster

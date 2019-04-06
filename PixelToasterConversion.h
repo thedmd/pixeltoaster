@@ -198,7 +198,7 @@ inline void convert_RGB565_to_XBGRFFFF(const integer16 source[], Pixel destinati
 {
     for (unsigned int i = 0; i < count; ++i)
     {
-        const integer32 color = (integer32)source[i];
+        const auto color = (integer32)source[i];
 
         const integer8 r = (color & 0x0000F800) >> 8;
         const integer8 g = (color & 0x000007E0) >> 3;
@@ -226,7 +226,7 @@ inline void convert_BGR565_to_XBGRFFFF(const integer16 source[], Pixel destinati
 {
     for (unsigned int i = 0; i < count; ++i)
     {
-        const integer32 color = (integer32)source[i];
+        const auto color = (integer32)source[i];
 
         const integer8 b = (color & 0x0000F800) >> 8;
         const integer8 g = (color & 0x000007E0) >> 3;
@@ -254,7 +254,7 @@ inline void convert_XRGB1555_to_XBGRFFFF(const integer16 source[], Pixel destina
 {
     for (unsigned int i = 0; i < count; ++i)
     {
-        const integer32 color = (integer32)source[i];
+        const auto color = (integer32)source[i];
 
         const integer8 r = (color & 0x00007C00) >> 7;
         const integer8 g = (color & 0x000003E0) >> 2;
@@ -282,7 +282,7 @@ inline void convert_XBGR1555_to_XBGRFFFF(const integer16 source[], Pixel destina
 {
     for (unsigned int i = 0; i < count; ++i)
     {
-        const integer32 color = (integer32)source[i];
+        const auto color = (integer32)source[i];
 
         const integer8 b = (color & 0x00007C00) >> 7;
         const integer8 g = (color & 0x000003E0) >> 2;
@@ -378,7 +378,7 @@ inline void convert_RGB565_to_XRGB8888(const integer16 source[], integer32 desti
 {
     for (unsigned int i = 0; i < count; ++i)
     {
-        integer32 color = (integer32)source[i];
+        auto color = (integer32)source[i];
 
         integer32 r = (color & 0x0000F800) << 8;
         integer32 g = (color & 0x000007E0) << 5;
@@ -404,7 +404,7 @@ inline void convert_BGR565_to_XRGB8888(const integer16 source[], integer32 desti
 {
     for (unsigned int i = 0; i < count; ++i)
     {
-        integer32 color = (integer32)source[i];
+        auto color = (integer32)source[i];
 
         integer32 r = ((color & 0x0000F800) << 8) >> 16;
         integer32 g = ((color & 0x000007E0) << 5);
@@ -430,7 +430,7 @@ inline void convert_XRGB1555_to_XRGB8888(const integer16 source[], integer32 des
 {
     for (unsigned int i = 0; i < count; ++i)
     {
-        integer32 color = (integer32)source[i];
+        auto color = (integer32)source[i];
 
         integer32 r = (color & 0x00007C00) << 9;
         integer32 g = (color & 0x000003E0) << 6;
@@ -456,7 +456,7 @@ inline void convert_XBGR1555_to_XRGB8888(const integer16 source[], integer32 des
 {
     for (unsigned int i = 0; i < count; ++i)
     {
-        integer32 color = (integer32)source[i];
+        auto color = (integer32)source[i];
 
         integer32 r = (color & 0x00007C00) >> 7;
         integer32 g = (color & 0x000003E0) << 6;
@@ -492,8 +492,8 @@ inline void convert_XBGRFFFF_to_XBGRFFFF(const Pixel source[], Pixel destination
 
 class ConverterAdapter : public Converter
 {
-    void begin(){};
-    void end() {}
+    virtual void begin() override {}
+    virtual void end() override {}
 };
 
 #define PIXELTOASTER_CONVERTER(type, source_type, destination_type)                             \
@@ -526,7 +526,7 @@ PIXELTOASTER_CONVERTER(XRGB8888_to_BGR565, integer32, integer16);
 PIXELTOASTER_CONVERTER(XRGB8888_to_XRGB1555, integer32, integer16);
 PIXELTOASTER_CONVERTER(XRGB8888_to_XBGR1555, integer32, integer16);
 
-#undef CONVERTER
+#undef PIXELTOASTER_CONVERTER
 } // namespace PixelToaster
 
 #endif

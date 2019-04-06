@@ -5,6 +5,11 @@
 #include <cstdio>
 #include "PixelToaster.h"
 
+#ifdef PIXELTOASTER_NO_STL
+#    include <vector>
+using std::vector;
+#endif
+
 using namespace PixelToaster;
 
 class Application : public Listener
@@ -38,29 +43,33 @@ public:
                 }
             }
 
+#ifdef PIXELTOASTER_NO_STL
+            display.update(pixels.data());
+#else
             display.update(pixels);
+#endif
         }
 
         return 0;
     }
 
 protected:
-    void onKeyDown(DisplayInterface& display, Key key)
+    virtual void onKeyDown(DisplayInterface& display, Key key) override
     {
         printf("onKeyDown: key=%s\n", getKeyString(key));
     }
 
-    void onKeyPressed(DisplayInterface& display, Key key)
+    virtual void onKeyPressed(DisplayInterface& display, Key key) override
     {
         printf("onKeyPressed: key=%s\n", getKeyString(key));
     }
 
-    void onKeyUp(DisplayInterface& display, Key key)
+    virtual void onKeyUp(DisplayInterface& display, Key key) override
     {
         printf("onKeyUp: key=%s\n", getKeyString(key));
     }
 
-    void onMouseButtonDown(DisplayInterface& display, Mouse mouse)
+    virtual void onMouseButtonDown(DisplayInterface& display, Mouse mouse) override
     {
         printf("onMouseButtonDown: buttons=%d,%d,%d x=%f, y=%f\n",
                mouse.buttons.left,
@@ -70,7 +79,7 @@ protected:
                mouse.y);
     }
 
-    void onMouseButtonUp(DisplayInterface& display, Mouse mouse)
+    virtual void onMouseButtonUp(DisplayInterface& display, Mouse mouse) override
     {
         printf("onMouseButtonUp: buttons=%d,%d,%d x=%f, y=%f\n",
                mouse.buttons.left,
@@ -80,7 +89,7 @@ protected:
                mouse.y);
     }
 
-    void onMouseMove(DisplayInterface& display, Mouse mouse)
+    virtual void onMouseMove(DisplayInterface& display, Mouse mouse) override
     {
         printf("onMouseMove: buttons=%d,%d,%d x=%f, y=%f\n",
                mouse.buttons.left,
@@ -90,12 +99,12 @@ protected:
                mouse.y);
     }
 
-    void onActivate(DisplayInterface& display, bool active)
+    virtual void onActivate(DisplayInterface& display, bool active) override
     {
         printf("onActivate: active=%d\n", active);
     }
 
-    void onOpen(DisplayInterface& display)
+    virtual void onOpen(DisplayInterface& display) override
     {
         printf("onOpen: \"%s\", %d x %d ", display.title(), display.width(), display.height());
         switch (display.mode())
@@ -111,7 +120,7 @@ protected:
         }
     }
 
-    bool onClose(DisplayInterface& display)
+    virtual bool onClose(DisplayInterface& display) override
     {
         printf("onClose");
         return true;

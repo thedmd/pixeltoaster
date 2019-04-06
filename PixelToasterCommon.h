@@ -9,7 +9,7 @@
 namespace PixelToaster {
 // glenn's magical strcpy replacement with bram's template touch ...
 template <int n>
-void magical_strcpy(char (&dest)[n], const char src[])
+inline void magical_strcpy(char (&dest)[n], const char src[])
 {
     unsigned int i = 0;
     while (i < n - 1)
@@ -29,19 +29,19 @@ class DisplayAdapter : public DisplayInterface
 public:
     DisplayAdapter()
     {
-        _listener = NULL;
-        _wrapper  = NULL;
+        _listener = nullptr;
+        _wrapper  = nullptr;
         defaults();
     }
 
     ~DisplayAdapter()
     {
         close();
-        _listener = NULL;
-        _wrapper  = NULL;
+        _listener = nullptr;
+        _wrapper  = nullptr;
     }
 
-    bool open(const char title[], int width, int height, Output output, Mode mode)
+    bool open(const char title[], int width, int height, Output output, Mode mode) override
     {
         close();
 
@@ -55,17 +55,17 @@ public:
         return true;
     }
 
-    void close()
+    void close() override
     {
         defaults();
     }
 
-    bool open() const
+    bool open() const override
     {
         return _open;
     }
 
-    bool update(const TrueColorPixel pixels[], const Rectangle* dirtyBox)
+    bool update(const TrueColorPixel pixels[], const Rectangle* dirtyBox) override
     {
         if (pixels)
             return update(pixels, 0, dirtyBox);
@@ -73,7 +73,7 @@ public:
             return false;
     }
 
-    bool update(const FloatingPointPixel pixels[], const Rectangle* dirtyBox)
+    bool update(const FloatingPointPixel pixels[], const Rectangle* dirtyBox) override
     {
         if (pixels)
             return update(0, pixels, dirtyBox);
@@ -81,52 +81,52 @@ public:
             return false;
     }
 
-    const char* title() const
+    const char* title() const override
     {
         return _title;
     }
 
-    void title(const char title[])
+    void title(const char title[]) override
     {
         magical_strcpy(_title, title);
     }
 
-    int width() const
+    int width() const override
     {
         return _width;
     }
 
-    int height() const
+    int height() const override
     {
         return _height;
     }
 
-    Mode mode() const
+    Mode mode() const override
     {
         return _mode;
     }
 
-    Output output() const
+    Output output() const override
     {
         return _output;
     }
 
-    void listener(Listener* listener)
+    void listener(Listener* listener) override
     {
         _listener = listener;
     }
 
-    Listener* listener() const
+    Listener* listener() const override
     {
         return _listener;
     }
 
-    void wrapper(DisplayInterface* display)
+    void wrapper(DisplayInterface* display) override
     {
         _wrapper = display;
     }
 
-    DisplayInterface* wrapper()
+    DisplayInterface* wrapper() override
     {
         return _wrapper;
     }

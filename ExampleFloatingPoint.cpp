@@ -4,6 +4,11 @@
 
 #include "PixelToaster.h"
 
+#ifdef PIXELTOASTER_NO_STL
+#    include <vector>
+using std::vector;
+#endif
+
 using namespace PixelToaster;
 
 int main()
@@ -31,6 +36,10 @@ int main()
             }
         }
 
+#ifdef PIXELTOASTER_NO_STL
+        display.update(pixels.data());
+#else
         display.update(pixels);
+#endif
     }
 }

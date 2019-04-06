@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 #include <X11/Xlib.h>
+#include <X11/XKBlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysymdef.h>
 
@@ -20,13 +21,13 @@ template <typename T>
 class DirtyVector
 {
 public:
-    explicit DirtyVector(size_t size = 0) { data_ = size == 0 ? NULL : (static_cast<T*>(malloc(size * sizeof(T)))); }
+    explicit DirtyVector(size_t size = 0) { data_ = size == 0 ? nullptr : (static_cast<T*>(malloc(size * sizeof(T)))); }
     ~DirtyVector()
     {
-        if (data_ != NULL)
+        if (data_ != nullptr)
         {
             free(data_);
-            data_ = NULL;
+            data_ = nullptr;
         }
     }
     void reset(size_t size = 0)
@@ -40,7 +41,7 @@ public:
         return data_[i];
     }
     T*   get() { return data_; }
-    bool isEmpty() const { return data_ == NULL; }
+    bool isEmpty() const { return data_ == nullptr; }
     void swap(DirtyVector& other)
     {
         T* temp     = data_;
@@ -52,7 +53,7 @@ private:
     T* data_;
 };
 
-Format findFormat(int bitsPerPixel, unsigned long redMask, unsigned long greenMask, unsigned long blueMask)
+static Format findFormat(int bitsPerPixel, unsigned long redMask, unsigned long greenMask, unsigned long blueMask)
 {
     switch (bitsPerPixel)
     {
@@ -90,7 +91,7 @@ public:
         defaults();
     }
 
-    bool open(const char title[], int width, int height, Output output, Mode mode)
+    bool open(const char title[], int width, int height, Output output, Mode mode) override
     {
         DisplayAdapter::open(title, width, height, output, mode);
 
@@ -217,7 +218,7 @@ public:
         return true;
     }
 
-    void close()
+    void close() override
     {
         if (image_)
         {
@@ -240,7 +241,7 @@ public:
         DisplayAdapter::close(); // note: this calls our virtual defaults method
     }
 
-    bool update(const TrueColorPixel* trueColorPixels, const FloatingPointPixel* floatingPointPixels, const Rectangle* dirtyBox)
+    bool update(const TrueColorPixel* trueColorPixels, const FloatingPointPixel* floatingPointPixels, const Rectangle* dirtyBox) override
     {
         if (isShuttingDown_)
         {
@@ -255,7 +256,7 @@ public:
         const int h    = height();
         const int size = w * h;
 
-        const bool shortcut = trueColorPixels != NULL && destFormat_ == Format::XRGB8888;
+        const bool shortcut = trueColorPixels != nullptr && destFormat_ == Format::XRGB8888;
 
         if (!shortcut)
         {
@@ -280,14 +281,14 @@ public:
         ::XPutImage(display_, window_, gc_, image_, 0, 0, 0, 0, w, h);
         ::XFlush(display_);
 
-        image_->data = NULL;
+        image_->data = nullptr;
 
         pumpEvents();
 
         return true;
     }
 
-    void title(const char title[])
+    void title(const char title[]) override
     {
         DisplayAdapter::title(title);
 
@@ -296,7 +297,7 @@ public:
     }
 
 protected:
-    void defaults()
+    void defaults() override
     {
         DisplayAdapter::defaults();
 
@@ -367,7 +368,7 @@ private:
             case KeyPress:
             case KeyRelease:
             {
-                const KeySym keySym = ::XKeycodeToKeysym(display_, event.xkey.keycode, 0);
+                const KeySym keySym = ::XkbKeycodeToKeysym(display_, event.xkey.keycode, 0, 0);
                 const int    hiSym  = (keySym & 0xff00) >> 8;
                 const int    loSym  = keySym & 0xff;
 
@@ -658,7 +659,7 @@ bool                   UnixDisplay::keyMapsInitialized_ = UnixDisplay::initializ
 
 namespace PixelToaster {
 namespace internal {
-void wait(double seconds)
+static void wait(double seconds)
 {
     const double floorSeconds      = ::floor(seconds);
     const double fractionalSeconds = seconds - floorSeconds;

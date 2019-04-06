@@ -5,22 +5,27 @@
 #include "PixelToaster.h"
 #include <stdio.h>
 
+#ifdef PIXELTOASTER_NO_STL
+#    include <vector>
+using std::vector;
+#endif
+
 using namespace PixelToaster;
 
 class MultiDisplayListener : public Listener
 {
-    void onOpen(DisplayInterface& display)
+    void onOpen(DisplayInterface& display) override
     {
         printf("open: %s\n", display.title());
     }
 
-    bool onClose(DisplayInterface& display)
+    bool onClose(DisplayInterface& display) override
     {
         printf("close: %s\n", display.title());
         return true;
     }
 
-    void onMouseMove(DisplayInterface& display, Mouse mouse)
+    void onMouseMove(DisplayInterface& display, Mouse mouse) override
     {
         printf("%s: mouse move (%f,%f)\n",
                display.title(),
@@ -65,12 +70,30 @@ int main()
         }
 
         if (a.open())
+        {
+#ifdef PIXELTOASTER_NO_STL
+            a.update(pixels.data());
+#else
             a.update(pixels);
+#endif
+        }
 
         if (b.open())
+        {
+#ifdef PIXELTOASTER_NO_STL
+            b.update(pixels.data());
+#else
             b.update(pixels);
+#endif
+        }
 
         if (c.open())
+        {
+#ifdef PIXELTOASTER_NO_STL
+            c.update(pixels.data());
+#else
             c.update(pixels);
+#endif
+        }
     }
 }

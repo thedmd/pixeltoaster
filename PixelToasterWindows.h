@@ -5,7 +5,7 @@
 #define VC_EXTRALEAN
 #define WIN32_LEAN_AND_MEAN
 
-#include <windows.h>
+#include <Windows.h>
 #include <windowsx.h>
 
 #include <d3d9.h>
@@ -25,7 +25,7 @@ template <typename I>
 class SmartI
 {
 public:
-    SmartI(I* i = NULL)
+    SmartI(I* i = nullptr)
         : i_(i)
     {
     }
@@ -39,7 +39,7 @@ public:
     {
         if (i_)
             i_->Release();
-        i_ = NULL;
+        i_ = nullptr;
     }
     SmartI& operator=(SmartI& other)
     {
@@ -47,7 +47,7 @@ public:
         swap(temp);
         return *this;
     }
-    void reset(I* i = NULL)
+    void reset(I* i = nullptr)
     {
         SmartI temp(i);
         swap(temp);
@@ -61,7 +61,7 @@ public:
         i_       = other.i_;
         other.i_ = i;
     }
-    const bool operator!() const { return i_ == NULL; }
+    explicit operator bool() const { return i_ != nullptr; }
 
 private:
     I* i_;
@@ -106,24 +106,24 @@ public:
 
         // defaults
 
-        window     = NULL;
-        systemMenu = NULL;
+        window     = nullptr;
+        systemMenu = nullptr;
         active     = false;
-        _listener  = NULL;
+        _listener  = nullptr;
         centered   = false;
         zoomLevel  = ZOOM_ORIGINAL;
         mode       = Windowed;
 
         // get handle to system arrow cursor
 
-        arrowCursor = LoadCursor(NULL, IDC_ARROW);
+        arrowCursor = LoadCursor(nullptr, IDC_ARROW);
 
         // create null cursor so we can hide it reliably
 
         integer32 cursorAnd = 0xFFFFFFFF;
         integer32 cursorXor = 0;
 
-        nullCursor = CreateCursor(NULL, 0, 0, 1, 1, &cursorAnd, &cursorXor);
+        nullCursor = CreateCursor(nullptr, 0, 0, 1, 1, &cursorAnd, &cursorXor);
 
         // clear mouse data
 
@@ -135,10 +135,10 @@ public:
 
         // setup keyboard data
 
-        for (int i = 0; i < 256; ++i)
+        for (bool& i : down)
         {
             translate[i] = (Key::Code)i;
-            down[i]      = false;
+            i            = false;
         }
 
         translate[219] = Key::OpenBracket;
@@ -156,7 +156,7 @@ public:
 
         // setup window class
 
-        HINSTANCE instance = GetModuleHandle(0);
+        HINSTANCE instance = GetModuleHandle(nullptr);
 
         WNDCLASSEX windowClass;
         windowClass.cbSize        = sizeof(WNDCLASSEX);
@@ -166,10 +166,10 @@ public:
         windowClass.cbWndExtra    = 0;
         windowClass.hInstance     = instance;
         windowClass.hIcon         = LoadIcon(instance, TEXT("DisplayIcon"));
-        windowClass.hCursor       = NULL;
-        windowClass.hbrBackground = NULL;
-        windowClass.lpszMenuName  = NULL;
-        windowClass.hIconSm       = NULL;
+        windowClass.hCursor       = nullptr;
+        windowClass.hbrBackground = nullptr;
+        windowClass.lpszMenuName  = nullptr;
+        windowClass.hIconSm       = nullptr;
 #ifdef UNICODE
         windowClass.lpszClassName = unicodeTitle;
 #else
@@ -188,9 +188,9 @@ public:
             // create window
 
 #ifdef UNICODE
-        window = CreateWindow(unicodeTitle, unicodeTitle, WS_OVERLAPPEDWINDOW, 0, 0, width, height, NULL, NULL, instance, NULL);
+        window = CreateWindow(unicodeTitle, unicodeTitle, WS_OVERLAPPEDWINDOW, 0, 0, width, height, nullptr, nullptr, instance, nullptr);
 #else
-        window = CreateWindow(title, title, WS_OVERLAPPEDWINDOW, 0, 0, width, height, NULL, NULL, instance, NULL);
+        window = CreateWindow(title, title, WS_OVERLAPPEDWINDOW, 0, 0, width, height, nullptr, nullptr, instance, nullptr);
 #endif
 
         if (!window)
@@ -215,7 +215,7 @@ public:
     ~WindowsWindow()
     {
         DestroyWindow(window);
-        window = NULL;
+        window = nullptr;
 
         DestroyCursor(nullCursor);
     }
@@ -270,7 +270,7 @@ public:
         if (height > h)
             h = height;
 
-        SetWindowPos(window, 0, 0, 0, w, h, SWP_NOZORDER);
+        SetWindowPos(window, nullptr, 0, 0, w, h, SWP_NOZORDER);
 
         show();
 
@@ -299,7 +299,7 @@ public:
         RECT rect;
         GetWindowRect(window, &rect);
         AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, 0);
-        SetWindowPos(window, 0, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER);
+        SetWindowPos(window, nullptr, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER);
 
         center();
 
@@ -329,7 +329,7 @@ public:
         if (y < 0)
             y = 0;
 
-        SetWindowPos(window, 0, x, y, width, height, SWP_NOZORDER);
+        SetWindowPos(window, nullptr, x, y, width, height, SWP_NOZORDER);
 
         centered = true;
 
@@ -397,7 +397,7 @@ public:
 
         // finally set the zoomed window position
 
-        SetWindowPos(window, 0, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER);
+        SetWindowPos(window, nullptr, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER);
 
         // detect what zoom level we are at and update system menu
 
@@ -493,7 +493,7 @@ protected:
         if (!extra)
             return DefWindowProc(hWnd, uMsg, wParam, lParam);
 
-        WindowsWindow* window = (WindowsWindow*)extra;
+        auto* window = (WindowsWindow*)extra;
 
         return window->WindowProc(hWnd, uMsg, wParam, lParam);
     }
@@ -597,7 +597,7 @@ protected:
             case WM_KEYDOWN:
             case WM_SYSKEYDOWN:
             {
-                unsigned char key = (unsigned char)wParam;
+                auto key = (unsigned char)wParam;
 
                 if (key == VK_RETURN && GetAsyncKeyState(VK_MENU))
                 {
@@ -632,7 +632,7 @@ protected:
             case WM_KEYUP:
             case WM_SYSKEYUP:
             {
-                unsigned char key = (unsigned char)wParam;
+                auto key = (unsigned char)wParam;
 
                 if (_listener)
                     _listener->onKeyUp(display->wrapper() ? *display->wrapper() : *display, (Key::Code)translate[key]);
@@ -942,7 +942,7 @@ public:
         if (!primaryTexture)
             return false;
 
-        RECT rect, *pRect = 0;
+        RECT rect, *pRect = nullptr;
         if (dirtyBox)
         {
             rect.left   = dirtyBox->xBegin;
@@ -956,11 +956,11 @@ public:
         if (FAILED(primaryTexture->LockRect(0, &lock, pRect, D3DLOCK_NOSYSLOCK)))
             return false;
 
-        unsigned char* dest             = static_cast<unsigned char*>(lock.pBits);
-        const int      bytesPerDestLine = lock.Pitch;
+        auto*     dest             = static_cast<unsigned char*>(lock.pBits);
+        const int bytesPerDestLine = lock.Pitch;
 
         Converter*           converter           = 0;
-        const unsigned char* source              = 0;
+        const unsigned char* source              = nullptr;
         int                  bytesPerSourcePixel = 0;
         if (floatingPointPixels)
         {
@@ -1023,7 +1023,7 @@ public:
             device->SetSamplerState(0, D3DSAMP_MAGFILTER, scalesUp ? D3DTEXF_LINEAR : D3DTEXF_POINT);
             device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
             drawQuad();
-            device->SetTexture(0, 0);
+            device->SetTexture(0, nullptr);
 
             device->EndScene();
         }
@@ -1037,7 +1037,7 @@ public:
             if (!surface || !backBuffer)
                 return false;
 
-            HRESULT result = device->UpdateSurface(surface.get(), 0, backBuffer.get(), NULL);
+            HRESULT result = device->UpdateSurface(surface.get(), nullptr, backBuffer.get(), nullptr);
 
             if (FAILED(result))
                 return false;
@@ -1045,12 +1045,12 @@ public:
 
         // present back buffer to display
 
-        if (FAILED(device->Present(NULL, NULL, NULL, NULL)))
+        if (FAILED(device->Present(nullptr, nullptr, nullptr, nullptr)))
             return false;
 
         // tell windows that we dont need to repaint anything
 
-        ValidateRect(window, NULL);
+        ValidateRect(window, nullptr);
 
         return true;
     }
@@ -1122,7 +1122,7 @@ protected:
                 D3DDISPLAYMODE mode;
                 if (SUCCEEDED(direct3d->EnumAdapterModes(D3DADAPTER_DEFAULT, fmt, i, &mode)))
                 {
-                    if ((int)mode.Width >= width && (int)mode.Height >= height && (bestWidth == 0 || (int)mode.Width <= bestWidth && (int)mode.Height <= bestHeight))
+                    if (((int)mode.Width >= width) && ((int)mode.Height >= height) && (bestWidth == 0 || ((int)mode.Width <= bestWidth && (int)mode.Height <= bestHeight)))
                     {
                         bestWidth  = (int)mode.Width;
                         bestHeight = (int)mode.Height;
@@ -1187,12 +1187,12 @@ protected:
 
         if (textureFormat == Format::XBGRFFFF || textureFormat != deviceFormat)
         {
-            if (FAILED(device->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, fmt, D3DPOOL_DEFAULT, primaryTexture.address(), NULL)))
+            if (FAILED(device->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, fmt, D3DPOOL_DEFAULT, primaryTexture.address(), nullptr)))
                 primaryTexture.reset();
         }
         else
         {
-            if (FAILED(device->CreateTexture(width, height, 1, 0, fmt, D3DPOOL_SYSTEMMEM, primaryTexture.address(), NULL)))
+            if (FAILED(device->CreateTexture(width, height, 1, 0, fmt, D3DPOOL_SYSTEMMEM, primaryTexture.address(), nullptr)))
                 primaryTexture.reset();
         }
 
@@ -1329,7 +1329,6 @@ private:
     Format textureFormat;
     Mode   mode;
     bool   windowed;
-    bool   lost;
     bool   drawAsQuad;
     bool   scalesUp;
 };
@@ -1353,11 +1352,11 @@ public:
         if (direct3d)
         {
             direct3d->Release();
-            direct3d = NULL;
+            direct3d = nullptr;
         }
     }
 
-    bool open(const char title[], int width, int height, Output output, Mode mode)
+    bool open(const char title[], int width, int height, Output output, Mode mode) override
     {
         DisplayAdapter::open(title, width, height, output, mode);
 
@@ -1387,7 +1386,7 @@ public:
         return true;
     }
 
-    void close()
+    void close() override
     {
         delete device;
         delete window;
@@ -1395,7 +1394,7 @@ public:
         DisplayAdapter::close();
     }
 
-    bool update(const TrueColorPixel* trueColorPixels, const FloatingPointPixel* floatingPointPixels, const Rectangle* dirtyBox)
+    bool update(const TrueColorPixel* trueColorPixels, const FloatingPointPixel* floatingPointPixels, const Rectangle* dirtyBox) override
     {
         if (shutdown)
         {
@@ -1428,7 +1427,7 @@ public:
         return true;
     }
 
-    void title(const char title[])
+    void title(const char title[]) override
     {
         DisplayAdapter::title(title);
 
@@ -1436,7 +1435,7 @@ public:
             window->title(title);
     }
 
-    void listener(Listener* listener)
+    void listener(Listener* listener) override
     {
         DisplayAdapter::listener(listener);
 
@@ -1446,7 +1445,7 @@ public:
 
     // implement adapter interface for interoperability with window class
 
-    bool paint()
+    bool paint() override
     {
         if (!device || !device->valid())
         {
@@ -1463,7 +1462,7 @@ public:
                 ReleaseDC(window->handle(), dc);
             }
 
-            ValidateRect(window->handle(), NULL);
+            ValidateRect(window->handle(), nullptr);
 
             return true;
         }
@@ -1473,7 +1472,7 @@ public:
         }
     }
 
-    bool fullscreen()
+    bool fullscreen() override
     {
         if (device)
         {
@@ -1481,7 +1480,7 @@ public:
                 return true;
 
             delete device;
-            device = NULL;
+            device = nullptr;
         }
 
         window->fullscreen(width(), height());
@@ -1501,7 +1500,7 @@ public:
         return true;
     }
 
-    bool windowed()
+    bool windowed() override
     {
         if (device)
         {
@@ -1509,7 +1508,7 @@ public:
                 return true;
 
             delete device;
-            device = NULL;
+            device = nullptr;
         }
 
         window->windowed(width(), height());
@@ -1527,22 +1526,22 @@ public:
         return true;
     }
 
-    void toggle()
+    void toggle() override
     {
         pendingToggle = true;
     }
 
-    void exit()
+    void exit() override
     {
         shutdown = true;
     }
 
 protected:
-    void defaults()
+    void defaults() override
     {
         DisplayAdapter::defaults();
-        window        = NULL;
-        device        = NULL;
+        window        = nullptr;
+        device        = nullptr;
         shutdown      = false;
         pendingToggle = false;
     }

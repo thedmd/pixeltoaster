@@ -21,6 +21,11 @@
 namespace PixelToaster {
 /// smart pointer for COM interfaces
 
+inline int Abs(int v)
+{
+    return v < 0 ? -v : v;
+}
+
 template <typename I>
 class SmartI
 {
@@ -1115,18 +1120,27 @@ protected:
         {
             // round up to nearest resolution
 
-            int        bestWidth = 0, bestHeight = 0;
+            float requestedAspectRatio = height ? width / (float)height : 1.0f;
+
+            int bestScore  = INT_MAX;
+            int bestWidth  = 0;
+            int bestHeight = 0;
+
             const UINT n = direct3d->GetAdapterModeCount(D3DADAPTER_DEFAULT, fmt);
             for (UINT i = 0; i < n; ++i)
             {
                 D3DDISPLAYMODE mode;
-                if (SUCCEEDED(direct3d->EnumAdapterModes(D3DADAPTER_DEFAULT, fmt, i, &mode)))
+                if (!SUCCEEDED(direct3d->EnumAdapterModes(D3DADAPTER_DEFAULT, fmt, i, &mode)))
+                    continue;
+
+                float aspectRatio = mode.Height ? (int)mode.Width / (float)mode.Height : 1.0f;
+
+                int currentScore = Abs((int)mode.Width - width) + Abs((int)mode.Height - height) + (int)(requestedAspectRatio / aspectRatio) * 10000;
+                if (currentScore < bestScore)
                 {
-                    if (((int)mode.Width >= width) && ((int)mode.Height >= height) && (bestWidth == 0 || ((int)mode.Width <= bestWidth && (int)mode.Height <= bestHeight)))
-                    {
-                        bestWidth  = (int)mode.Width;
-                        bestHeight = (int)mode.Height;
-                    }
+                    bestScore = currentScore;
+                    bestWidth  = (int)mode.Width;
+                    bestHeight = (int)mode.Height;
                 }
             }
 

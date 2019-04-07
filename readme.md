@@ -13,11 +13,44 @@ your pixels to the display.
 
 ## Installation
 
+ * Building with CMake
+
+    CMake by default buils a library and examples. Target is simply named `PixelToaster`, you can link to it and `PixelToaster.h` header will be available to you.
+
+    ```cmake
+        add_executable(MyApp main.cpp)
+        target_link_libraries(MyApp PRIVATE PixelToaster)
+    ```
+
+    Options:
+    - `ENABLE_EXAMPLES = YES` - Compile examples.
+    - `PIXELTOASTER_NO_CRT = NO` - Removes CRT dependency.
+    - `PIXELTOASTER_NO_STL = NO` - Removes STL dependency.
+    - `PIXELTOASTER_TINY = NO` - Remove all unecessary dependencies. It is like checking `PIXELTOASTER_NO_CRT` and `PIXELTOASTER_NO_STL`
+    - `USE_MSVC_RUNTIME_LIBRARY_DLL = YES` - MSVC only: Build with shared runtime when checked, static runtime when unchecked.
+
+    Example invocations:
+    ```sh
+    Windows:
+        cmake -H. -Bbuild -G "Visual Studio 15 2017 Win64"
+
+    macOS:
+        cmake -H. -Bbuild -G "Xcode"
+
+    Linux:
+        cmake -H. -Bbuild -G "Unix Makefiles"
+
+    Build:
+        cmake --build build --config Release
+    ```
+
+    Source code is comatible with C++11.
+
  * Windows:
 
     PixelToaster for Windows requires DirectX 9.0.
 
-    First you must make sure you have the latest DirectX Runtime installed.
+    ~~First you must make sure you have the latest DirectX Runtime installed.~~
 
     Visual C++ Users:
     - ~~Install the latest DirectX SDK so you have its headers and libs~~
@@ -114,10 +147,12 @@ each line bolted on at the end of the one above it, in one long line.
 
 Lets say we have an image of dimensions 320x240, that is:
 
-    width = 320
-    height = 240
+```cpp
+width = 320
+height = 240
 
-    Pixel pixels[320*240];
+Pixel pixels[320*240];
+```
 
 Coordinate (0,0) is the top-left of the screen, and (319,239) is the bottom right.
 
@@ -126,11 +161,15 @@ in range [0,239]
 
 We can find the index of a pixel given its (x,y) coordinates as follows:
 
-    int index = x + y * width;
+```cpp
+int index = x + y * width;
+```
 
 So we can set get this pixel as follows:
 
-    pixel[index] = Pixel( 0, 0, 1 );		// set to blue
+```cpp
+pixel[index] = Pixel( 0, 0, 1 );		// set to blue
+```
 
 If you think about this closely, you are starting from the top-left of the screen,
 advancing past all the whole lines above the line you want (y*width). This gets
@@ -156,10 +195,12 @@ interesting format to work in.
 
 Floating point pixels made up of four floating point values:
 
-    struct FloatingPointPixel
-    {
-        float r,g,b,a;
-    };
+```cpp
+struct FloatingPointPixel
+{
+    float r,g,b,a;
+};
+```
 
 You set the color of a pixel by setting its components.
 
@@ -209,9 +250,11 @@ therefore:
 
 You can unpack and manually using masking and shift operations:
 
-    integer8 r = ( pixel & 0x00FF0000 ) >> 16;
-    integer8 g = ( pixel & 0x0000FF00 ) >> 8;
-    integer8 b = ( pixel & 0x000000FF );
+```cpp
+integer8 r = ( pixel & 0x00FF0000 ) >> 16;
+integer8 g = ( pixel & 0x0000FF00 ) >> 8;
+integer8 b = ( pixel & 0x000000FF );
+```
 
 And repack them again with shifts:
 
@@ -220,11 +263,13 @@ And repack them again with shifts:
 Alternatively, you can treat your array of pixels as an array of
 TrueColorPixel structs and use its union to access pixels:
 
-    TrueColorPixel pixel;
+```cpp
+TrueColorPixel pixel;
 
-    pixel.r = 128;
-    pixel.g = 10;
-    pixel.b = 192;
+pixel.r = 128;
+pixel.g = 10;
+pixel.b = 192;
+```
 
 This is much easier! Just remember that each r,g,b value can only
 in the range [0,255] when working with it - if you go outside this range

@@ -1,12 +1,13 @@
-﻿
+﻿[![Build Status](https://travis-ci.org/thedmd/pixeltoaster.svg?branch=master)](https://travis-ci.org/thedmd/pixeltoaster)
+
 ## Introduction
 
 PixelToaster is a library for C++ programmers who want to write their own
-software rendering routines, instead of using hardware accelerated 
+software rendering routines, instead of using hardware accelerated
 rendering with OpenGL or Direct3D.
 
-To use PixelToaster, all you need to do is "open" a display at the desired 
-resolution, then each frame, render into an array of pixels and "update" 
+To use PixelToaster, all you need to do is "open" a display at the desired
+resolution, then each frame, render into an array of pixels and "update"
 your pixels to the display.
 
 
@@ -15,19 +16,19 @@ your pixels to the display.
  * Windows:
 
     PixelToaster for Windows requires DirectX 9.0.
-    
+
     First you must make sure you have the latest DirectX Runtime installed.
-    
+
     Visual C++ Users:
     - ~~Install the latest DirectX SDK so you have its headers and libs~~
-    - If you are using Visual C++ Express, you need to install the 
+    - If you are using Visual C++ Express, you need to install the
       Platform SDK if you havent already. Follow the instructions on
       the Visual C++ Express site.
     - If you plan on building PixelToaster from the command line (nmake)
-      make sure you add the appropriate DirectX directories to your LIB 
+      make sure you add the appropriate DirectX directories to your LIB
       and INCLUDE environment variables
     - To use the solution file, just open PixelToaster.sln select the
-      example project you want to build (right click, make active project), 
+      example project you want to build (right click, make active project),
       and press F5 to build & run. For speed, switch to "Release"
     - The solution file only supports the latest Visual Studio 2005,
       so if you have an earlier version of Visual C++, you'll need to use
@@ -37,7 +38,7 @@ your pixels to the display.
       line with the path and environment fully setup, then type:
 
           nmake -f makefile.visualc
-                        
+
     MinGW Users:
     - You *DO NOT* need to install the DirectX SDK
 
@@ -52,30 +53,30 @@ your pixels to the display.
 
     - All the example programs will be built for you
 
-    - You can use PixelToaster with Dev-C++ or any other IDE 
+    - You can use PixelToaster with Dev-C++ or any other IDE
       on top of MinGW, just as long as you setup your own project files.
-    
+
  * UNIX: FreeBSD, Linux and Mac OS X
 
     The supported display on FreeBSD and Linux is XWindows,
     on Mac OS X Cocoa/OpenGL is used.
-        
+
     To compile the example programs, just use make:
-    
+
         make -f makefile.linux
         make -f makefile.bsd
         make -f makefile.apple
 
     Pick the correct line based on your platform obviously,
     I like to speed things up a bit my using a symbolic link:
-    
+
     For example on Mac OS X, I just go:
-    
+
         ln -s makefile.apple makefile
         make
-        
+
     So everything is easy from this point on:
-    
+
         make test
         make profile
         make all
@@ -83,13 +84,13 @@ your pixels to the display.
         make clean
 
     In order to make docs, you'll need to have doxygen installed:
-    
+
         http://www.doxygen.org
-    
+
     Alternatively, you can browse the docs for the latest release online:
-    
+
         http://www.pixeltoaster.com
-        
+
     Have fun!
 
 
@@ -100,7 +101,7 @@ and you'll get the idea quickly.
 
 However, what isnt obvious at first, is exactly what to do with the pixels!
 
-Obviously, I cant teach software rendering in a few pages, but here is a quick 
+Obviously, I cant teach software rendering in a few pages, but here is a quick
 tutorial to get you started...
 
 
@@ -115,22 +116,22 @@ Lets say we have an image of dimensions 320x240, that is:
 
     width = 320
     height = 240
-    
-    Pixel pixels[320*240];
-    
-Coordinate (0,0) is the top-left of the screen, and (319,239) is the bottom right. 
 
-Your x coordinate needs to be in range [0,319] and your y coordinate needs to be 
+    Pixel pixels[320*240];
+
+Coordinate (0,0) is the top-left of the screen, and (319,239) is the bottom right.
+
+Your x coordinate needs to be in range [0,319] and your y coordinate needs to be
 in range [0,239]
 
 We can find the index of a pixel given its (x,y) coordinates as follows:
 
     int index = x + y * width;
-    
+
 So we can set get this pixel as follows:
 
     pixel[index] = Pixel( 0, 0, 1 );		// set to blue
-    
+
 If you think about this closely, you are starting from the top-left of the screen,
 advancing past all the whole lines above the line you want (y*width). This gets
 you to the start of the line you want, so all if you have to do now is add "x"
@@ -142,12 +143,12 @@ and you have the index of the pixel at (x,y).
 You have the choice of working in truecolor or floating point color.
 
 Truecolor has 32bit integer pixels with byte size rgb color components,
-while floating point color has 128bits per pixel, with floating point values 
+while floating point color has 128bits per pixel, with floating point values
 for red, green, blue and alpha!
 
-All things being equal, floating point is obviously slower than truecolor, 
-if for no reason other than requiring 4X the memory bandwidth! However, the 
-increased dynamic range and high precision of floating point make it a very 
+All things being equal, floating point is obviously slower than truecolor,
+if for no reason other than requiring 4X the memory bandwidth! However, the
+increased dynamic range and high precision of floating point make it a very
 interesting format to work in.
 
 
@@ -162,7 +163,7 @@ Floating point pixels made up of four floating point values:
 
 You set the color of a pixel by setting its components.
 
-The alpha value is for padding to 128bits. You can ignore it, or use it for 
+The alpha value is for padding to 128bits. You can ignore it, or use it for
 any purpose you like. It makes a nice z-buffer for a software renderer, or
 alpha channel for compositing.
 
@@ -182,10 +183,10 @@ Here are some examples:
     red = (1,0,0)
     green = (0,1,0)
     blue = (0,0,1)
-    
+
     really bright white = (1000000,1000000,1000000) ... !!!
 
-    
+
 ## Working in TrueColor
 
 In truecolor, pixels are packed into 32bit integer values, like this:
@@ -196,10 +197,10 @@ r,g,b are the red, green and blue color components making up the color.
 
 the x component is padding so the pixel takes up 32 bits.
 
-Each component is in the range [0,255] with 0 being lowest intensity, 
+Each component is in the range [0,255] with 0 being lowest intensity,
 and 255 being maximum intensity.
 
-therefore: 
+therefore:
 
     black is (0,0,0) -> 0x00000000
     bright red is (255,0,0) -> 0x00FF0000
@@ -211,9 +212,9 @@ You can unpack and manually using masking and shift operations:
     integer8 r = ( pixel & 0x00FF0000 ) >> 16;
     integer8 g = ( pixel & 0x0000FF00 ) >> 8;
     integer8 b = ( pixel & 0x000000FF );
-    
+
 And repack them again with shifts:
-    
+
     integer32 repacked = ( r << 16 ) | ( g << 8 ) | b;
 
 Alternatively, you can treat your array of pixels as an array of
@@ -224,7 +225,7 @@ TrueColorPixel structs and use its union to access pixels:
     pixel.r = 128;
     pixel.g = 10;
     pixel.b = 192;
-    
+
 This is much easier! Just remember that each r,g,b value can only
 in the range [0,255] when working with it - if you go outside this range
 the color will wrap around from light to dark and vice versa.

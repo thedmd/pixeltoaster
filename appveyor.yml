@@ -33,7 +33,7 @@ before_build:
 - cmd: >-
     cmake --version
 
-    cmake -H. -BBuild -G %generator% -A %arch%
+    cmake -H. -Bbuild -G %generator% -A %arch%
 build:
   project: Build\ALL_BUILD.vcxproj
   parallel: true

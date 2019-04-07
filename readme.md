@@ -1,4 +1,4 @@
-﻿[![Build Status](https://travis-ci.org/thedmd/pixeltoaster.svg?branch=master)](https://travis-ci.org/thedmd/pixeltoaster)
+﻿[![Build status](https://ci.appveyor.com/api/projects/status/dx3y8ur4ld0ug15x/branch/master?svg=true)](https://ci.appveyor.com/project/thedmd/pixeltoaster/branch/master) [![Build Status](https://travis-ci.org/thedmd/pixeltoaster.svg?branch=master)](https://travis-ci.org/thedmd/pixeltoaster)
 
 ## Introduction
 

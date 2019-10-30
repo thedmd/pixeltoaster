@@ -11,6 +11,10 @@
 #    include <memory.h>
 #endif
 
+#ifdef PIXELTOASTER_USE_SSE2
+#    include <emmintrin.h>
+#endif
+
 namespace PixelToaster {
 // floating point tricks!
 
@@ -24,6 +28,14 @@ inline integer32 clamp_positive(integer32 value)
 {
     return (value - (value & (((int)value) >> 31)));
 }
+
+#ifdef PIXELTOASTER_USE_SSE2
+inline __m128i clamp_positive(__m128i value)
+{
+    auto x = _mm_srai_epi32(value, 31);
+    return _mm_andnot_si128(x, value);
+}
+#endif
 
 inline integer32 clamped_fraction_8(float input)
 {
@@ -39,6 +51,24 @@ inline integer32 clamped_fraction_8(float input)
 
     return value.i & 0x07F8000;
 }
+
+#ifdef PIXELTOASTER_USE_SSE2
+inline __m128i clamped_fraction_8(__m128 input)
+{
+    auto maskRet = _mm_set1_epi32(0x07F8000);
+    auto onei    = _mm_set1_epi32(0x3F7FFFFF);
+    auto onef    = _mm_castsi128_ps(onei);
+
+    auto xi   = clamp_positive(_mm_castps_si128(input));
+    auto xf   = _mm_castsi128_ps(xi);
+    auto mask = _mm_cmpgt_epi32(xi, onei);
+
+    // Compute either cases simultaneously and merge them later
+    auto y0 = _mm_and_si128(mask, onei);
+    auto y1 = _mm_andnot_si128(mask, _mm_castps_si128(_mm_add_ps(xf, onef)));
+    return _mm_and_si128(_mm_or_si128(y0, y1), maskRet);
+}
+#endif
 
 inline integer32 clamped_fraction_6(float input)
 {
@@ -84,7 +114,55 @@ inline float uint8ToFloat(integer8 input)
 
 inline void convert_XBGRFFFF_to_XRGB8888(const Pixel source[], integer32 destination[], unsigned int count)
 {
-    for (unsigned int i = 0; i < count; ++i)
+    unsigned int offset = 0;
+
+#ifdef PIXELTOASTER_USE_SSE2
+    uint32_t           output[16];
+    const unsigned int numBlocks = count / 4;
+
+    for (unsigned int i = 0; i < numBlocks; ++i)
+    {
+        __m128 p0 = _mm_load_ps(reinterpret_cast<const float*>(&source[4 * i + 0]));
+        __m128 p1 = _mm_load_ps(reinterpret_cast<const float*>(&source[4 * i + 1]));
+        __m128 p2 = _mm_load_ps(reinterpret_cast<const float*>(&source[4 * i + 2]));
+        __m128 p3 = _mm_load_ps(reinterpret_cast<const float*>(&source[4 * i + 3]));
+
+        __m128i f0 = clamped_fraction_8(p0);
+        __m128i f1 = clamped_fraction_8(p1);
+        __m128i f2 = clamped_fraction_8(p2);
+        __m128i f3 = clamped_fraction_8(p3);
+
+        _mm_store_si128(reinterpret_cast<__m128i*>(&output[0]), f0);
+        _mm_store_si128(reinterpret_cast<__m128i*>(&output[4]), f1);
+        _mm_store_si128(reinterpret_cast<__m128i*>(&output[8]), f2);
+        _mm_store_si128(reinterpret_cast<__m128i*>(&output[12]), f3);
+
+        const integer32 r0 = output[0] << 1;
+        const integer32 g0 = output[1] >> 7;
+        const integer32 b0 = output[2] >> 15;
+
+        const integer32 r1 = output[4] << 1;
+        const integer32 g1 = output[5] >> 7;
+        const integer32 b1 = output[6] >> 15;
+
+        const integer32 r2 = output[8] << 1;
+        const integer32 g2 = output[9] >> 7;
+        const integer32 b2 = output[10] >> 15;
+
+        const integer32 r3 = output[12] << 1;
+        const integer32 g3 = output[13] >> 7;
+        const integer32 b3 = output[14] >> 15;
+
+        destination[4 * i + 0] = r0 | g0 | b0;
+        destination[4 * i + 1] = r1 | g1 | b1;
+        destination[4 * i + 2] = r2 | g2 | b2;
+        destination[4 * i + 3] = r3 | g3 | b3;
+    }
+
+    offset += 4 * count;
+#endif
+
+    for (unsigned int i = offset; i < count; ++i)
     {
         const integer32 r = clamped_fraction_8(source[i].r) << 1;
         const integer32 g = clamped_fraction_8(source[i].g) >> 7;

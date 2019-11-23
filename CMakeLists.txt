@@ -4,6 +4,8 @@ project(PixelToaster VERSION 1.5.0)
 option (PIXELTOASTER_TINY   "Disable use of STL and CRT libraries." NO)
 option (PIXELTOASTER_NO_STL "Disable use of STL library." NO)
 option (PIXELTOASTER_NO_CRT "Disable use of CRT library." NO)
+option (PIXELTOASTER_USE_SSE2 "Enable use of SSE2." NO)
+
 if (MSVC)
     option (USE_MSVC_RUNTIME_LIBRARY_DLL "Use MSVC runtime library DLL" YES)
 endif()
@@ -66,6 +68,10 @@ endif()
 
 if (PIXELTOASTER_NO_CRT AND (NOT PIXELTOASTER_TINY))
     target_compile_definitions(PixelToaster PUBLIC PIXELTOASTER_NO_CRT)
+endif()
+
+if (PIXELTOASTER_USE_SSE2)
+    target_compile_definitions(PixelToaster PRIVATE PIXELTOASTER_USE_SSE2)
 endif()
 
 if (BUILD_SHARED_LIBS)

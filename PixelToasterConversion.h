@@ -117,7 +117,7 @@ inline void convert_XBGRFFFF_to_XRGB8888(const Pixel source[], integer32 destina
     unsigned int offset = 0;
 
 #ifdef PIXELTOASTER_USE_SSE2
-    uint32_t           output[16];
+    integer32          output[16];
     const unsigned int numBlocks = count / 4;
 
     for (unsigned int i = 0; i < numBlocks; ++i)

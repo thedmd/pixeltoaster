@@ -140,12 +140,12 @@ public:
 
         // setup keyboard data
 
-        for (bool& i : down)
+        for (int i=0;i<256;i++)
         {
             translate[i] = (Key::Code)i;
-            i            = false;
+            down[i] = false;
         }
-
+        
         translate[219] = Key::OpenBracket;
         translate[221] = Key::CloseBracket;
         translate[220] = Key::BackSlash;
